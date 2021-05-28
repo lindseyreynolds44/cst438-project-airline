@@ -150,4 +150,8 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# Local Configuration
+.env
+
 # End of https://www.toptal.com/developers/gitignore/api/eclipse,java,windows,macos
+
