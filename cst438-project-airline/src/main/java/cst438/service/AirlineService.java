@@ -2,6 +2,7 @@ package cst438.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import cst438.domain.Flight;
 import cst438.domain.FlightRepository;
 import cst438.domain.PassengerRepository;
 import cst438.domain.ReservationRepository;
@@ -33,6 +34,10 @@ public class AirlineService {
     this.reservationRepository = reservationRepository;
     this.seatRepository = seatRepository;
     this.userRepository = userRepository;
+  }
+
+  public Iterable<Flight> getFlights() {
+    return flightRepository.findAll();
   }
 
   // We need the following methods:

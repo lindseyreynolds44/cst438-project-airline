@@ -1,11 +1,15 @@
 package cst438.domain;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.ArrayList;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface FlightRepository extends JpaRepository<Flight, String> {
+public interface FlightRepository extends CrudRepository<Flight, Long> {
+
+  ArrayList<Flight> findAll();
+
   // Methods TBD
   // We are going to need to add a query that pulls a flight based on origin and destination cities
   // example: find a flight departing from san diego towards boston.

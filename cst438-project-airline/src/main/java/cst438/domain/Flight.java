@@ -19,6 +19,8 @@ public class Flight {
   private String originCity;
   private String destinationCity;
 
+  public Flight() {}
+
   public Flight(int flightId, String airlineName, Date departureDateTime, int numberOfStops,
       String originCity, String destinationCity) {
     super();
