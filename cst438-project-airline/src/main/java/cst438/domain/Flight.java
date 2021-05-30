@@ -1,6 +1,7 @@
 package cst438.domain;
 
 import java.util.Date;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -10,12 +11,15 @@ import javax.persistence.Table;
 public class Flight {
 
   @Id
+  @Column(name = "flight_id")
   private int flightId;
   private String airlineName;
   private Date departureDateTime;
   private int numberOfStops;
   private String originCity;
   private String destinationCity;
+
+  public Flight() {}
 
   public Flight(int flightId, String airlineName, Date departureDateTime, int numberOfStops,
       String originCity, String destinationCity) {

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<table>
+		<tr>
+			<th>Airline</th>
+			<th>Departure Date</th>
+			<th>Origin</th>
+			<th>Destination</th>
+		</tr>
+		<tr th:each="flight : ${flights}">
+			<td th:text="${flight.airlineName}"></td>
+			<td th:text="${flight.departureDateTime}"></td>
+			<td th:text="${flight.originCity}"></td>
+			<td th:text="${flight.destinationCity}"></td>
+		</tr>
+	</table>
+
+</body>
+</html>

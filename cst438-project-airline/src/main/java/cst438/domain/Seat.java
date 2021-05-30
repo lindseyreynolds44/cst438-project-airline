@@ -1,5 +1,6 @@
 package cst438.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -11,6 +12,7 @@ import javax.persistence.Table;
 public class Seat {
 
   @Id
+  @Column(name = "seat_id")
   private int seatId;
   @ManyToOne
   @JoinColumn(name = "flight_id", referencedColumnName = "flight_id")

@@ -1,5 +1,6 @@
 package cst438.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
@@ -14,8 +15,10 @@ import javax.persistence.Table;
 public class Reservation {
 
   @Id
+  @Column(name = "reservation_id")
   private int reservationId;
   @Id
+  @Column(name = "passenger_id")
   private int passengerId;
 
   @ManyToOne
