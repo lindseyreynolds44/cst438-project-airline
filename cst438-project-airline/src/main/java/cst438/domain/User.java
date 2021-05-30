@@ -1,5 +1,6 @@
 package cst438.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -9,6 +10,7 @@ import javax.persistence.Table;
 public class User {
 
   @Id
+  @Column(name = "user_id")
   private int userId;
   private String userName;
   private String password;
