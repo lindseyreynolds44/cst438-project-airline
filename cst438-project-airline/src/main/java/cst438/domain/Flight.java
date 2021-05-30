@@ -13,16 +13,22 @@ public class Flight {
   @Id
   @Column(name = "flight_id")
   private int flightId;
+  @Column(name = "airline_name")
   private String airlineName;
+  @Column(name = "departure_date_time")
   private Date departureDateTime;
+  @Column(name = "number_of_stops")
   private int numberOfStops;
+  @Column(name = "origin_city")
   private String originCity;
+  @Column(name = "destination_city")
   private String destinationCity;
+  private int price;
 
   public Flight() {}
 
   public Flight(int flightId, String airlineName, Date departureDateTime, int numberOfStops,
-      String originCity, String destinationCity) {
+      String originCity, String destinationCity, int price) {
     super();
     this.flightId = flightId;
     this.airlineName = airlineName;
@@ -30,14 +36,11 @@ public class Flight {
     this.numberOfStops = numberOfStops;
     this.originCity = originCity;
     this.destinationCity = destinationCity;
+    this.price = price;
   }
 
   public int getFlightId() {
     return flightId;
-  }
-
-  public void setFlightId(int flightId) {
-    this.flightId = flightId;
   }
 
   public String getAirlineName() {
@@ -80,6 +83,14 @@ public class Flight {
     this.destinationCity = destinationCity;
   }
 
+  public int getPrice() {
+    return price;
+  }
+
+  public void setPrice(int price) {
+    this.price = price;
+  }
+
   @Override
   public boolean equals(Object obj) {
     if (this == obj)
@@ -113,6 +124,8 @@ public class Flight {
         return false;
     } else if (!originCity.equals(other.originCity))
       return false;
+    if (price != other.price)
+      return false;
     return true;
   }
 
@@ -120,7 +133,7 @@ public class Flight {
   public String toString() {
     return "Flight [flightId=" + flightId + ", airlineName=" + airlineName + ", departureDateTime="
         + departureDateTime + ", numberOfStops=" + numberOfStops + ", originCity=" + originCity
-        + ", destinationCity=" + destinationCity + "]";
+        + ", destinationCity=" + destinationCity + ", price=" + price + "]";
   }
 
 }

@@ -30,10 +30,12 @@ public class Reservation {
   @OneToOne
   @JoinColumn(name = "seat_id", referencedColumnName = "seat_id")
   private Seat seat;
+  @Column(name = "date_created")
   private String dateCreated;
+  private int price;
 
   public Reservation(int reservationId, int passengerId, User user, Flight flight, Seat seat,
-      String dateCreated) {
+      String dateCreated, int price) {
     super();
     this.reservationId = reservationId;
     this.passengerId = passengerId;
@@ -41,7 +43,67 @@ public class Reservation {
     this.flight = flight;
     this.seat = seat;
     this.dateCreated = dateCreated;
+    this.price = price;
   }
+
+
+  public int getReservationId() {
+    return reservationId;
+  }
+
+
+  public int getPassengerId() {
+    return passengerId;
+  }
+
+  public User getUser() {
+    return user;
+  }
+
+  public void setUser(User user) {
+    this.user = user;
+  }
+
+
+  public Flight getFlight() {
+    return flight;
+  }
+
+
+  public void setFlight(Flight flight) {
+    this.flight = flight;
+  }
+
+
+  public Seat getSeat() {
+    return seat;
+  }
+
+
+  public void setSeat(Seat seat) {
+    this.seat = seat;
+  }
+
+
+  public String getDateCreated() {
+    return dateCreated;
+  }
+
+
+  public void setDateCreated(String dateCreated) {
+    this.dateCreated = dateCreated;
+  }
+
+
+  public int getPrice() {
+    return price;
+  }
+
+
+  public void setPrice(int price) {
+    this.price = price;
+  }
+
 
   @Override
   public boolean equals(Object obj) {
@@ -64,6 +126,8 @@ public class Reservation {
       return false;
     if (passengerId != other.passengerId)
       return false;
+    if (price != other.price)
+      return false;
     if (reservationId != other.reservationId)
       return false;
     if (seat == null) {
@@ -83,8 +147,7 @@ public class Reservation {
   public String toString() {
     return "Reservation [reservationId=" + reservationId + ", passengerId=" + passengerId
         + ", user=" + user + ", flight=" + flight + ", seat=" + seat + ", dateCreated="
-        + dateCreated + "]";
+        + dateCreated + ", price=" + price + "]";
   }
-
 
 }

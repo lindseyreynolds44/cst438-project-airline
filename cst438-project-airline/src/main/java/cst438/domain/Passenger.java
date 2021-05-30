@@ -17,7 +17,9 @@ public class Passenger {
   @ManyToOne
   @JoinColumn(name = "user_id", referencedColumnName = "user_id")
   private User user;
+  @Column(name = "first_name")
   private String firstName;
+  @Column(name = "last_name")
   private String lastName;
 
   public Passenger(int passengerId, User user, String firstName, String lastName) {
@@ -30,10 +32,6 @@ public class Passenger {
 
   public int getPassengerId() {
     return passengerId;
-  }
-
-  public void setPassengerId(int passengerId) {
-    this.passengerId = passengerId;
   }
 
   public User getUser() {

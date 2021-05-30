@@ -37,7 +37,7 @@ public class AirlineService {
   }
 
   public Iterable<Flight> getFlights() {
-    return flightRepository.findAll();
+    return flightRepository.findAllByAirline();
   }
 
   // We need the following methods:
