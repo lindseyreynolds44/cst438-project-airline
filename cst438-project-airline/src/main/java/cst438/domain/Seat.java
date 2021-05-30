@@ -17,25 +17,27 @@ public class Seat {
   @ManyToOne
   @JoinColumn(name = "flight_id", referencedColumnName = "flight_id")
   private Flight flight;
+  @Column(name = "seat_row")
   private int seatRow;
+  @Column(name = "seat_letter")
   private String seatLetter;
   private int available;
+  @Column(name = "is_first_class")
+  private int isFirstClass;
 
-  public Seat(int seatId, Flight flight, int seatRow, String seatLetter, int available) {
+  public Seat(int seatId, Flight flight, int seatRow, String seatLetter, int available,
+      int isFirstClass) {
     super();
     this.seatId = seatId;
     this.flight = flight;
     this.seatRow = seatRow;
     this.seatLetter = seatLetter;
     this.available = available;
+    this.isFirstClass = isFirstClass;
   }
 
   public int getSeatId() {
     return seatId;
-  }
-
-  public void setSeatId(int seatId) {
-    this.seatId = seatId;
   }
 
   public Flight getFlight() {
@@ -70,6 +72,14 @@ public class Seat {
     this.available = available;
   }
 
+  public int getIsFirstClass() {
+    return isFirstClass;
+  }
+
+  public void setIsFirstClass(int isFirstClass) {
+    this.isFirstClass = isFirstClass;
+  }
+
   @Override
   public boolean equals(Object obj) {
     if (this == obj)
@@ -86,6 +96,8 @@ public class Seat {
         return false;
     } else if (!flight.equals(other.flight))
       return false;
+    if (isFirstClass != other.isFirstClass)
+      return false;
     if (seatId != other.seatId)
       return false;
     if (seatLetter == null) {
@@ -101,7 +113,8 @@ public class Seat {
   @Override
   public String toString() {
     return "Seat [seatId=" + seatId + ", flight=" + flight + ", seatRow=" + seatRow
-        + ", seatLetter=" + seatLetter + ", available=" + available + "]";
+        + ", seatLetter=" + seatLetter + ", available=" + available + ", isFirstClass="
+        + isFirstClass + "]";
   }
 
 }

@@ -1,14 +1,17 @@
 package cst438.domain;
 
 import java.util.ArrayList;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-
 @Repository
-public interface FlightRepository extends CrudRepository<Flight, Long> {
+public interface FlightRepository extends JpaRepository<Flight, Long> {
 
   ArrayList<Flight> findAll();
+
+  @Query("select m from Flight m order by airlineName, departureDateTime desc")
+  ArrayList<Flight> findAllByAirline();
 
   // Methods TBD
   // We are going to need to add a query that pulls a flight based on origin and destination cities
