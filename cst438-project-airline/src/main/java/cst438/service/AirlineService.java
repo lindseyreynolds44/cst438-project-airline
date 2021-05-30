@@ -35,6 +35,18 @@ public class AirlineService {
     this.userRepository = userRepository;
   }
 
+  // We need the following methods:
+
+  // A method to return available flights and seats for a given origin city and destination
+  // if all seats are used up, then return "no flights"
+  // if there are no flights then we return "no flights"
+
+  // A method to book a reservation
+
+  // A method to change a reservation
+
+  // A method to cancel a reservation
+
 
 
 }
