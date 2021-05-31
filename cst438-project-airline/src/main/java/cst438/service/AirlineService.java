@@ -58,9 +58,15 @@ public class AirlineService {
     return flightRepository.findAvailableTimes(originCity, destinationCity, date);
   }
 
+  public ArrayList<Flight> getFlightsByRoute(String originCity, String destinationCity) {
+    return flightRepository.findFlightsByRoute(originCity, destinationCity);
+  }
+
   // We need the following methods:
 
-  // A method to return available flights and seats for a given origin city and destination
+  // A method to return available flights (Note From Dan: I will implement this)
+  // A method to return seats for a given origin city and destination (Note from Dan: This should be
+  // by flight ID, yeah?)
   // if all seats are used up, then return "no flights"
   // if there are no flights then we return "no flights"
 
