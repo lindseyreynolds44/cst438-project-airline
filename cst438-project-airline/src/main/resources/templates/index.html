@@ -1,56 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>FlightsRUs</title>
-<link th:href="@{/css/main.css}" rel="stylesheet" />
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script>
-
-	let originCityChanged = false;
-
-	$("#origin-city").change(function() {
-	    originCityChanged = true;
-	});
-	
-	$("#desitnation-city").change(function(){
-		if(originCityChanged){
-			$.ajax({
-				method: "GET",
-				url: "/getFlightDate", 
-				date: {
-						"orginCity": $("#origin-city").val(),
-						"destinationCity":$("#destination-city").val()		
-				},
-				success: function(data) {
-					// add all the option tags for departure date.
-					for (const date in data) {
-						$("#departure-date").append($("<option>").val(date).text(date));
-					}
-				}
-			}); // ajax
-		}
-	}); // destination-city change
-	
-	$("#departure-date").change(function(){
-		$.ajax({
-			method: "GET",
-			url: "/getFlightTime", 
-			date: {
-					"departureDate": $("#departure-date").val()		
-			},
-			success: function(data) {
-					// add all the option tags for departure time.
-					for (const time in data) {
-						$("#departure-date").append($("<option>").val(time).text(time));
-					}
-			}
-			}); // ajax
-	});	// departure-date change
-	
-
-</script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>FlightsRUs</title>
+	<link th:href="@{/css/main.css}" rel="stylesheet" />
 </head>
 <body>
 	<nav>
@@ -65,21 +19,87 @@
 		<div class="hero-text">
     	<h1 style="font-size:50px">Flights R US</h1>
     	<p>Where would you like to fly to?</p>
-    	<form>
-    		<select id="origin-city" th:field="*{originCity}">
-    			<option th:each="city: ${originCities}" th:value="${city}">
+    	<form action="#" th:action=@{/searchFlights} method="post">
+    		<!-- Origin City -->
+    		<select id="origin-city" th:field="*{originCities}">
+    			<option value="" selected>Departing From</option>
+    			<option class="option" th:each="city: ${originCities}" th:value="${city}" th:text="${city}"></option>
     		</select>
-    		<select id="departure-city" th:field="*{destinationCity}">
-    			<option th:each="city: ${destinationCities}" th:value="${city}">	
+    		<!-- Destination City -->
+    		<select id="destination-city" th:field="*{destinationCities}" disabled>
+    			<option value="" selected>Destination</option>
+    			<option class="option" th:each="city: ${destinationCities}" th:value="${city}" th:text="${city}"></option>	
     		</select>
-    		<select id="departure-date" th:field="*{departureDate}"></select>
-    		<select id="departure-time" th:field="*{departureTime}"></select>
+    		<!-- Departure Date -->
+    		<select id="departure-date" name="departureDate" disabled>
+    			<option value="" disabled selected>Flight Dates</option>
+    		</select>
+    		<!-- Departure Time -->
+    		<select id="departure-time" name="departureTime" disabled>
+	    		<option value="" disabled selected>Flight Times</option>
+    		</select>
+    		<!--<select id="departure-date" th:field="{departureDate}"></select>
+    		<select id="departure-time" th:field="{departureTime}"></select> -->
     		<input type="Submit">
     	</form>
   </div>
 	</div>
+
+<!-- Scripts -->	
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+
+	$(document).ready(function () {
+		
+		
+		let originCityChanged = false; // additional checker
 	
-	
+		$("#origin-city").change(function() {
+			event.preventDefault();
+			$("#destination-city").removeAttr("disabled");
+		    originCityChanged = true;
+		});
+		
+		// Will load avalable flight dates for a city combo
+		$("#destination-city").change(function(){
+			if(originCityChanged){
+				$.ajax({
+					method: "GET",
+					url: "/getFlightDate", 
+					data: {
+							"orginCity": $("#origin-city").val(),
+							"destinationCity":$("#destination-city").val()		
+					},
+					success: function(data) {
+						// add all the option tags for departure date.
+						for (const date in data) {
+							$("#departure-date").append($("<option>").val(date).text(date));
+						}
+						$("#departure-date").removeAttr("disabled");
+					}
+				}); // ajax
+			}
+		}); // destination-city change
+		
+		// Will load available flight times for a city combo 
+		$("#departure-date").change(function(){
+			$.ajax({
+				method: "GET",
+				url: "/getFlightTime", 
+				data: {
+						"departureDate": this.value	
+				},
+				success: function(data) {
+						// add all the option tags for departure time.
+						for (const time in data) {
+							$("#departure-time").append($("<option>").val(time).text(time));
+						}
+						$("#departure-time").removeAttr("disabled");
+				}
+				}); // ajax
+		});	// departure-date change
+	});// ready
+</script>	
 
 </body>
 </html>
