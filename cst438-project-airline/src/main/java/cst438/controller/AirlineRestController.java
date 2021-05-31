@@ -29,6 +29,10 @@ public class AirlineRestController {
   @GetMapping("getFlights")
   public ArrayList<Flight> getFlights(@RequestParam("originCity") String origin,
       @RequestParam("destinationCity") String destination) {
+    // avoids calling the DB.
+    if (origin == null || destination == null) {
+      return new ArrayList<Flight>();
+    }
 
     ArrayList<Flight> flights = airlineService.getFlightsByRoute(origin, destination);
     return flights;

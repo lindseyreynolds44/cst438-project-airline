@@ -1,6 +1,7 @@
 package cst438.domain;
 
-import java.util.Date;
+import java.sql.Date;
+import java.sql.Time;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -15,8 +16,10 @@ public class Flight {
   private int flightId;
   @Column(name = "airline_name")
   private String airlineName;
-  @Column(name = "departure_date_time")
-  private Date departureDateTime;
+  @Column(name = "departure_date")
+  private Date departureDate;
+  @Column(name = "departure_time")
+  private Time departureTime;
   @Column(name = "number_of_stops")
   private int numberOfStops;
   @Column(name = "origin_city")
@@ -27,17 +30,21 @@ public class Flight {
 
   public Flight() {}
 
-  public Flight(int flightId, String airlineName, Date departureDateTime, int numberOfStops,
-      String originCity, String destinationCity, int price) {
-    super();
+
+
+  public Flight(int flightId, String airlineName, Date departureDate, Time departureTime,
+      int numberOfStops, String originCity, String destinationCity, int price) {
     this.flightId = flightId;
     this.airlineName = airlineName;
-    this.departureDateTime = departureDateTime;
+    this.departureDate = departureDate;
+    this.departureTime = departureTime;
     this.numberOfStops = numberOfStops;
     this.originCity = originCity;
     this.destinationCity = destinationCity;
     this.price = price;
   }
+
+
 
   public int getFlightId() {
     return flightId;
@@ -51,12 +58,20 @@ public class Flight {
     this.airlineName = airlineName;
   }
 
-  public Date getDepartureDateTime() {
-    return departureDateTime;
+  public Date getDepartureDate() {
+    return departureDate;
   }
 
-  public void setDepartureDateTime(Date departureDateTime) {
-    this.departureDateTime = departureDateTime;
+  public void setDepartureDate(Date departureDate) {
+    this.departureDate = departureDate;
+  }
+
+  public Time getDepartureTime() {
+    return departureTime;
+  }
+
+  public void setDepartureTime(Time departureTime) {
+    this.departureTime = departureTime;
   }
 
   public int getNumberOfStops() {
@@ -91,6 +106,7 @@ public class Flight {
     this.price = price;
   }
 
+
   @Override
   public boolean equals(Object obj) {
     if (this == obj)
@@ -105,10 +121,15 @@ public class Flight {
         return false;
     } else if (!airlineName.equals(other.airlineName))
       return false;
-    if (departureDateTime == null) {
-      if (other.departureDateTime != null)
+    if (departureDate == null) {
+      if (other.departureDate != null)
         return false;
-    } else if (!departureDateTime.equals(other.departureDateTime))
+    } else if (!departureDate.equals(other.departureDate))
+      return false;
+    if (departureTime == null) {
+      if (other.departureTime != null)
+        return false;
+    } else if (!departureTime.equals(other.departureTime))
       return false;
     if (destinationCity == null) {
       if (other.destinationCity != null)
@@ -131,9 +152,12 @@ public class Flight {
 
   @Override
   public String toString() {
-    return "Flight [flightId=" + flightId + ", airlineName=" + airlineName + ", departureDateTime="
-        + departureDateTime + ", numberOfStops=" + numberOfStops + ", originCity=" + originCity
-        + ", destinationCity=" + destinationCity + ", price=" + price + "]";
+    return "Flight [flightId=" + flightId + ", airlineName=" + airlineName + ", departureDate="
+        + departureDate + ", departureTime=" + departureTime + ", numberOfStops=" + numberOfStops
+        + ", originCity=" + originCity + ", destinationCity=" + destinationCity + ", price=" + price
+        + "]";
   }
+
+
 
 }
