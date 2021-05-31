@@ -34,6 +34,7 @@ public class Flight {
 
   public Flight(int flightId, String airlineName, Date departureDate, Time departureTime,
       int numberOfStops, String originCity, String destinationCity, int price) {
+    super();
     this.flightId = flightId;
     this.airlineName = airlineName;
     this.departureDate = departureDate;
