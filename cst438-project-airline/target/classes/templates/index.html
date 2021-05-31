@@ -15,6 +15,7 @@
 			<li class="nav-li"><a href="/login">Login</a></li>
 		</ul>
 	</nav>
+	
 	<div class="hero-img">
 		<div class="hero-text">
     	<h1 style="font-size:50px">Flights R US</h1>
@@ -34,15 +35,12 @@
     		<select id="departure-date" name="departureDate" disabled>
     			<option value="" disabled selected>Flight Dates</option>
     		</select>
-    		<!-- Departure Time -->
-    		<select id="departure-time" name="departureTime" disabled>
-	    		<option value="" disabled selected>Flight Times</option>
-    		</select>
-    		<!--<select id="departure-date" th:field="{departureDate}"></select>
-    		<select id="departure-time" th:field="{departureTime}"></select> -->
+    		<!-- Submit -->
     		<input type="Submit">
     	</form>
-  </div>
+    	<br>
+    	<span id="response-message"></span>
+  		</div>
 	</div>
 
 <!-- Scripts -->	
@@ -63,6 +61,9 @@
 		// Will load avalable flight dates for a city combo
 		$("#destination-city").change(function(){
 			if(originCityChanged){
+				
+				$("#response-message").empty(); // resets span 
+				
 				$.ajax({
 					method: "GET",
 					url: "/api/getFlightDate", 
@@ -71,9 +72,18 @@
 							"destinationCity":$("#destination-city").val()		
 					},
 					success: function(data) {
+						console.log(data);
+						
 						// reset the drop down menu
 						$("#departure-date").empty();
-						$("#departure-date").append($("<option>").text("Flight Dates"));
+						// displays a message if no flights are available.
+						if (data.length == 0) {
+							$("#response-message").text("No flights avaiable"); 
+							$("#departure-date").append($("<option>").text("Flight Dates"));
+						}
+						// reset the drop down menu
+						//$("#departure-date").empty();
+						//$("#departure-date").append($("<option>").text("Flight Dates"));
 						
 						// add all the option tags for departure date.
 						data.forEach(function (date) {
@@ -86,23 +96,6 @@
 			}
 		}); // destination-city change
 		
-		// Will load available flight times for a city combo 
-		$("#departure-date").change(function(){
-			$.ajax({
-				method: "GET",
-				url: "/getFlightTime", 
-				data: {
-						"departureDate": this.value	
-				},
-				success: function(data) {
-						// add all the option tags for departure time.
-						for (const time in data) {
-							$("#departure-time").append($("<option>").val(time).text(time));
-						}
-						$("#departure-time").removeAttr("disabled");
-				}
-				}); // ajax
-		});	// departure-date change
 	});// ready
 </script>	
 

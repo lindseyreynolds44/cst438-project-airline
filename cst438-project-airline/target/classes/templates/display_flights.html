@@ -1,24 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Flights</title>
+	<link th:href="@{/css/main.css}" rel="stylesheet" />
 </head>
 <body>
-	<table>
-		<tr>
-			<th>Airline</th>
-			<th>Departure Date</th>
-			<th>Origin</th>
-			<th>Destination</th>
-		</tr>
-		<tr th:each="flight : ${flights}">
-			<td th:text="${flight.airlineName}"></td>
-			<td th:text="${flight.departureDateTime}"></td>
-			<td th:text="${flight.originCity}"></td>
-			<td th:text="${flight.destinationCity}"></td>
-		</tr>
-	</table>
-
+	<div id="content">
+		<table>
+			<tr>
+				<th>Airline</th>
+				<th>Departure Date</th>
+				<th>Origin</th>
+				<th>Destination</th>
+			</tr>
+			<tr th:each="flight : ${flights}">
+				<td th:text="${flight.airlineName}"></td>
+				<td th:text="${flight.departureDateTime}"></td>
+				<td th:text="${flight.originCity}"></td>
+				<td th:text="${flight.destinationCity}"></td>
+			</tr>
+		</table>
+	</div>
 </body>
 </html>

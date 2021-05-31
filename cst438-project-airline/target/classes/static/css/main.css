@@ -4,6 +4,7 @@ body {
 	max-width: 100em;
 	font-family: arial;
 	margin: auto;
+	background-image: linear-gradient(to top, #6a85b6 0%, #bac8e0 100%);
 }
 body, html {
 	height: 100%;
@@ -59,5 +60,16 @@ body, html {
 }
 
 select , .option {
+	text-transform: capitalize;
+}
+
+#content {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+}
+table {
 	text-transform: capitalize;
 }

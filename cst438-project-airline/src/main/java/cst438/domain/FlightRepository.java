@@ -31,9 +31,13 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
       nativeQuery = true)
   ArrayList<Date> findAvailableTimes(String originCity, String destinationCity, String date);
 
+  @Query(value = "SELECT * from flight f WHERE f.origin_city = ?1 AND f.destination_city = ?2",
+      nativeQuery = true)
+  ArrayList<Flight> findFlightsByRoute(String originCity, String destinationCity);
 
   // Methods TBD
-  // We are going to need to add a query that pulls a flight based on origin and destination cities
+  // DONE: We are going to need to add a query that pulls a flight based on origin and destination
+  // cities (Dan was here)
   // example: find a flight departing from san diego towards boston.
   // code: select * from flight where origin_city = ? and destination_city = ?;
   // We may also have to account for open seats, so if a flight does not have any open seats
