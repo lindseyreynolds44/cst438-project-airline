@@ -8,6 +8,7 @@ import cst438.domain.Flight;
 import cst438.domain.FlightRepository;
 import cst438.domain.PassengerRepository;
 import cst438.domain.ReservationRepository;
+import cst438.domain.Seat;
 import cst438.domain.SeatRepository;
 import cst438.domain.UserRepository;
 
@@ -60,6 +61,10 @@ public class AirlineService {
 
   public ArrayList<Flight> getFlightsByRoute(String originCity, String destinationCity) {
     return flightRepository.findFlightsByRoute(originCity, destinationCity);
+  }
+
+  public ArrayList<Seat> getSeatsByFlightId(int flightId, int isFirstClass) {
+    return seatRepository.findSeatsByFlightID(flightId, isFirstClass);
   }
 
   // We need the following methods:

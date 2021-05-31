@@ -25,6 +25,8 @@ public class Seat {
   @Column(name = "is_first_class")
   private int isFirstClass;
 
+  public Seat() {}
+
   public Seat(int seatId, Flight flight, int seatRow, String seatLetter, int available,
       int isFirstClass) {
     super();
