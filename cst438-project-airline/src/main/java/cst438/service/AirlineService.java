@@ -1,5 +1,7 @@
 package cst438.service;
 
+import java.util.ArrayList;
+import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import cst438.domain.Flight;
@@ -38,6 +40,22 @@ public class AirlineService {
 
   public Iterable<Flight> getFlights() {
     return flightRepository.findAllByAirline();
+  }
+
+  public ArrayList<String> getOriginCities() {
+    return flightRepository.findOriginCities();
+  }
+
+  public ArrayList<String> getDestinationCities() {
+    return flightRepository.findDestinationCities();
+  }
+
+  public ArrayList<Date> getAvailableDates(String originCity, String destinationCity) {
+    return flightRepository.findAvailableDates(originCity, destinationCity);
+  }
+
+  public ArrayList<Date> getAvailableTimes(String originCity, String destinationCity, String date) {
+    return flightRepository.findAvailableTimes(originCity, destinationCity, date);
   }
 
   // We need the following methods:
