@@ -65,16 +65,21 @@
 			if(originCityChanged){
 				$.ajax({
 					method: "GET",
-					url: "/getFlightDate", 
+					url: "/api/getFlightDate", 
 					data: {
-							"orginCity": $("#origin-city").val(),
+							"originCity": $("#origin-city").val(),
 							"destinationCity":$("#destination-city").val()		
 					},
 					success: function(data) {
+						// reset the drop down menu
+						$("#departure-date").empty();
+						$("#departure-date").append($("<option>").text("Flight Dates"));
+						
 						// add all the option tags for departure date.
-						for (const date in data) {
-							$("#departure-date").append($("<option>").val(date).text(date));
-						}
+						data.forEach(function (date) {
+							  $("#departure-date").append($("<option>").val(date).text(date));
+							});
+						
 						$("#departure-date").removeAttr("disabled");
 					}
 				}); // ajax
