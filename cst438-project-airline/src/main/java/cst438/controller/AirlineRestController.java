@@ -39,5 +39,7 @@ public class AirlineRestController {
 
   }
 
+  // AJAX call to get seats based on which class the user selected
+
 
 }
