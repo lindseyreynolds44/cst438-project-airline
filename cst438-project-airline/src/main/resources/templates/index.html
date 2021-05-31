@@ -2,11 +2,83 @@
 <html xmlns:th="www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title></title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FlightsRUs</title>
+<link th:href="@{/css/main.css}" rel="stylesheet" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+
+	let originCityChanged = false;
+
+	$("#origin-city").change(function() {
+	    originCityChanged = true;
+	});
+	
+	$("#desitnation-city").change(function(){
+		if(originCityChanged){
+			$.ajax({
+				method: "GET",
+				url: "/getFlightDate", 
+				date: {
+						"orginCity": $("#origin-city").val(),
+						"destinationCity":$("#destination-city").val()		
+				},
+				success: function(data) {
+					// add all the option tags for departure date.
+					for (const date in data) {
+						$("#departure-date").append($("<option>").val(date).text(date));
+					}
+				}
+			}); // ajax
+		}
+	}); // destination-city change
+	
+	$("#departure-date").change(function(){
+		$.ajax({
+			method: "GET",
+			url: "/getFlightTime", 
+			date: {
+					"departureDate": $("#departure-date").val()		
+			},
+			success: function(data) {
+					// add all the option tags for departure time.
+					for (const time in data) {
+						$("#departure-date").append($("<option>").val(time).text(time));
+					}
+			}
+			}); // ajax
+	});	// departure-date change
+	
+
+</script>
 </head>
 <body>
+	<nav>
+		<ul class="nav-ul">
+			<li class="nav-li"><a href="/">Home</a></li>
+			<li class="nav-li"><a href="/searchFlights">Search Flights</a></li>
+			<li class="nav-li"><a href="/reservations">See Reservations</a></li>
+			<li class="nav-li"><a href="/login">Login</a></li>
+		</ul>
+	</nav>
+	<div class="hero-img">
+		<div class="hero-text">
+    	<h1 style="font-size:50px">Flights R US</h1>
+    	<p>Where would you like to fly to?</p>
+    	<form>
+    		<select id="origin-city" th:field="*{originCity}">
+    			<option th:each="city: ${originCities}" th:value="${city}">
+    		</select>
+    		<select id="departure-city" th:field="*{destinationCity}">
+    			<option th:each="city: ${destinationCities}" th:value="${city}">	
+    		</select>
+    		<select id="departure-date" th:field="*{departureDate}"></select>
+    		<select id="departure-time" th:field="*{departureTime}"></select>
+    		<input type="Submit">
+    	</form>
+  </div>
+	</div>
 	
-	<h1> TESTING </h1>
 	
 
 </body>
