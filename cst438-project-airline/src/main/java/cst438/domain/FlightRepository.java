@@ -1,7 +1,7 @@
 package cst438.domain;
 
+import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Date;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -22,14 +22,15 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
   ArrayList<String> findDestinationCities();
 
   @Query(
-      value = "SELECT departure_date FROM flight f WHERE f.origin_city = ?1 and f.destination_city=?2",
+      value = "SELECT DISTINCT departure_date FROM flight f WHERE f.origin_city = ?1 and f.destination_city=?2",
       nativeQuery = true)
-  ArrayList<Date> findAvailableDates(String originCity, String destinationCity);
+  ArrayList<Date> findDatesForRoute(String originCity, String destinationCity);
 
   @Query(
-      value = "SELECT departure_time FROM flight f WHERE f.origin_city = ?1 and f.destination_city=?2 and departure_date=?3",
+      value = "SELECT * FROM flight f WHERE f.origin_city = ?1 and f.destination_city=?2 and departure_date=?3",
       nativeQuery = true)
-  ArrayList<Date> findAvailableTimes(String originCity, String destinationCity, String date);
+  ArrayList<Flight> findFlightsByRouteAndDate(String originCity, String destinationCity,
+      String date);
 
   @Query(value = "SELECT * from flight f WHERE f.origin_city = ?1 AND f.destination_city = ?2",
       nativeQuery = true)

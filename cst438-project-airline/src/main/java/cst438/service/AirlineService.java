@@ -1,7 +1,7 @@
 package cst438.service;
 
+import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import cst438.domain.Flight;
@@ -51,12 +51,13 @@ public class AirlineService {
     return flightRepository.findDestinationCities();
   }
 
-  public ArrayList<Date> getAvailableDates(String originCity, String destinationCity) {
-    return flightRepository.findAvailableDates(originCity, destinationCity);
+  public ArrayList<Date> getDatesForRoute(String originCity, String destinationCity) {
+    return flightRepository.findDatesForRoute(originCity, destinationCity);
   }
 
-  public ArrayList<Date> getAvailableTimes(String originCity, String destinationCity, String date) {
-    return flightRepository.findAvailableTimes(originCity, destinationCity, date);
+  public ArrayList<Flight> getFlightsByRouteAndDate(String originCity, String destinationCity,
+      String date) {
+    return flightRepository.findFlightsByRouteAndDate(originCity, destinationCity, date);
   }
 
   public ArrayList<Flight> getFlightsByRoute(String originCity, String destinationCity) {

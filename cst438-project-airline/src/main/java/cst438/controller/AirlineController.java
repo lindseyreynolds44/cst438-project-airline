@@ -1,7 +1,7 @@
 package cst438.controller;
 
+import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,13 +29,16 @@ public class AirlineController {
     return "index";
   }
 
-  // TODO Finish up this method
-  @GetMapping("/searchFlights")
-  public String searchFlights(@RequestParam("originCity") String origin,
-      @RequestParam("destinationCity") String destination, @RequestParam("date") String date,
-      Model model) {
+  /**
+   * Searches for and returns flights, given a route and a date
+   */
+  @PostMapping("/searchFlights")
+  public String searchFlights(@RequestParam(value = "originCity") String origin,
+      @RequestParam(value = "destinationCity") String destination,
+      @RequestParam(value = "departureDate") String date, Model model) {
 
-    Iterable<Flight> flights = airlineService.getFlights();
+    ArrayList<Flight> flights = airlineService.getFlightsByRouteAndDate(origin, destination, date);
+
     model.addAttribute("flights", flights);
     return "display_flights";
   }
@@ -73,15 +76,15 @@ public class AirlineController {
     String originCity = "seattle";
     String destinationCity = "san diego";
 
-    ArrayList<Date> availDates = airlineService.getAvailableDates(originCity, destinationCity);
+    ArrayList<Date> availDates = airlineService.getDatesForRoute(originCity, destinationCity);
     System.out.println("Dates: " + availDates + "\n");
 
     String date = "2021-07-12";
-    ArrayList<Date> availTimes =
-        airlineService.getAvailableTimes(originCity, destinationCity, date);
-    System.out.println("Times: " + availTimes + "\n");
+    ArrayList<Flight> availFlights =
+        airlineService.getFlightsByRouteAndDate(originCity, destinationCity, date);
+    System.out.println("Times: " + availFlights + "\n");
 
-    return "index";
+    return "tester";
   }
 
 

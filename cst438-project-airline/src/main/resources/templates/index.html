@@ -20,23 +20,23 @@
 		<div class="hero-text">
     	<h1 style="font-size:50px">Flights R US</h1>
     	<p>Where would you like to fly to?</p>
-    	<form action="#" th:action=@{/searchFlights} method="post">
-    		<!-- Origin City -->
-    		<select id="origin-city" th:field="*{originCities}">
+    	<form id="flight-form" action="#" th:action=@{/searchFlights} method="post">
+    		<!-- Origin City -->    		
+    		<select id="origin-city" name="originCity" form="flight-form">
     			<option value="" selected>Departing From</option>
     			<option class="option" th:each="city: ${originCities}" th:value="${city}" th:text="${city}"></option>
     		</select>
     		<!-- Destination City -->
-    		<select id="destination-city" th:field="*{destinationCities}" disabled>
+    		<select id="destination-city" name="destinationCity" form="flight-form" disabled>
     			<option value="" selected>Destination</option>
     			<option class="option" th:each="city: ${destinationCities}" th:value="${city}" th:text="${city}"></option>	
     		</select>
     		<!-- Departure Date -->
-    		<select id="departure-date" name="departureDate" disabled>
+    		<select id="departure-date" name="departureDate" form="flight-form" disabled>
     			<option value="" disabled selected>Flight Dates</option>
     		</select>
     		<!-- Submit -->
-    		<input type="Submit">
+    		<input type="submit" value="submit">
     	</form>
     	<br>
     	<span id="response-message"></span>
