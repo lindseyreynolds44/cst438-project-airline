@@ -1,7 +1,7 @@
 package cst438.controller;
 
+import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +22,7 @@ public class AirlineRestController {
   public ArrayList<Date> getFlightDate(@RequestParam("originCity") String origin,
       @RequestParam("destinationCity") String destination) {
 
-    ArrayList<Date> dates = airlineService.getAvailableDates(origin, destination);
+    ArrayList<Date> dates = airlineService.getDatesForRoute(origin, destination);
 
     return dates;
   }

@@ -8,20 +8,33 @@
 </head>
 <body>
 	<div id="content">
+
 		<table>
 			<tr>
 				<th>Airline</th>
-				<th>Departure Date</th>
 				<th>Origin</th>
 				<th>Destination</th>
+				<th>Departure Date</th>
+				<th>Departure Time</th>
 			</tr>
-			<tr th:each="flight : ${flights}">
+			<tr th:each="flight : ${flights}" th:id="${flight.flightId}">
 				<td th:text="${flight.airlineName}"></td>
-				<td th:text="${flight.departureDateTime}"></td>
 				<td th:text="${flight.originCity}"></td>
 				<td th:text="${flight.destinationCity}"></td>
+				<td th:text="${flight.departureDate}"></td>
+				<td th:text="${flight.departureTime}"></td>
+				<td><input type="button" value="Book" onclick="book()" /></td>
 			</tr>
 		</table>
+
 	</div>
+	
+	<script>
+	    function book() {
+	        var flight_id = event.target.parentNode.parentNode.id;
+	        alert("Flight ID: " + flight_id );
+	        
+		    }
+	</script>
 </body>
 </html>
