@@ -12,8 +12,8 @@ This endpoint will return all the flights for the given origin city and destinat
 
 #### Parameters
 
-    - originCity (required)
-    - destinationCity (required)
+    - originCity (required) string
+    - destinationCity (required) string
 
 ##### Request Example
 
@@ -58,7 +58,8 @@ This endpoint will return all the available seats for a given flight.
 
 #### Parameters
 
-    - flightID (required)
+    - flightID (required) int
+    - isFirstClass(required) int (0 or 1)
 
 ##### Request Example
 
@@ -71,7 +72,42 @@ A successful response will return all the available seats for a flight.
 ##### Response Example
 
 ```
-
+[
+    {
+        "seatId": 577,
+        "flight": {
+            "flightId": 5,
+            "airlineName": "alaska",
+            "departureDate": "2021-09-16",
+            "departureTime": "16:27:59",
+            "numberOfStops": 2,
+            "originCity": "washington d.c.",
+            "destinationCity": "new york",
+            "price": 253
+        },
+        "seatRow": 7,
+        "seatLetter": "A",
+        "available": 1,
+        "isFirstClass": 0
+    },
+    {
+        "seatId": 578,
+        "flight": {
+            "flightId": 5,
+            "airlineName": "alaska",
+            "departureDate": "2021-09-16",
+            "departureTime": "16:27:59",
+            "numberOfStops": 2,
+            "originCity": "washington d.c.",
+            "destinationCity": "new york",
+            "price": 253
+        },
+        "seatRow": 7,
+        "seatLetter": "B",
+        "available": 1,
+        "isFirstClass": 0
+    },
+]
 ```
 
 ### `api/makeReservation`
@@ -84,12 +120,12 @@ This endpoint will allow a thirdparty end user to book a flight reservation.
 
 #### Parameters
 
-    - username (required)
-    - password (required)
-    - flightID (required)
-    - seatID (required)
-    - passengerFirstName (required)
-    - passengerLastName (required)
+    - username (required) string
+    - password (required) string
+    - flightID (required) int
+    - seatID (required)   int
+    - passengerFirstName (required) string
+    - passengerLastName (required)  string
 
 ##### Request Example
 

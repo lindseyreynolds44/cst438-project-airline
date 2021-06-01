@@ -35,6 +35,7 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
       nativeQuery = true)
   ArrayList<Flight> findFlightsByRoute(String originCity, String destinationCity);
 
+
   // Methods TBD
   // DONE: We are going to need to add a query that pulls a flight based on origin and destination
   // cities (Dan was here)
