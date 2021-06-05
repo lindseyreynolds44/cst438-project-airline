@@ -6,8 +6,10 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import java.sql.Date;
 import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.TimeZone;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
@@ -43,13 +45,11 @@ public class AirlineRestControllerTest {
 
   @Test
   public void TestGetFlights() throws Exception {
-    Date deptDate = Date.valueOf("2021-12-08");
+    Date deptDate = Date.valueOf("2021-06-01");
     Time deptTime = Time.valueOf("12:12:12");
-
-
-
     Flight dogeFlight =
         new Flight(99, "doge airlines", deptDate, deptTime, 0, "dogeville", "dogeland", 300);
+
     ArrayList<Flight> Flights = new ArrayList<Flight>(Arrays.asList(dogeFlight));
 
     given(airlineService.getFlightsByRoute("dogeville", "dogeland")).willReturn(Flights);
@@ -58,20 +58,19 @@ public class AirlineRestControllerTest {
         mvc.perform(get("/api/getFlights?originCity=dogeville&destinationCity=dogeland"))
             .andReturn().getResponse();
 
-    assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
-
     ArrayList<Flight> resultFlights = jsonFlightAttempt.parseObject(response.getContentAsString());
-    assertEquals(1, resultFlights.size());
-
     Flight resultFlight = resultFlights.get(0);
     Flight expectedFlight =
         new Flight(99, "doge airlines", deptDate, deptTime, 0, "dogeville", "dogeland", 300);
 
-    System.out.println("*****************************************************"
-        + resultFlight.getDepartureDate().toString()); // this works you just have to look in the
-                                                       // console tab!
+    // needed to force java to print date in GMT timezone.
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
 
-    assertThat(resultFlight).isEqualTo(expectedFlight);
+
+    assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+    assertEquals(1, resultFlights.size());
+    assertEquals("2021-06-01", sdf.format(resultFlight.getDepartureDate()));
     assertEquals(300, resultFlight.getPrice());
 
 
