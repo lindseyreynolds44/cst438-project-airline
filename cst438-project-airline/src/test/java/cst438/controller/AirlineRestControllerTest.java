@@ -73,7 +73,21 @@ public class AirlineRestControllerTest {
     assertEquals("2021-06-01", sdf.format(resultFlight.getDepartureDate()));
     assertEquals(300, resultFlight.getPrice());
 
-
   }
+
+  @Test
+  public void TestGetFlightsShouldFail() {}
+
+  @Test
+  public void TestGetDatesShouldReturnDates() {}
+
+  @Test
+  public void TestGetDatesFails() {}
+
+  @Test
+  public void TestGetSeatsShouldReturnSeats() {}
+
+  @Test
+  public void TestGetSeatsShouldFail() {}
 
 }
