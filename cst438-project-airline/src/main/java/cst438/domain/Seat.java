@@ -3,8 +3,6 @@ package cst438.domain;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -14,9 +12,11 @@ public class Seat {
   @Id
   @Column(name = "seat_id")
   private int seatId;
-  @ManyToOne
-  @JoinColumn(name = "flight_id", referencedColumnName = "flight_id")
-  private Flight flight;
+  // @ManyToOne
+  // @JoinColumn(name = "flight_id", referencedColumnName = "flight_id")
+  // private Flight flight;
+  @Column(name = "flight_id")
+  private int flightId;
   @Column(name = "seat_row")
   private int seatRow;
   @Column(name = "seat_letter")
@@ -27,11 +27,11 @@ public class Seat {
 
   public Seat() {}
 
-  public Seat(int seatId, Flight flight, int seatRow, String seatLetter, int available,
+  public Seat(int seatId, int flightId, int seatRow, String seatLetter, int available,
       int isFirstClass) {
     super();
     this.seatId = seatId;
-    this.flight = flight;
+    this.flightId = flightId;
     this.seatRow = seatRow;
     this.seatLetter = seatLetter;
     this.available = available;
@@ -42,12 +42,13 @@ public class Seat {
     return seatId;
   }
 
-  public Flight getFlight() {
-    return flight;
+
+  public int getFlightId() {
+    return flightId;
   }
 
-  public void setFlight(Flight flight) {
-    this.flight = flight;
+  public void setFlightId(int flightId) {
+    this.flightId = flightId;
   }
 
   public int getSeatRow() {
@@ -82,6 +83,7 @@ public class Seat {
     this.isFirstClass = isFirstClass;
   }
 
+
   @Override
   public boolean equals(Object obj) {
     if (this == obj)
@@ -93,10 +95,7 @@ public class Seat {
     Seat other = (Seat) obj;
     if (available != other.available)
       return false;
-    if (flight == null) {
-      if (other.flight != null)
-        return false;
-    } else if (!flight.equals(other.flight))
+    if (flightId != other.flightId)
       return false;
     if (isFirstClass != other.isFirstClass)
       return false;
@@ -114,9 +113,10 @@ public class Seat {
 
   @Override
   public String toString() {
-    return "Seat [seatId=" + seatId + ", flight=" + flight + ", seatRow=" + seatRow
+    return "Seat [seatId=" + seatId + ", flightId=" + flightId + ", seatRow=" + seatRow
         + ", seatLetter=" + seatLetter + ", available=" + available + ", isFirstClass="
         + isFirstClass + "]";
   }
+
 
 }
