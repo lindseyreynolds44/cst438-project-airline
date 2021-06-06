@@ -7,9 +7,17 @@
 	<link th:href="@{/css/main.css}" rel="stylesheet" />
 </head>
 <body>
+	<nav>
+		<ul class="nav-ul">
+			<li class="nav-li"><a href="/">Home</a></li>
+			<li class="nav-li"><a href="/searchFlights">Search Flights</a></li>
+			<li class="nav-li"><a href="/reservations">See Reservations</a></li>
+			<li class="nav-li"><a href="/login">Login</a></li>
+		</ul>
+	</nav>
 	<div id="content">
 
-		<table>
+		<table id="flights-table">
 			<tr>
 				<th>Airline</th>
 				<th>Origin</th>
@@ -17,24 +25,35 @@
 				<th>Departure Date</th>
 				<th>Departure Time</th>
 			</tr>
-			<tr th:each="flight : ${flights}" th:id="${flight.flightId}">
+			<tr class="flight-row" th:each="flight : ${flights}" th:id="${flight.flightId}">
 				<td th:text="${flight.airlineName}"></td>
 				<td th:text="${flight.originCity}"></td>
 				<td th:text="${flight.destinationCity}"></td>
-				<td th:text="${flight.departureDate}"></td>
-				<td th:text="${flight.departureTime}"></td>
+				<td th:text="${#dates.format(flight.departureDate, 'E, MM-dd-yy')}"></td>
+				<td th:text="${#dates.format(flight.departureTime, 'h:mm aa z')}"></td>
 				<td><input type="button" value="Book" onclick="book()" /></td>
 			</tr>
 		</table>
 
 	</div>
-	
+	<!-- Scripts -->	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	<script>
 	    function book() {
-	        var flight_id = event.target.parentNode.parentNode.id;
+	        const flight_id = event.target.parentNode.parentNode.id;
 	        alert("Flight ID: " + flight_id );
+
+			$.ajax({
+				method: "GET",
+				url: "/api/getSeats",
+				data: {
+					"flightId": flight_id
+				}
+			})
 	        
 		    }
+
+
 	</script>
 </body>
 </html>
