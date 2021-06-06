@@ -70,11 +70,6 @@ public class AirlineRestControllerTest {
     Flight expectedFlight =
         new Flight(99, "doge airlines", deptDate, deptTime, 0, "dogeville", "dogeland", 300);
 
-    // // needed to force java to print date in GMT timezone.
-    // SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    // sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-
-
     assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
     assertEquals(1, resultFlights.size());
     assertEquals("2021-06-01", sdf.format(resultFlight.getDepartureDate()));
