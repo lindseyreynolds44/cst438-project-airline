@@ -37,6 +37,7 @@ public class AirlineRestControllerTest {
   private JacksonTester<ArrayList<Flight>> jsonFlightAttempt;
   private JacksonTester<ArrayList<Seat>> jsonSeatAttempt;
   private JacksonTester<ArrayList<Date>> jsonDateAttempt;
+  private JacksonTester<ArrayList<String>> jsonRouteAttempt;
 
   SimpleDateFormat sdf;
 
@@ -161,7 +162,7 @@ public class AirlineRestControllerTest {
     given(airlineService.getDatesForRoute("dogeville", "dogeland")).willReturn(dates);
 
     MockHttpServletResponse response =
-        mvc.perform(get("/api/getFlightDate?originCity=dogeville&destinationCity=dogeland"))
+        mvc.perform(get("/api/getFlightDates?originCity=dogeville&destinationCity=dogeland"))
             .andReturn().getResponse();
 
     ArrayList<Date> expected = new ArrayList<>();
@@ -187,11 +188,99 @@ public class AirlineRestControllerTest {
     given(airlineService.getDatesForRoute("dogeville", "dogeland")).willReturn(dates);
 
     MockHttpServletResponse response =
-        mvc.perform(get("/api/getFlightDate?originCity=danville&destinationCity=hogwarts"))
+        mvc.perform(get("/api/getFlightDates?originCity=danville&destinationCity=hogwarts"))
             .andReturn().getResponse();
     ArrayList<Date> results = jsonDateAttempt.parseObject(response.getContentAsString());
 
     assertEquals(0, results.size());
   }
+
+  @Test
+  public void TestGetAllFlights() throws Exception {
+    Date deptDate1 = Date.valueOf("2021-06-01");
+    Time deptTime1 = Time.valueOf("12:12:12");
+    Flight flight1 =
+        new Flight(99, "doge airlines", deptDate1, deptTime1, 0, "dogeville", "dogeland", 300);
+    Date deptDate2 = Date.valueOf("2021-07-11");
+    Time deptTime2 = Time.valueOf("02:15:00");
+    Flight flight2 =
+        new Flight(100, "unicorn airlines", deptDate2, deptTime2, 2, "uni", "corn", 555);
+
+    ArrayList<Flight> Flights = new ArrayList<Flight>(Arrays.asList(flight1, flight2));
+
+    given(airlineService.getAllFlights()).willReturn(Flights);
+
+    MockHttpServletResponse response =
+        mvc.perform(get("/api/getAllFlights")).andReturn().getResponse();
+
+    ArrayList<Flight> resultFlights = jsonFlightAttempt.parseObject(response.getContentAsString());
+    Flight resultFlight1 = resultFlights.get(0);
+    Flight resultFlight2 = resultFlights.get(1);
+
+    assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+    assertEquals(2, resultFlights.size());
+
+    assertEquals("2021-06-01", sdf.format(resultFlight1.getDepartureDate()));
+    assertEquals(300, resultFlight1.getPrice());
+    assertEquals("2021-07-11", sdf.format(resultFlight2.getDepartureDate()));
+    assertEquals(555, resultFlight2.getPrice());
+
+  }
+
+  @Test
+  public void TestGetAllFlightsWithEmptyDB() throws Exception {
+    ArrayList<Flight> Flights = new ArrayList<Flight>();
+
+    given(airlineService.getAllFlights()).willReturn(Flights);
+
+    MockHttpServletResponse response =
+        mvc.perform(get("/api/getAllFlights")).andReturn().getResponse();
+
+    ArrayList<Flight> resultFlights = jsonFlightAttempt.parseObject(response.getContentAsString());
+
+    assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+    assertEquals(0, resultFlights.size());
+
+  }
+
+  @Test
+  public void TestGetRoutes() throws Exception {
+    ArrayList<String> routes = new ArrayList<String>(
+        Arrays.asList("seattle,san diego", "san francisco,boston", "new york,boston",
+            "boston,san francisco", "washington d.c.,new york", "washington d.c.,san diego",
+            "san diego,seattle", "san francisco,seattle", "san diego,washington d.c.",
+            "san francisco,washington d.c.", "san diego,san francisco", "boston,washington d.c.",
+            "san diego,boston", "new york,san diego", "seattle,new york"));
+
+    given(airlineService.getAllRoutes()).willReturn(routes);
+
+    MockHttpServletResponse response = mvc.perform(get("/api/getRoutes")).andReturn().getResponse();
+
+    ArrayList<String> resultRoutes = jsonRouteAttempt.parseObject(response.getContentAsString());
+    String firstResult = resultRoutes.get(0);
+    String lastResult = resultRoutes.get(14);
+
+    assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+    assertEquals(15, resultRoutes.size());
+
+    assertEquals("seattle,san diego", firstResult);
+    assertEquals("seattle,new york", lastResult);
+  }
+
+  @Test
+  public void TestGetRoutesWithEmptyDB() throws Exception {
+    ArrayList<String> routes = new ArrayList<>();
+
+    given(airlineService.getAllRoutes()).willReturn(routes);
+
+    MockHttpServletResponse response = mvc.perform(get("/api/getRoutes")).andReturn().getResponse();
+
+    ArrayList<String> resultRoutes = jsonRouteAttempt.parseObject(response.getContentAsString());
+
+    assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+    assertEquals(0, resultRoutes.size());
+
+  }
+
 
 }
