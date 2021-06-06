@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import cst438.domain.Flight;
+import cst438.domain.Reservation;
 import cst438.domain.Seat;
 import cst438.service.AirlineService;
 
@@ -66,6 +67,21 @@ public class AirlineRestController {
     ArrayList<Seat> seats = airlineService.getSeatsByFlightId(flightId, isFirstClass);
 
     return seats;
+
+  }
+
+  // Example call (will put in readme)
+  // http://localhost:8080/api/makeReservation?flightId=7&userId=9&seatId=890&passengerFirstName=Lindsey&passengerLastName=Reynolds
+  @GetMapping("/makeReservation")
+  public Reservation makeReservation(@RequestParam("flightId") int flightId,
+      @RequestParam("userId") int userId, @RequestParam("seatId") int seatId,
+      @RequestParam("passengerFirstName") String passengerFirstName,
+      @RequestParam("passengerLastName") String passengerLastName) {
+
+    Reservation reservation = airlineService.makeReservation(flightId, userId, seatId,
+        passengerFirstName, passengerLastName);
+
+    return reservation;
 
   }
 

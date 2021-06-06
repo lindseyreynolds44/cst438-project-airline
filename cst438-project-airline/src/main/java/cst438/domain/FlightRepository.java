@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FlightRepository extends JpaRepository<Flight, Long> {
+  ArrayList<Flight> findByFlightId(Integer flightId);
 
   ArrayList<Flight> findAll();
 
