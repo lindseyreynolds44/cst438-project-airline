@@ -69,5 +69,18 @@ public class AirlineRestController {
 
   }
 
+  @GetMapping("/makeReservation")
+  public int makeReservation(@RequestParam("flightId") int flightId,
+      @RequestParam("userId") int userId, @RequestParam("seatId") int seatId,
+      @RequestParam("passengerFirstName") String passengerFirstName,
+      @RequestParam("passengerLastName") String passengerLastName) {
+
+    int reservationID = airlineService.makeReservation(flightId, userId, seatId, passengerFirstName,
+        passengerLastName);
+
+    return reservationID;
+
+  }
+
 
 }

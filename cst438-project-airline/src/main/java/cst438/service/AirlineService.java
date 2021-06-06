@@ -6,10 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import cst438.domain.Flight;
 import cst438.domain.FlightRepository;
+import cst438.domain.Passenger;
 import cst438.domain.PassengerRepository;
+import cst438.domain.Reservation;
 import cst438.domain.ReservationRepository;
 import cst438.domain.Seat;
 import cst438.domain.SeatRepository;
+import cst438.domain.User;
 import cst438.domain.UserRepository;
 
 @Service
@@ -74,6 +77,27 @@ public class AirlineService {
 
   public ArrayList<Flight> getAllFlights() {
     return flightRepository.findAll();
+  }
+
+  public int makeReservation(int flightId, int userId, int seatId, String passengerFirstName,
+      String passengerLastName) {
+    ArrayList<User> user = userRepository.findByUserId(userId);
+    ArrayList<Flight> flight = flightRepository.findByFlightId(flightId);
+    ArrayList<Seat> seat = seatRepository.findBySeatId(seatId);
+
+    if (user.isEmpty() || flight.isEmpty() || seat.isEmpty()) {
+      return -1;
+    }
+
+    Passenger passenger = new Passenger(user.get(0), passengerFirstName, passengerLastName);
+    passengerRepository.save(passenger);
+    System.out.println(passenger);
+    Reservation reservation = new Reservation(passenger.getPassengerId(), user.get(0),
+        flight.get(0), seat.get(0), flight.get(0).getPrice());
+    System.out.println("RESERVATION " + reservation);
+    reservationRepository.save(reservation);
+
+    return 0;
   }
 
   // We need the following methods:

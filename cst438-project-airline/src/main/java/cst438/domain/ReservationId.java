@@ -1,14 +1,20 @@
 package cst438.domain;
 
 import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 
 /**
  * This is the composite primary key for the Reservation class
  */
 
+@Embeddable
 public class ReservationId implements Serializable {
 
+  @Column(name = "reservation_id")
   private int reservationId;
+
+  @Column(name = "passenger_id")
   private int passengerId;
 
   public ReservationId() {

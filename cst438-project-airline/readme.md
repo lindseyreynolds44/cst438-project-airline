@@ -253,8 +253,7 @@ This endpoint will allow a thirdparty end user to book a flight reservation.
 
 #### Parameters
 
-    - username (required) string
-    - password (required) string
+    - userID (required) string
     - flightID (required) int
     - seatID (required)   int
     - passengerFirstName (required) string

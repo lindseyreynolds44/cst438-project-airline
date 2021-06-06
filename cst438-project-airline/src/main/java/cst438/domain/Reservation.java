@@ -2,6 +2,7 @@ package cst438.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
@@ -15,6 +16,7 @@ import javax.persistence.Table;
 public class Reservation {
 
   @Id
+  @GeneratedValue
   @Column(name = "reservation_id")
   private int reservationId;
   @Id
@@ -33,6 +35,17 @@ public class Reservation {
   @Column(name = "date_created")
   private String dateCreated;
   private int price;
+
+  public Reservation() {}
+
+  public Reservation(int passengerId, User user, Flight flight, Seat seat, int price) {
+    super();
+    this.passengerId = passengerId;
+    this.user = user;
+    this.flight = flight;
+    this.seat = seat;
+    this.price = price;
+  }
 
   public Reservation(int reservationId, int passengerId, User user, Flight flight, Seat seat,
       String dateCreated, int price) {

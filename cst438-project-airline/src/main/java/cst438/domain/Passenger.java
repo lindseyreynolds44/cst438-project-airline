@@ -2,6 +2,8 @@ package cst438.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -12,6 +14,7 @@ import javax.persistence.Table;
 public class Passenger {
 
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "passenger_id")
   private int passengerId;
   @ManyToOne
@@ -21,6 +24,13 @@ public class Passenger {
   private String firstName;
   @Column(name = "last_name")
   private String lastName;
+
+  public Passenger(User user, String firstName, String lastName) {
+    super();
+    this.user = user;
+    this.firstName = firstName;
+    this.lastName = lastName;
+  }
 
   public Passenger(int passengerId, User user, String firstName, String lastName) {
     super();
