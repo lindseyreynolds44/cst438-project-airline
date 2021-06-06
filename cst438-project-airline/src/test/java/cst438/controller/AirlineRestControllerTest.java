@@ -282,5 +282,26 @@ public class AirlineRestControllerTest {
 
   }
 
+  @Test
+  public void TestMakeReservation() throws Exception {
+
+  }
+
+  @Test
+  public void TestMakeReservationNonExistentUserId() throws Exception {
+
+  }
+
+  @Test
+  public void TestMakeReservationNonExistentFlightId() throws Exception {
+
+  }
+
+  @Test
+  public void TestMakeReservationWithUnavailableSeat() throws Exception {
+
+  }
+
+
 
 }

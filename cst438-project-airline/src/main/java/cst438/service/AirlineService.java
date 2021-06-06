@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import cst438.domain.Flight;
 import cst438.domain.FlightRepository;
-import cst438.domain.Passenger;
-import cst438.domain.PassengerRepository;
 import cst438.domain.Reservation;
 import cst438.domain.ReservationRepository;
 import cst438.domain.Seat;
@@ -21,8 +19,6 @@ public class AirlineService {
   @Autowired
   FlightRepository flightRepository;
   @Autowired
-  PassengerRepository passengerRepository;
-  @Autowired
   ReservationRepository reservationRepository;
   @Autowired
   SeatRepository seatRepository;
@@ -31,12 +27,11 @@ public class AirlineService {
 
   public AirlineService() {}
 
-  public AirlineService(FlightRepository flightRepository, PassengerRepository passengerRepository,
+  public AirlineService(FlightRepository flightRepository,
       ReservationRepository reservationRepository, SeatRepository seatRepository,
       UserRepository userRepository) {
     super();
     this.flightRepository = flightRepository;
-    this.passengerRepository = passengerRepository;
     this.reservationRepository = reservationRepository;
     this.seatRepository = seatRepository;
     this.userRepository = userRepository;
@@ -79,25 +74,25 @@ public class AirlineService {
     return flightRepository.findAll();
   }
 
-  public int makeReservation(int flightId, int userId, int seatId, String passengerFirstName,
-      String passengerLastName) {
+  public Reservation makeReservation(int flightId, int userId, int seatId,
+      String passengerFirstName, String passengerLastName) {
     ArrayList<User> user = userRepository.findByUserId(userId);
     ArrayList<Flight> flight = flightRepository.findByFlightId(flightId);
     ArrayList<Seat> seat = seatRepository.findBySeatId(seatId);
 
     if (user.isEmpty() || flight.isEmpty() || seat.isEmpty()) {
-      return -1;
+      return null;
     }
 
-    Passenger passenger = new Passenger(user.get(0), passengerFirstName, passengerLastName);
-    passengerRepository.save(passenger);
-    System.out.println(passenger);
-    Reservation reservation = new Reservation(passenger.getPassengerId(), user.get(0),
+    // TODO: Change seat to no longer available
+
+    // TODO: Make date created time stamp work correctly
+
+    Reservation reservation = new Reservation(user.get(0), passengerFirstName, passengerLastName,
         flight.get(0), seat.get(0), flight.get(0).getPrice());
-    System.out.println("RESERVATION " + reservation);
     reservationRepository.save(reservation);
 
-    return 0;
+    return reservation;
   }
 
   // We need the following methods:
