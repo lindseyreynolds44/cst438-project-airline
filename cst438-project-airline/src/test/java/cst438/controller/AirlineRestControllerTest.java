@@ -36,11 +36,18 @@ public class AirlineRestControllerTest {
 
   private JacksonTester<ArrayList<Flight>> jsonFlightAttempt;
   private JacksonTester<ArrayList<Seat>> jsonSeatAttempt;
+  private JacksonTester<ArrayList<Date>> jsonDateAttempt;
+
+  SimpleDateFormat sdf;
 
   @BeforeEach
   public void setupEach() {
     MockitoAnnotations.initMocks(this);
     JacksonTester.initFields(this, new ObjectMapper());
+
+    // needed to force java to print date in GMT timezone.
+    sdf = new SimpleDateFormat("yyyy-MM-dd");
+    sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
   }
 
   @Test
@@ -60,13 +67,6 @@ public class AirlineRestControllerTest {
 
     ArrayList<Flight> resultFlights = jsonFlightAttempt.parseObject(response.getContentAsString());
     Flight resultFlight = resultFlights.get(0);
-    Flight expectedFlight =
-        new Flight(99, "doge airlines", deptDate, deptTime, 0, "dogeville", "dogeland", 300);
-
-    // needed to force java to print date in GMT timezone.
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-
 
     assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
     assertEquals(1, resultFlights.size());
@@ -76,18 +76,122 @@ public class AirlineRestControllerTest {
   }
 
   @Test
-  public void TestGetFlightsShouldFail() {}
+  public void TestGetFlightsShouldReturnEmptyIfNotFound() throws Exception {
+    Date deptDate = Date.valueOf("2021-06-01");
+    Time deptTime = Time.valueOf("12:12:12");
+    Flight dogeFlight =
+        new Flight(99, "doge airlines", deptDate, deptTime, 0, "dogeville", "dogeland", 300);
+
+    ArrayList<Flight> Flights = new ArrayList<Flight>(Arrays.asList(dogeFlight));
+
+    given(airlineService.getFlightsByRoute("dogeville", "dogeland")).willReturn(Flights);
+
+    MockHttpServletResponse response =
+        mvc.perform(get("/api/getFlights?originCity=moon&destinationCity=dogeland")).andReturn()
+            .getResponse();
+
+    ArrayList<Flight> resultFlights = jsonFlightAttempt.parseObject(response.getContentAsString());
+
+    assertEquals(0, resultFlights.size());
+
+  }
 
   @Test
-  public void TestGetDatesShouldReturnDates() {}
+  public void TestGetFlightsShouldReturnEmptyIfWrongVarType() throws Exception {
+    Date deptDate = Date.valueOf("2021-06-01");
+    Time deptTime = Time.valueOf("12:12:12");
+    Flight dogeFlight =
+        new Flight(99, "doge airlines", deptDate, deptTime, 0, "dogeville", "dogeland", 300);
+
+    ArrayList<Flight> Flights = new ArrayList<Flight>(Arrays.asList(dogeFlight));
+
+    given(airlineService.getFlightsByRoute("dogeville", "dogeland")).willReturn(Flights);
+
+    MockHttpServletResponse response =
+        mvc.perform(get("/api/getFlights?originCity=25&destinationCity=dogeland")).andReturn()
+            .getResponse();
+
+    ArrayList<Flight> resultFlights = jsonFlightAttempt.parseObject(response.getContentAsString());
+
+    assertEquals(0, resultFlights.size());
+
+  }
 
   @Test
-  public void TestGetDatesFails() {}
+  public void TestGetSeatShouldReturnSeats() throws Exception {
+    Seat seat = new Seat(254, 23, 4, "A", 1, 1);
+    ArrayList<Seat> seats = new ArrayList<Seat>(Arrays.asList(seat));
+
+    given(airlineService.getSeatsByFlightId(254, 1)).willReturn(seats);
+    MockHttpServletResponse response =
+        mvc.perform(get("/api/getSeats?flightId=254&isFirstClass=1")).andReturn().getResponse();
+
+    ArrayList<Seat> results = jsonSeatAttempt.parseObject(response.getContentAsString());
+
+    Seat expected = new Seat(254, 23, 4, "A", 1, 1);
+    Seat result = results.get(0);
+
+    assertEquals(expected, result);
+
+  }
 
   @Test
-  public void TestGetSeatsShouldReturnSeats() {}
+  public void TestGetSeatsReturnsEmptyIfNotFound() throws Exception {
+    Seat seat = new Seat(254, 23, 4, "A", 1, 1);
+    ArrayList<Seat> seats = new ArrayList<Seat>(Arrays.asList(seat));
+
+    given(airlineService.getSeatsByFlightId(254, 1)).willReturn(seats);
+    MockHttpServletResponse response =
+        mvc.perform(get("/api/getSeats?flightId=0&isFirstClass=1")).andReturn().getResponse();
+
+    ArrayList<Seat> results = jsonSeatAttempt.parseObject(response.getContentAsString());
+
+    assertEquals(0, results.size());
+  }
+
 
   @Test
-  public void TestGetSeatsShouldFail() {}
+  public void TestGetDatesShouldReturnDates() throws Exception {
+    ArrayList<Date> dates = new ArrayList<>();
+    dates.add(Date.valueOf("2022-01-23"));
+    dates.add(Date.valueOf("2022-05-23"));
+    dates.add(Date.valueOf("2022-12-25"));
+    dates.add(Date.valueOf("2022-2-28"));
+
+    given(airlineService.getDatesForRoute("dogeville", "dogeland")).willReturn(dates);
+
+    MockHttpServletResponse response =
+        mvc.perform(get("/api/getFlightDate?originCity=dogeville&destinationCity=dogeland"))
+            .andReturn().getResponse();
+
+    ArrayList<Date> expected = new ArrayList<>();
+    expected.add(Date.valueOf("2022-01-23"));
+    expected.add(Date.valueOf("2022-05-23"));
+    expected.add(Date.valueOf("2022-12-25"));
+    expected.add(Date.valueOf("2022-2-28"));
+    ArrayList<Date> results = jsonDateAttempt.parseObject(response.getContentAsString());
+
+    assertEquals(expected.size(), results.size());
+    assertEquals("2022-01-23", sdf.format(results.get(0)));
+  }
+
+  @Test
+  public void TestGetDatesShouldReturnEmptyIfNotFound() throws Exception {
+
+    ArrayList<Date> dates = new ArrayList<>();
+    dates.add(Date.valueOf("2022-01-23"));
+    dates.add(Date.valueOf("2022-05-23"));
+    dates.add(Date.valueOf("2022-12-25"));
+    dates.add(Date.valueOf("2022-2-28"));
+
+    given(airlineService.getDatesForRoute("dogeville", "dogeland")).willReturn(dates);
+
+    MockHttpServletResponse response =
+        mvc.perform(get("/api/getFlightDate?originCity=danville&destinationCity=hogwarts"))
+            .andReturn().getResponse();
+    ArrayList<Date> results = jsonDateAttempt.parseObject(response.getContentAsString());
+
+    assertEquals(0, results.size());
+  }
 
 }

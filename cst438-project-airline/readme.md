@@ -2,7 +2,38 @@
 
 ## Endpoints
 
-### `api/getFlights`
+### `/api/getFlightDates`
+
+`Type: GET`
+
+#### Description
+
+This endpoint will return a json response with all the available departure dates for a specific route. 
+
+#### Parameters
+
+    - originCity (required) string
+    - destinationCity (required) string
+
+##### Request Example
+
+`/api/getFlightDates?originCity=boston&destinationCity=san%20francisco`
+
+#### Response
+
+A successful response will return a json response with all the departure dates for a given route.
+
+##### Response Example
+
+```
+[
+    "2021-12-22",
+    "2021-07-28"
+]
+```
+
+
+### `/api/getFlights`
 
 `Type: GET`
 
@@ -17,7 +48,7 @@ This endpoint will return all the flights for the given origin city and destinat
 
 ##### Request Example
 
-`api/getFlights?originCity=boston&destinationCity=san francisco`
+`/api/getFlights?originCity=boston&destinationCity=san%20francisco`
 
 #### Response
 
@@ -50,7 +81,7 @@ A successful response will return a json response with all the flights for those
 ]
 ```
 
-### api/getSeats
+### /api/getSeats
 
 #### Description
 
@@ -63,7 +94,7 @@ This endpoint will return all the available seats for a given flight.
 
 ##### Request Example
 
-`api/getSeats?flightID=19`
+`/api/getSeats?flightID=19`
 
 #### Response
 
@@ -75,16 +106,7 @@ A successful response will return all the available seats for a flight.
 [
     {
         "seatId": 577,
-        "flight": {
-            "flightId": 5,
-            "airlineName": "alaska",
-            "departureDate": "2021-09-16",
-            "departureTime": "16:27:59",
-            "numberOfStops": 2,
-            "originCity": "washington d.c.",
-            "destinationCity": "new york",
-            "price": 253
-        },
+        "flightId": 5,
         "seatRow": 7,
         "seatLetter": "A",
         "available": 1,
@@ -92,25 +114,24 @@ A successful response will return all the available seats for a flight.
     },
     {
         "seatId": 578,
-        "flight": {
-            "flightId": 5,
-            "airlineName": "alaska",
-            "departureDate": "2021-09-16",
-            "departureTime": "16:27:59",
-            "numberOfStops": 2,
-            "originCity": "washington d.c.",
-            "destinationCity": "new york",
-            "price": 253
-        },
+        "flightId": 5,
         "seatRow": 7,
         "seatLetter": "B",
+        "available": 1,
+        "isFirstClass": 0
+    },
+    {
+        "seatId": 579,
+        "flightId": 5,
+        "seatRow": 7,
+        "seatLetter": "C",
         "available": 1,
         "isFirstClass": 0
     },
 ]
 ```
 
-### `api/makeReservation`
+### `/api/makeReservation`
 
 `TYPE: POST`
 
