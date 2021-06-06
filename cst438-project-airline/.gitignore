@@ -3,6 +3,7 @@
 
 ### Custom ###
 .env
+system.properties
 
 ### Eclipse ###
 .metadata
