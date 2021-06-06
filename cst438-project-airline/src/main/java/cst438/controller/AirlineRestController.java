@@ -18,7 +18,7 @@ public class AirlineRestController {
   @Autowired
   private AirlineService airlineService;
 
-  @GetMapping("/getFlightDate")
+  @GetMapping("/getFlightDates")
   public ArrayList<Date> getFlightDate(@RequestParam("originCity") String origin,
       @RequestParam("destinationCity") String destination) {
 
@@ -27,7 +27,26 @@ public class AirlineRestController {
     return dates;
   }
 
-  @GetMapping("getFlights")
+  /**
+   * Mapping that returns all possible routes (origin and destination pairs) that are present in the
+   * database
+   */
+  @GetMapping("/getRoutes")
+  public ArrayList<String> getRoutes() {
+    ArrayList<String> routes = airlineService.getAllRoutes();
+    return routes;
+  }
+
+  /**
+   * Mapping that returns all available flights
+   */
+  @GetMapping("/getAllFlights")
+  public ArrayList<Flight> getAllFlights() {
+    ArrayList<Flight> flights = airlineService.getAllFlights();
+    return flights;
+  }
+
+  @GetMapping("/getFlights")
   public ArrayList<Flight> getFlights(@RequestParam("originCity") String origin,
       @RequestParam("destinationCity") String destination) {
     // avoids calling the DB.
@@ -40,7 +59,7 @@ public class AirlineRestController {
 
   }
 
-  @GetMapping("getSeats")
+  @GetMapping("/getSeats")
   public ArrayList<Seat> getSeats(@RequestParam("flightId") int flightId,
       @RequestParam("isFirstClass") int isFirstClass) {
 
@@ -49,8 +68,6 @@ public class AirlineRestController {
     return seats;
 
   }
-
-  // AJAX call to get seats based on which class the user selected
 
 
 }

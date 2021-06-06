@@ -36,6 +36,10 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
       nativeQuery = true)
   ArrayList<Flight> findFlightsByRoute(String originCity, String destinationCity);
 
+  @Query(value = "SELECT DISTINCT origin_city, destination_city FROM flight", nativeQuery = true)
+  ArrayList<String> findAllRoutes();
+
+
 
   // Methods TBD
   // DONE: We are going to need to add a query that pulls a flight based on origin and destination

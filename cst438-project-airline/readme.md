@@ -2,7 +2,66 @@
 
 ## Endpoints
 
-### `/api/getFlightDates`
+<br/>
+
+### Get All Flights
+`/api/getAllFlights`
+
+`Type: GET`
+
+#### Description
+
+This endpoint will return a json response with all the flights available. 
+
+#### Parameters
+
+    None
+
+#### Request Example
+
+`/api/getAllFlights`
+
+#### Response Example
+
+```
+[
+    {
+        "flightId": 1,
+        "airlineName": "jet-blue",
+        "departureDate": "2021-07-12",
+        "departureTime": "11:22:29",
+        "numberOfStops": 2,
+        "originCity": "seattle",
+        "destinationCity": "san diego",
+        "price": 200
+    },
+    {
+        "flightId": 2,
+        "airlineName": "delta",
+        "departureDate": "2021-11-05",
+        "departureTime": "15:14:56",
+        "numberOfStops": 1,
+        "originCity": "san francisco",
+        "destinationCity": "boston",
+        "price": 550
+    },
+    {
+        "flightId": 3,
+        "airlineName": "united",
+        "departureDate": "2021-08-13",
+        "departureTime": "17:23:00",
+        "numberOfStops": 1,
+        "originCity": "new york",
+        "destinationCity": "boston",
+        "price": 150
+    }
+]
+```
+
+<br/>
+
+### Get Flight Dates
+`/api/getFlightDates`
 
 `Type: GET`
 
@@ -32,8 +91,55 @@ A successful response will return a json response with all the departure dates f
 ]
 ```
 
+<br/>
 
-### `/api/getFlights`
+### Get All Routes
+`/api/getRoutes`
+
+`Type: GET`
+
+#### Description
+
+This endpoint will return a json response with all the available routes (i.e. all the pairs of origin and destination cities).  
+
+#### Parameters
+
+    None
+
+##### Request Example
+
+`/api/getRoutes`
+
+#### Response
+
+A successful response will return a json response with all routes.
+
+##### Response Example
+
+```
+[
+    "seattle,san diego",
+    "san francisco,boston",
+    "new york,boston",
+    "boston,san francisco",
+    "washington d.c.,new york",
+    "washington d.c.,san diego",
+    "san diego,seattle",
+    "san francisco,seattle",
+    "san diego,washington d.c.",
+    "san francisco,washington d.c.",
+    "san diego,san francisco",
+    "boston,washington d.c.",
+    "san diego,boston",
+    "new york,san diego",
+    "seattle,new york"
+]
+```
+
+<br/>
+
+### Get Flights using a Route
+`/api/getFlights`
 
 `Type: GET`
 
@@ -80,8 +186,12 @@ A successful response will return a json response with all the flights for those
     }
 ]
 ```
+<br/>
 
-### /api/getSeats
+### Get Available Seats
+`/api/getSeats`
+
+`Type: GET`
 
 #### Description
 
@@ -130,8 +240,10 @@ A successful response will return all the available seats for a flight.
     },
 ]
 ```
+<br/>
 
-### `/api/makeReservation`
+### Make a Reservation
+`/api/makeReservation`
 
 `TYPE: POST`
 

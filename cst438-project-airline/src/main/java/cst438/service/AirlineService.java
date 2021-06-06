@@ -68,6 +68,14 @@ public class AirlineService {
     return seatRepository.findSeatsByFlightID(flightId, isFirstClass);
   }
 
+  public ArrayList<String> getAllRoutes() {
+    return flightRepository.findAllRoutes();
+  }
+
+  public ArrayList<Flight> getAllFlights() {
+    return flightRepository.findAll();
+  }
+
   // We need the following methods:
 
   // A method to return available flights (Note From Dan: I will implement this)
