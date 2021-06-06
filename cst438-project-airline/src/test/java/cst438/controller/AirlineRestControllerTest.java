@@ -67,8 +67,6 @@ public class AirlineRestControllerTest {
 
     ArrayList<Flight> resultFlights = jsonFlightAttempt.parseObject(response.getContentAsString());
     Flight resultFlight = resultFlights.get(0);
-    Flight expectedFlight =
-        new Flight(99, "doge airlines", deptDate, deptTime, 0, "dogeville", "dogeland", 300);
 
     assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
     assertEquals(1, resultFlights.size());
