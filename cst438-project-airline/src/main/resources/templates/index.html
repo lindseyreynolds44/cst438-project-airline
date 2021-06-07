@@ -81,10 +81,7 @@
 							$("#response-message").text("No flights avaiable"); 
 							$("#departure-date").append($("<option>").text("Flight Dates"));
 						}
-						// reset the drop down menu
-						//$("#departure-date").empty();
-						//$("#departure-date").append($("<option>").text("Flight Dates"));
-						
+											
 						// add all the option tags for departure date.
 						data.forEach(function (date) {
 							  $("#departure-date").append($("<option>").val(date).text(date));
