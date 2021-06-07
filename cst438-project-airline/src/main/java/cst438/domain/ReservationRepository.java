@@ -5,6 +5,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
+
+  Reservation findByReservationId(int reservationId);
+
+
   // We'll need a query to select all the reservations a user name grouping it by date.
   // We'll need a query to update a reservation
   // We'll need a query to delete a reservation

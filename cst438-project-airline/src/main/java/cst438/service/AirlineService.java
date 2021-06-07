@@ -74,26 +74,52 @@ public class AirlineService {
     return flightRepository.findAll();
   }
 
+  /**
+   * Creates a new reservation using the flight ID, user ID, seat ID, first name and last name
+   * specified. Returns the newly created reservation object or null if any of the IDs entered were
+   * incorrect.
+   */
   public Reservation makeReservation(int flightId, int userId, int seatId,
       String passengerFirstName, String passengerLastName) {
-    ArrayList<User> user = userRepository.findByUserId(userId);
-    ArrayList<Flight> flight = flightRepository.findByFlightId(flightId);
-    ArrayList<Seat> seat = seatRepository.findBySeatId(seatId);
+    User user = userRepository.findByUserId(userId);
+    Flight flight = flightRepository.findByFlightId(flightId);
+    Seat seat = seatRepository.findBySeatId(seatId);
 
-    if (user.isEmpty() || flight.isEmpty() || seat.isEmpty()) {
+    // Check if any of the entered IDs are invalid
+    if (user == null || flight == null || seat == null) {
       return null;
     }
 
-    // TODO: Change seat to no longer available
+    // Set seat to unavailable
+    seatRepository.setSeatToUnavailable(seatId);
 
-    // TODO: Make date created time stamp work correctly
+    Reservation reservation = new Reservation(user, passengerFirstName, passengerLastName, flight,
+        seat, flight.getPrice());
 
-    Reservation reservation = new Reservation(user.get(0), passengerFirstName, passengerLastName,
-        flight.get(0), seat.get(0), flight.get(0).getPrice());
     reservationRepository.save(reservation);
 
     return reservation;
   }
+
+  /**
+   * Checks if this seat is in the database and available to book. Returns a boolean value.
+   */
+  public boolean isSeatAvailable(int seatId) {
+
+    // Check if this seat exists in the database
+    Seat seat = seatRepository.findBySeatId(seatId);
+    if (seat == null) {
+      return false;
+    }
+
+    // Check if this seat is available to book
+    int isAvailable = seatRepository.isSeatAvailable(seatId);
+    if (isAvailable == 0) {
+      return false;
+    }
+    return true;
+  }
+
 
   // We need the following methods:
 
