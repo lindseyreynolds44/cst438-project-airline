@@ -1,40 +1,120 @@
 <!DOCTYPE html>
 <html xmlns:th="www.thymeleaf.org">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Flights</title>
-	<link th:href="@{/css/main.css}" rel="stylesheet" />
+	<!--/*/ <th:block th:include="fragments/fragments :: head"></th:block> /*/-->
 </head>
 <body>
+<!--/*/ <th:block th:include="fragments/topnav :: navbar"></th:block> /*/-->
+	
+
+
+	<!-- Modal -->
+	<div class="modal fade" id="seatModal" tabindex="-1" role="dialog" aria-labelledby="seatModal" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="seatModal">Modal title</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	        ...
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	        <button type="button" class="btn btn-primary">Save changes</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<!-- End Modal -->
 	<div id="content">
 
-		<table>
-			<tr>
-				<th>Airline</th>
-				<th>Origin</th>
-				<th>Destination</th>
-				<th>Departure Date</th>
-				<th>Departure Time</th>
-			</tr>
-			<tr th:each="flight : ${flights}" th:id="${flight.flightId}">
-				<td th:text="${flight.airlineName}"></td>
-				<td th:text="${flight.originCity}"></td>
-				<td th:text="${flight.destinationCity}"></td>
-				<td th:text="${flight.departureDate}"></td>
-				<td th:text="${flight.departureTime}"></td>
-				<td><input type="button" value="Book" onclick="book()" /></td>
-			</tr>
+		<table id="flights-table" class="table table=striped border">
+			<thead class="thead-dark">
+				<tr>
+					<th scope="col">Airline</th>
+					<th scope="col">Origin</th>
+					<th scope="col">Destination</th>
+					<th scope="col">Departure Date</th>
+					<th scope="col">Departure Time</th>
+					<th scope="col">Like this flight?</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr class="flight-row" th:each="flight : ${flights}" th:id="${flight.flightId}">
+					<td th:text="${flight.airlineName}"></td>
+					<td th:text="${flight.originCity}"></td>
+					<td th:text="${flight.destinationCity}"></td>
+					<td th:text="${#dates.format(flight.departureDate, 'E, MM-dd-yy')}"></td>
+					<td th:text="${#dates.format(flight.departureTime, 'h:mm aa z')}"></td>
+					<td>
+						<form th:attr="data-flight-id=${flight.flightId}">
+							<label for="firstClass">First Class</label>
+							<input class="checkbox" id="firstClass" type="checkbox" value="0" />
+							<input type="button" value="Book" onclick="book()" />
+						</form>
+					</td>
+				</tr>
+			</tbody>
 		</table>
 
 	</div>
-	
+	<!-- Scripts -->	
+	<!--/*/ <th:block th:include="fragments/fragments :: scripts"></th:block> /*/-->
 	<script>
+		/**
+		* Updates the value of the clicked checkbox 
+		* 1 means first class 0 means coach.
+		*/
+		$(document).ready(function () {
+			$(".checkbox").on("change", function() {
+				const value = this.checked ? "1" : "0";
+				$(this).val(value);
+			});
+		});
+		
+		/**
+		* Calls the rest API to get the available seats for a specific flight
+		*/
 	    function book() {
-	        var flight_id = event.target.parentNode.parentNode.id;
-	        alert("Flight ID: " + flight_id );
+	        const flight_id = event.target.parentNode.getAttribute("data-flight-id");
+	        const isFirstClass = $("#firstClass").val()
+	        alert("Flight ID: " + flight_id + "\n" + "isFirstClass: " + isFirstClass);
 	        
-		    }
+	        $.ajax({
+	        	method: "GET",
+	        	url: "/api/getSeats",
+	        	data: {
+	        		"flightId": flight_id,
+	        		"isFirstClass": isFirstClass
+	        	},
+	        	success: function(response) {
+	        		console.log(response);
+	        		launchModal(response);
+	        	}
+	        });
+
+     
+		  }
+		/**
+		* This function will open the modal, which will contain a form
+		* that will send data to the server.
+		*/
+		function launchModal(response){
+			$("#seatModal").modal("show");
+			$(".modal-body").empty();
+			$(".modal-body").html('<select id="seat-row">' +
+					'	<option value="" selected>Seat Row</option>' +
+					'</select>' +
+					'<select id="seat-letter">' +
+					'	<option value="" selected>Seat Letter</option>' +
+					'</select>')
+		}
+
+
 	</script>
 </body>
 </html>

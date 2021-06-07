@@ -1,13 +1,14 @@
 @charset "ISO-8859-1";
 
 body {
-	max-width: 100em;
-	font-family: arial;
-	margin: auto;
-	background-image: linear-gradient(to top, #6a85b6 0%, #bac8e0 100%);
+  max-width: 100em;
+  font-family: arial;
+  margin: auto;
+  background-image: linear-gradient(to top, #6a85b6 0%, #bac8e0 100%);
 }
-body, html {
-	height: 100%;
+body,
+html {
+  height: 100%;
 }
 
 .nav-ul {
@@ -38,7 +39,8 @@ body, html {
 /* The hero image */
 .hero-img {
   /* Use "linear-gradient" to add a darken background effect to the image (photographer.jpg). This will make the text easier to read */
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("../images/index-hero-img.jpg");
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url("../images/index-hero-img.jpg");
 
   /* Set a specific height */
   height: 70%;
@@ -48,7 +50,6 @@ body, html {
   background-repeat: no-repeat;
   background-size: cover;
   position: relative;
- 
 }
 .hero-text {
   text-align: center;
@@ -59,17 +60,28 @@ body, html {
   color: white;
 }
 
-select , .option {
-	text-transform: capitalize;
+select,
+.option {
+  text-transform: capitalize;
 }
 
 #content {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+  min-height: 100vh;
+  margin-top: 10vh;
 }
 table {
-	text-transform: capitalize;
+  text-transform: capitalize;
+}
+
+.table {
+  max-width: 75%;
+  color: whitesmoke;
+}
+
+.flight-row {
+  text-align: center;
 }
