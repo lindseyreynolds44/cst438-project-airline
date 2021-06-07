@@ -7,14 +7,9 @@
 	<link th:href="@{/css/main.css}" rel="stylesheet" />
 </head>
 <body>
-	<nav>
-		<ul class="nav-ul">
-			<li class="nav-li"><a href="/">Home</a></li>
-			<li class="nav-li"><a href="/searchFlights">Search Flights</a></li>
-			<li class="nav-li"><a href="/reservations">See Reservations</a></li>
-			<li class="nav-li"><a href="/login">Login</a></li>
-		</ul>
-	</nav>
+<!--/*/ <th:block th:include="fragments/topnav :: navbar"></th:block> /*/-->
+
+</div>
 	<div id="content">
 	
 
@@ -45,7 +40,7 @@
 
 	</div>
 	<!-- Scripts -->	
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<!--/*/ <th:block th:include="fragments/fragments :: scripts"></th:block> /*/-->
 	<script>
 		/**
 		* Updates the value of the clicked checkbox 
