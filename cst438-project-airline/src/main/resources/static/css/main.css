@@ -77,13 +77,11 @@ table {
   text-transform: capitalize;
 }
 
-#flights-table {
-  border: 2px solid white;
-  padding: 1em;
-  border-radius: 1em;
-  min-width: 75%;
+.table {
+  max-width: 75%;
   color: whitesmoke;
 }
+
 .flight-row {
   text-align: center;
 }
