@@ -1,5 +1,8 @@
 # Flights R Us API Documentation
 
+## Heroku URL
+`https://cst438w3a-airline-service.herokuapp.com`
+
 ## Endpoints
 
 <br/>
@@ -253,22 +256,60 @@ This endpoint will allow a thirdparty end user to book a flight reservation.
 
 #### Parameters
 
-    - userID (required) string
-    - flightID (required) int
-    - seatID (required)   int
+    - flightId (required) int
+    - userId (required) int
+    - seatId (required)   int
     - passengerFirstName (required) string
     - passengerLastName (required)  string
 
-##### Request Example
+#### Request Example
 
-`needed`
+`/api/makeReservation?flightId=10&userId=9&seatId=900&passengerFirstName=Fake&passengerLastName=Data`
+
+
+##### Note: This updates the database, so each time you call this endpoint, the seat ID you just used will become unavailable. If you want to test this endpoint multiple times, be sure to change the seat ID.
+
+<br/>
 
 #### Response
 
-A successful response will return a 200 code, the reservation id, and the when booked timestamp.
+- A successful response will return a 200 code and a json response with the newly created reservation information.
+- If the seat is not available to book, a 200 code along with an error message will be displayed.
+- If any of the ID numbers are invalid, a 404 not found code will be displayed. 
+
+
 
 ##### Response Example
 
 ```
-
+{
+    "reservationId": 22,
+    "user": {
+        "userId": 9,
+        "userName": "clumox8",
+        "password": "rZbtCC"
+    },
+    "firstName": "Hello",
+    "lastName": "World",
+    "flight": {
+        "flightId": 10,
+        "airlineName": "jet-blue",
+        "departureDate": "2021-09-09",
+        "departureTime": "11:02:26",
+        "numberOfStops": 1,
+        "originCity": "san diego",
+        "destinationCity": "washington d.c.",
+        "price": 675
+    },
+    "seat": {
+        "seatId": 839,
+        "flightId": 7,
+        "seatRow": 3,
+        "seatLetter": "C",
+        "available": 1,
+        "isFirstClass": 1
+    },
+    "dateCreated": null,
+    "price": 675
+}
 ```
