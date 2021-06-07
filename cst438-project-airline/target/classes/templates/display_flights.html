@@ -6,10 +6,31 @@
 </head>
 <body>
 <!--/*/ <th:block th:include="fragments/topnav :: navbar"></th:block> /*/-->
-
-</div>
-	<div id="content">
 	
+
+
+	<!-- Modal -->
+	<div class="modal fade" id="seatModal" tabindex="-1" role="dialog" aria-labelledby="seatModal" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="seatModal">Modal title</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	        ...
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	        <button type="button" class="btn btn-primary">Save changes</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<!-- End Modal -->
+	<div id="content">
 
 		<table id="flights-table" class="table table=striped border">
 			<thead class="thead-dark">
@@ -72,6 +93,7 @@
 	        	},
 	        	success: function(response) {
 	        		console.log(response);
+	        		launchModal(response);
 	        	}
 	        });
 
@@ -81,7 +103,16 @@
 		* This function will open the modal, which will contain a form
 		* that will send data to the server.
 		*/
-		function launchModal(){}
+		function launchModal(response){
+			$("#seatModal").modal("show");
+			$(".modal-body").empty();
+			$(".modal-body").html('<select id="seat-row">' +
+					'	<option value="" selected>Seat Row</option>' +
+					'</select>' +
+					'<select id="seat-letter">' +
+					'	<option value="" selected>Seat Letter</option>' +
+					'</select>')
+		}
 
 
 	</script>
