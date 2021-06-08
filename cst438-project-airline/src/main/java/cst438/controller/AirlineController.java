@@ -49,9 +49,11 @@ public class AirlineController {
   }
 
   @PostMapping("/searchFlights/provideDetails")
-  public String provideDetails(@RequestParam("flightId") String flightId, Model model) {
+  public String provideDetails(@RequestParam("flightId") String flightId,
+      @RequestParam(value = "numberOfPassengers") String numberOfPassengers, Model model) {
 
-    System.out.println(flightId);
+    System.out.println("Search Flights Provide Details " + " FlightID: " + flightId
+        + " Number Of Passengers: " + numberOfPassengers);
     model.addAttribute("flightId", flightId);
 
     return "provide_details";

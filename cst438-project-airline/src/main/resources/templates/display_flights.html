@@ -7,29 +7,6 @@
 <body>
 <!--/*/ <th:block th:include="fragments/topnav :: navbar"></th:block> /*/-->
 	
-
-
-	<!-- Modal -->
-	<div class="modal fade" id="seatModal" tabindex="-1" role="dialog" aria-labelledby="seatModal" aria-hidden="true">
-	  <div class="modal-dialog modal-dialog-centered" role="document">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <h5 class="modal-title" id="seatModal">Modal title</h5>
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-	          <span aria-hidden="true">&times;</span>
-	        </button>
-	      </div>
-	      <div class="modal-body">
-	        ...
-	      </div>
-	      <div class="modal-footer">
-	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-	        <button type="button" class="btn btn-primary">Save changes</button>
-	      </div>
-	    </div>
-	  </div>
-	</div>
-	<!-- End Modal -->
 	<div id="content">
 
 		<table id="flights-table" class="table table=striped border">
@@ -51,10 +28,10 @@
 					<td th:text="${#dates.format(flight.departureDate, 'E, MM-dd-yy')}"></td>
 					<td th:text="${#dates.format(flight.departureTime, 'h:mm aa z')}"></td>
 					<td>
-						<form th:attr="data-flight-id=${flight.flightId}">
-							<label for="firstClass">First Class</label>
-							<input class="checkbox" id="firstClass" type="checkbox" value="0" />
-							<input type="button" value="Book" onclick="book()" />
+						<form action="/searchFlights/provideDetails" method="post">
+							<input type="hidden" name="flightId" th:attr="value=${flight.flightId}" />
+							<input type="hidden" name="numberOfPassengers" th:attr="value=${numberOfPassengers}"/>
+							<input type="submit" value="Book"  />
 						</form>
 					</td>
 				</tr>
@@ -73,48 +50,9 @@
 			$(".checkbox").on("change", function() {
 				const value = this.checked ? "1" : "0";
 				$(this).val(value);
+				alert(value);
 			});
 		});
-		
-		/**
-		* Calls the rest API to get the available seats for a specific flight
-		*/
-	    function book() {
-	        const flight_id = event.target.parentNode.getAttribute("data-flight-id");
-	        const isFirstClass = $("#firstClass").val()
-	        alert("Flight ID: " + flight_id + "\n" + "isFirstClass: " + isFirstClass);
-	        
-	        $.ajax({
-	        	method: "GET",
-	        	url: "/api/getSeats",
-	        	data: {
-	        		"flightId": flight_id,
-	        		"isFirstClass": isFirstClass
-	        	},
-	        	success: function(response) {
-	        		console.log(response);
-	        		launchModal(response);
-	        	}
-	        });
-
-     
-		  }
-		/**
-		* This function will open the modal, which will contain a form
-		* that will send data to the server.
-		*/
-		function launchModal(response){
-			$("#seatModal").modal("show");
-			$(".modal-body").empty();
-			$(".modal-body").html('<select id="seat-row">' +
-					'	<option value="" selected>Seat Row</option>' +
-					'</select>' +
-					'<select id="seat-letter">' +
-					'	<option value="" selected>Seat Letter</option>' +
-					'</select>')
-		}
-
-
 	</script>
 </body>
 </html>
