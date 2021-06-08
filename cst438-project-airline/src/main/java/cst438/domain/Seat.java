@@ -21,20 +21,21 @@ public class Seat {
   private int seatRow;
   @Column(name = "seat_letter")
   private String seatLetter;
-  private int available;
+  @Column(name = "available")
+  private int isAvailable;
   @Column(name = "is_first_class")
   private int isFirstClass;
 
   public Seat() {}
 
-  public Seat(int seatId, int flightId, int seatRow, String seatLetter, int available,
+  public Seat(int seatId, int flightId, int seatRow, String seatLetter, int isAvailable,
       int isFirstClass) {
     super();
     this.seatId = seatId;
     this.flightId = flightId;
     this.seatRow = seatRow;
     this.seatLetter = seatLetter;
-    this.available = available;
+    this.isAvailable = isAvailable;
     this.isFirstClass = isFirstClass;
   }
 
@@ -67,12 +68,12 @@ public class Seat {
     this.seatLetter = seatLetter;
   }
 
-  public int isAvailable() {
-    return available;
+  public int getIsAvailable() {
+    return isAvailable;
   }
 
-  public void setAvailable(int available) {
-    this.available = available;
+  public void setIsAvailable(int isAvailable) {
+    this.isAvailable = isAvailable;
   }
 
   public int getIsFirstClass() {
@@ -93,7 +94,7 @@ public class Seat {
     if (getClass() != obj.getClass())
       return false;
     Seat other = (Seat) obj;
-    if (available != other.available)
+    if (isAvailable != other.isAvailable)
       return false;
     if (flightId != other.flightId)
       return false;
@@ -114,7 +115,7 @@ public class Seat {
   @Override
   public String toString() {
     return "Seat [seatId=" + seatId + ", flightId=" + flightId + ", seatRow=" + seatRow
-        + ", seatLetter=" + seatLetter + ", available=" + available + ", isFirstClass="
+        + ", seatLetter=" + seatLetter + ", isAvailable=" + isAvailable + ", isFirstClass="
         + isFirstClass + "]";
   }
 
