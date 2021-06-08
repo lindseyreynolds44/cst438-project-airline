@@ -35,12 +35,26 @@ public class AirlineController {
   @PostMapping("/searchFlights")
   public String searchFlights(@RequestParam(value = "originCity") String origin,
       @RequestParam(value = "destinationCity") String destination,
-      @RequestParam(value = "departureDate") String date, Model model) {
+      @RequestParam(value = "departureDate") String date,
+      @RequestParam(value = "numberOfPassengers") String numberOfPassengers, Model model) {
+
+    System.out.println("Search Flights: " + "Origin: " + origin + " Destination: " + destination
+        + " Date: " + date + " Number of passengers: " + numberOfPassengers);
 
     ArrayList<Flight> flights = airlineService.getFlightsByRouteAndDate(origin, destination, date);
 
+    model.addAttribute("numberOfPassengers", numberOfPassengers);
     model.addAttribute("flights", flights);
     return "display_flights";
+  }
+
+  @PostMapping("/searchFlights/provideDetails")
+  public String provideDetails(@RequestParam("flightId") String flightId, Model model) {
+
+    System.out.println(flightId);
+    model.addAttribute("flightId", flightId);
+
+    return "provide_details";
   }
 
 
