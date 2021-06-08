@@ -1,5 +1,6 @@
 package cst438.domain;
 
+import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Table(name = "reservation")
@@ -37,8 +39,9 @@ public class Reservation {
   @JoinColumn(name = "seat_id", referencedColumnName = "seat_id")
   private Seat seat;
 
-  @Column(name = "date_created", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-  private String dateCreated;
+  @Column(name = "date_created")
+  @CreationTimestamp
+  private Timestamp dateCreated;
 
   private int price;
 
@@ -56,7 +59,7 @@ public class Reservation {
   }
 
   public Reservation(int reservationId, User user, String firstName, String lastName, Flight flight,
-      Seat seat, String dateCreated, int price) {
+      Seat seat, Timestamp dateCreated, int price) {
     super();
     this.reservationId = reservationId;
     this.user = user;
@@ -112,11 +115,11 @@ public class Reservation {
     this.seat = seat;
   }
 
-  public String getDateCreated() {
+  public Timestamp getDateCreated() {
     return dateCreated;
   }
 
-  public void setDateCreated(String dateCreated) {
+  public void setDateCreated(Timestamp dateCreated) {
     this.dateCreated = dateCreated;
   }
 

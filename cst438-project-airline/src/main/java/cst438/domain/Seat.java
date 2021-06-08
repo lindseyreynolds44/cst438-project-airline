@@ -67,7 +67,7 @@ public class Seat {
     this.seatLetter = seatLetter;
   }
 
-  public int getAvailable() {
+  public int isAvailable() {
     return available;
   }
 

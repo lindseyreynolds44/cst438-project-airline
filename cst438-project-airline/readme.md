@@ -1,5 +1,8 @@
 # Flights R Us API Documentation
 
+## Heroku URL
+`https://cst438w3a-airline-service.herokuapp.com`
+
 ## Endpoints
 
 <br/>
@@ -253,22 +256,60 @@ This endpoint will allow a thirdparty end user to book a flight reservation.
 
 #### Parameters
 
-    - userID (required) string
-    - flightID (required) int
-    - seatID (required)   int
+    - flightId (required) int
+    - userId (required) int
+    - seatId (required)   int
     - passengerFirstName (required) string
     - passengerLastName (required)  string
 
-##### Request Example
+#### Request Example
 
-`needed`
+`/api/makeReservation?flightId=10&userId=9&seatId=900&passengerFirstName=Fake&passengerLastName=Data`
+
+
+##### Note: This updates the database, so each time you call this endpoint, the seat ID you just used will become unavailable. If you want to test this endpoint multiple times, be sure to change the seat ID.
+
+<br/>
 
 #### Response
 
-A successful response will return a 200 code, the reservation id, and the when booked timestamp.
+- A successful response will return a 200 code and a json response with the newly created reservation information.
+- If the seat is not available to book, a 200 code along with an error message will be displayed.
+- If any of the ID numbers are invalid, a 404 not found code will be displayed. 
+
+
 
 ##### Response Example
 
 ```
-
+{
+    "reservationId": 27,
+    "user": {
+        "userId": 9,
+        "userName": "clumox8",
+        "password": "rZbtCC"
+    },
+    "firstName": "Hello",
+    "lastName": "World",
+    "flight": {
+        "flightId": 20,
+        "airlineName": "america",
+        "departureDate": "2022-02-01",
+        "departureTime": "19:13:23",
+        "numberOfStops": 2,
+        "originCity": "seattle",
+        "destinationCity": "new york",
+        "price": 545
+    },
+    "seat": {
+        "seatId": 840,
+        "flightId": 7,
+        "seatRow": 3,
+        "seatLetter": "D",
+        "available": 1,
+        "isFirstClass": 1
+    },
+    "dateCreated": "2021-06-08T03:39:37.318+00:00",
+    "price": 545
+}
 ```
