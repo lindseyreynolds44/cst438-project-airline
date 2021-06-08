@@ -116,7 +116,7 @@ public class AirlineService {
     }
 
     // Check if this seat is available to book
-    int isAvailable = seatRepository.isSeatAvailable(seatId);
+    int isAvailable = seat.isAvailable();
     if (isAvailable == 0) {
       return false;
     }

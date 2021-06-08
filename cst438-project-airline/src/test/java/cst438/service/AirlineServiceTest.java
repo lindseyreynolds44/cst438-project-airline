@@ -53,7 +53,6 @@ public class AirlineServiceTest {
 
     // Create stubs for the MOCK database
     given(seatRepository.findBySeatId(seatId)).willReturn(seat);
-    given(seatRepository.isSeatAvailable(seatId)).willReturn(1);
 
     // Test the isSeatAvailable method
     boolean result = as.isSeatAvailable(seatId);
@@ -73,7 +72,6 @@ public class AirlineServiceTest {
 
     // Create stubs for the MOCK database
     given(seatRepository.findBySeatId(seatId)).willReturn(seat);
-    given(seatRepository.isSeatAvailable(seatId)).willReturn(0);
 
     // Test the isSeatAvailable method
     boolean result = as.isSeatAvailable(seatId);
@@ -93,7 +91,6 @@ public class AirlineServiceTest {
 
     // Create stubs for the MOCK database
     given(seatRepository.findBySeatId(seatId)).willReturn(seat);
-    given(seatRepository.isSeatAvailable(seatId)).willReturn(0);
 
     // Test the isSeatAvailable method
     boolean result = as.isSeatAvailable(seatId);
