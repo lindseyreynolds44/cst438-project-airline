@@ -98,7 +98,10 @@ public class AirlineService {
 
     reservationRepository.save(reservation);
 
-    return reservation;
+    Reservation reservationFromDb =
+        reservationRepository.findByReservationId(reservation.getReservationId());
+
+    return reservationFromDb;
   }
 
   /**

@@ -283,7 +283,7 @@ This endpoint will allow a thirdparty end user to book a flight reservation.
 
 ```
 {
-    "reservationId": 22,
+    "reservationId": 27,
     "user": {
         "userId": 9,
         "userName": "clumox8",
@@ -292,24 +292,24 @@ This endpoint will allow a thirdparty end user to book a flight reservation.
     "firstName": "Hello",
     "lastName": "World",
     "flight": {
-        "flightId": 10,
-        "airlineName": "jet-blue",
-        "departureDate": "2021-09-09",
-        "departureTime": "11:02:26",
-        "numberOfStops": 1,
-        "originCity": "san diego",
-        "destinationCity": "washington d.c.",
-        "price": 675
+        "flightId": 20,
+        "airlineName": "america",
+        "departureDate": "2022-02-01",
+        "departureTime": "19:13:23",
+        "numberOfStops": 2,
+        "originCity": "seattle",
+        "destinationCity": "new york",
+        "price": 545
     },
     "seat": {
-        "seatId": 839,
+        "seatId": 840,
         "flightId": 7,
         "seatRow": 3,
-        "seatLetter": "C",
+        "seatLetter": "D",
         "available": 1,
         "isFirstClass": 1
     },
-    "dateCreated": null,
-    "price": 675
+    "dateCreated": "2021-06-08T03:39:37.318+00:00",
+    "price": 545
 }
 ```
