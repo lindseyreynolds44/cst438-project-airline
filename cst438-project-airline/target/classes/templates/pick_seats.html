@@ -6,7 +6,31 @@
 </head>
 <body>
 <!--/*/ <th:block th:include="fragments/topnav :: navbar"></th:block> /*/-->
+		
+<div th:each="i : ${#numbers.sequence(0,firstClassSeats.size() - 5)}" >
+		<div class="row" th:if="${i} % 4 == 0">
+			<div class="col">
+				<div class="btn btn-info" th:attr="data-seat-id=${firstClassSeats.get(i+0).getSeatId()}" th:text="${firstClassSeats.get(i+0).getSeatRow()}+${firstClassSeats.get(i+0).getSeatLetter()}"></div>
+				<div class="btn btn-info" th:attr="data-seat-id=${firstClassSeats.get(i+1).getSeatId()}" th:text="${firstClassSeats.get(i+1).getSeatRow()}+${firstClassSeats.get(i+1).getSeatLetter()}"></div>
+			</div>
+			<div class="col">
+				<div class="btn btn-info" th:attr="data-seat-id=${firstClassSeats.get(i+2).getSeatId()}" th:text="${firstClassSeats.get(i+2).getSeatRow()}+${firstClassSeats.get(i+2).getSeatLetter()}"></div>
+				<div class="btn btn-info" th:attr="data-seat-id=${firstClassSeats.get(i+3).getSeatId()}" th:text="${firstClassSeats.get(i+3).getSeatRow()}+${firstClassSeats.get(i+3).getSeatLetter()}"></div>
+			</div>
+		</div>
+
+	</div>	
 
 
+	<!-- Scripts -->	
+	<!--/*/ <th:block th:include="fragments/fragments :: scripts"></th:block> /*/-->
+	<script>
+		$(document).ready(function(){
+			let counter = 0;
+			
+			
+		});
+		
+	</script>
 </body>
 </html>
