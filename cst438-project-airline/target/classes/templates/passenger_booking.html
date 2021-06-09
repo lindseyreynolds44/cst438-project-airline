@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+	<title>Book Flight</title>
+	<!--/*/ <th:block th:include="fragments/fragments :: head"></th:block> /*/-->
+</head>
+<body>
+	<!--/*/ <th:block th:include="fragments/topnav :: navbar"></th:block> /*/-->
+	
+	<!-- Modal -->
+	<div class="modal fade" id="seatModal" tabindex="-1" role="dialog" aria-labelledby="seatModal" aria-hidden="true" th:attr="data-flight-id=${flightId}">
+	  <div class="modal-dialog modal-dialog-centered" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="seatModal">Modal title</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	      	<div class="seat" th:each="i : ${#numbers.sequence(1,numberOfPassengers)}">
+	      		<select class="seat-row">
+					<option value="" selected>Seat Row</option>
+				</select>
+				<select class="seat-letter">
+					<option value="" selected>Seat</option>
+				</select>
+				<br/>
+	      	</div>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	        <button type="button" class="btn btn-primary">Save changes</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<!-- End Modal -->
+	<div id="content">
+		<form action="/bookFlight" th:object=${reservation}>
+			<div th:id="'passenger-'+${i}" class="card" th:each="i : ${#numbers.sequence(1,numberOfPassengers)}">
+					<span th:text="'Passenger ' + ${i}"></span>
+					<input type="hidden" name="flightId" th:value="${flightId}">
+					<input type="hidden" name="numberOfPassengers" th:value="${numberOfPassengers}">
+					<input type="hidden" name="seatId" value="">
+					<label>First Name</label>
+					<input class="input-group-text" type="text" required>
+					<label>Last Name</label>
+					<input class="input-group-text" type="text" required>
+			</div>
+			<input class="btn btn-primary" type="submit" value="Finish Booking">
+		</form>
+	</div>
+
+
+	<!-- Scripts -->	
+	<!--/*/ <th:block th:include="fragments/fragments :: scripts"></th:block> /*/-->
+	<script th:inline="javascript">
+		
+		<!--/* allows me to use controller variables in JS! */-->
+		const numberOfPassengers = [[${numberOfPassengers}]]; 
+	
+		$(document).ready(function() {
+			getSeats();
+
+		});
+		/**
+		* Calls the rest API to get the available seats for a specific flight
+		*/
+	    function getSeats() {
+	        const flight_id = $("#seatModal").attr("data-flight-id");
+	        let isFirstClass = 0;
+	        //alert("Flight ID: " + flight_id + "\n" + "isFirstClass: " + isFirstClass);
+	        
+	        $.ajax({
+	        	method: "GET",
+	        	url: "/api/getSeats",
+	        	data: {
+	        		"flightId": flight_id,
+	        		"isFirstClass": isFirstClass
+	        	},
+	        	success: function(response) {
+	        		console.log(response);
+	        		launchModal(response);
+	        	}
+	        });	 
+		  }
+		/**
+		* This function will open the modal, which will contain a form
+		* that will send data to the server.
+		*/
+		function launchModal(response){
+			$("#seatModal").modal("show");
+			const seatRows = response.filter(unique);
+			console.log(seatRows);
+				for (const seat of seats){
+					console.log("adding seat row" + seat.seatRow);
+					$(".seat-row").append($("<option>").val(seat.seatRow).text(seat.seatRow));
+					$(".seat-letter").append($("<option>").val(seat.seatLetter).text(seat.seatLetter));
+				}
+		}
+		
+		const unique = (value, index, self) => {
+			  return self.indexOf(value) === index
+		}
+
+		const ages = [26, 27, 26, 26, 28, 28, 29, 29, 30]
+		const uniqueAges = ages.filter(unique)
+		console.log(uniqueAges)
+	</script>
+</body>
+</html>
