@@ -136,6 +136,41 @@ public class AirlineService {
     return true;
   }
 
+  /**
+   * Checks if this reservation is valid and that the user ID and reservation ID match. Returns a
+   * boolean value.
+   */
+  public boolean isValidReservation(int reservationId, int userId) {
+    Reservation reservation =
+        reservationRepository.findByReservationIdAndUserId(reservationId, userId);
+
+    if (reservation == null) {
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * Removes this reservation from the database and changes the associated seat to available again.
+   * Returns a boolean that indicates whether the reservation was cancelled successfully or not.
+   */
+  public boolean cancelReservation(int reservationId) {
+    Reservation reservation = reservationRepository.findByReservationId(reservationId);
+
+    // This should never happen, if isValidReservation() is called before this method
+    if (reservation == null)
+      return false;
+
+    // Change this seat to be available now
+    int seatId = reservation.getSeat().getSeatId();
+    seatRepository.setSeatToAvailable(seatId);
+
+    // Delete this reservation from the database
+    reservationRepository.cancelByReservationId(reservationId);
+
+    return true;
+  }
+
 
   // We need the following methods:
 

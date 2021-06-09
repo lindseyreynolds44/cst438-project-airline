@@ -313,3 +313,51 @@ This endpoint will allow a thirdparty end user to book a flight reservation.
     "price": 545
 }
 ```
+
+
+### Cancel a Reservation
+`/api/cancelReservation`
+
+`TYPE: POST`
+
+#### Description
+
+This endpoint will allow a thirdparty end user to cancel a flight reservation using their user ID and reservation ID.
+
+#### Parameters
+
+    - reservationId (required) int
+    - userId (required) int
+
+#### Request Example
+
+`/api/cancelReservation?&reservationId=19&userId=2`
+
+
+##### Note 1: This updates the database, so each time you call this endpoint, the specified reservation will be deleted.
+##### Note 2: The user ID entered must match the user ID associated with the reservation.
+ 
+<br/>
+
+#### Response
+
+- A successful response will return the reservation ID of the cancelled reservation. 
+- If the user ID and reservation ID do not match up with an existing reservation, an invalid reservation error will be displayed
+
+
+##### Response Example (Success)
+
+```
+{
+    "status": "Success",
+    "data": 19
+}
+```
+
+##### Response Example (Failure)
+```
+{
+    "status": "Error: Invalid Reservation",
+    "data": null
+}
+```

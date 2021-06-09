@@ -5,12 +5,14 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import cst438.domain.Flight;
 import cst438.domain.Reservation;
+import cst438.domain.Response;
 import cst438.domain.Seat;
 import cst438.service.AirlineService;
 
@@ -104,11 +106,42 @@ public class AirlineRestController {
     if (reservation == null) {
       // At least one ID was incorrect
       throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-          "MESSAGE: Request contains incorrect flight ID, user ID or seat ID.");
+          "ERROR: Request contains incorrect flight ID, user ID or seat ID.");
     }
 
     System.out.println("\n-- Reservation Created ID: " + reservation.getReservationId() + " --");
     return reservation;
+  }
+
+  /**
+   * Cancels a reservation using a reservation ID and user ID. If it was successful, this method
+   * will return the reservation ID that was just cancelled. If this reservation ID and user ID pair
+   * do not have a corresponding reservation, a 404 not found exception will be returned.
+   */
+
+
+  @PostMapping(value = "/cancelReservation")
+  public Response cancelReservation(@RequestParam("reservationId") int reservationId,
+      @RequestParam("userId") int userId) {
+
+    System.out.println("Attempting to cancel reservation with Reservation ID: " + reservationId
+        + " and User ID: " + userId);
+
+    // Check that this reservation is valid
+    if (!airlineService.isValidReservation(reservationId, userId)) {
+      // This is not a valid reservation
+      return new Response("Error: Invalid Reservation", null);
+    }
+
+    // Cancel the reservation
+    if (!airlineService.cancelReservation(reservationId)) {
+      // This is not a valid reservation
+      return new Response("Error: Invalid Reservation", null);
+    }
+
+    System.out.println("\n-- Cancelled Reservation with ID: " + reservationId + " --");
+
+    return new Response("Success", reservationId);
   }
 
 

@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cst438.domain.Flight;
 import cst438.domain.Reservation;
+import cst438.domain.Response;
 import cst438.domain.Seat;
 import cst438.domain.User;
 import cst438.service.AirlineService;
@@ -41,6 +42,7 @@ public class AirlineRestControllerTest {
   private JacksonTester<ArrayList<Date>> jsonDateAttempt;
   private JacksonTester<ArrayList<String>> jsonRouteAttempt;
   private JacksonTester<Reservation> jsonReservationAttempt;
+  private JacksonTester<Response> jsonResponseAttempt;
 
   SimpleDateFormat sdf;
 
@@ -55,7 +57,7 @@ public class AirlineRestControllerTest {
   }
 
   @Test
-  public void TestGetFlights() throws Exception {
+  public void testGetFlights() throws Exception {
     Date deptDate = Date.valueOf("2021-06-01");
     Time deptTime = Time.valueOf("12:12:12");
     Flight dogeFlight =
@@ -80,7 +82,7 @@ public class AirlineRestControllerTest {
   }
 
   @Test
-  public void TestGetFlightsShouldReturnEmptyIfNotFound() throws Exception {
+  public void testGetFlightsShouldReturnEmptyIfNotFound() throws Exception {
     Date deptDate = Date.valueOf("2021-06-01");
     Time deptTime = Time.valueOf("12:12:12");
     Flight dogeFlight =
@@ -101,7 +103,7 @@ public class AirlineRestControllerTest {
   }
 
   @Test
-  public void TestGetFlightsShouldReturnEmptyIfWrongVarType() throws Exception {
+  public void testGetFlightsShouldReturnEmptyIfWrongVarType() throws Exception {
     Date deptDate = Date.valueOf("2021-06-01");
     Time deptTime = Time.valueOf("12:12:12");
     Flight dogeFlight =
@@ -122,7 +124,7 @@ public class AirlineRestControllerTest {
   }
 
   @Test
-  public void TestGetSeatShouldReturnSeats() throws Exception {
+  public void testGetSeatShouldReturnSeats() throws Exception {
     Seat seat = new Seat(254, 23, 4, "A", 1, 1);
     ArrayList<Seat> seats = new ArrayList<Seat>(Arrays.asList(seat));
 
@@ -140,7 +142,7 @@ public class AirlineRestControllerTest {
   }
 
   @Test
-  public void TestGetSeatsReturnsEmptyIfNotFound() throws Exception {
+  public void testGetSeatsReturnsEmptyIfNotFound() throws Exception {
     Seat seat = new Seat(254, 23, 4, "A", 1, 1);
     ArrayList<Seat> seats = new ArrayList<Seat>(Arrays.asList(seat));
 
@@ -155,7 +157,7 @@ public class AirlineRestControllerTest {
 
 
   @Test
-  public void TestGetDatesShouldReturnDates() throws Exception {
+  public void testGetDatesShouldReturnDates() throws Exception {
     ArrayList<Date> dates = new ArrayList<>();
     dates.add(Date.valueOf("2022-01-23"));
     dates.add(Date.valueOf("2022-05-23"));
@@ -180,7 +182,7 @@ public class AirlineRestControllerTest {
   }
 
   @Test
-  public void TestGetDatesShouldReturnEmptyIfNotFound() throws Exception {
+  public void testGetDatesShouldReturnEmptyIfNotFound() throws Exception {
 
     ArrayList<Date> dates = new ArrayList<>();
     dates.add(Date.valueOf("2022-01-23"));
@@ -199,7 +201,7 @@ public class AirlineRestControllerTest {
   }
 
   @Test
-  public void TestGetAllFlights() throws Exception {
+  public void testGetAllFlights() throws Exception {
     Date deptDate1 = Date.valueOf("2021-06-01");
     Time deptTime1 = Time.valueOf("12:12:12");
     Flight flight1 =
@@ -231,7 +233,7 @@ public class AirlineRestControllerTest {
   }
 
   @Test
-  public void TestGetAllFlightsWithEmptyDB() throws Exception {
+  public void testGetAllFlightsWithEmptyDB() throws Exception {
     ArrayList<Flight> Flights = new ArrayList<Flight>();
 
     given(airlineService.getAllFlights()).willReturn(Flights);
@@ -247,7 +249,7 @@ public class AirlineRestControllerTest {
   }
 
   @Test
-  public void TestGetRoutes() throws Exception {
+  public void testGetRoutes() throws Exception {
     ArrayList<String> routes = new ArrayList<String>(
         Arrays.asList("seattle,san diego", "san francisco,boston", "new york,boston",
             "boston,san francisco", "washington d.c.,new york", "washington d.c.,san diego",
@@ -286,7 +288,7 @@ public class AirlineRestControllerTest {
   }
 
   @Test
-  public void TestMakeReservationWithValidInfoFirstClassSeat() throws Exception {
+  public void testMakeReservationWithValidInfoFirstClassSeat() throws Exception {
 
     int flightId = 10;
     int userId = 9;
@@ -340,7 +342,7 @@ public class AirlineRestControllerTest {
   }
 
   @Test
-  public void TestMakeReservationWithValidInfoEconomySeat() throws Exception {
+  public void testMakeReservationWithValidInfoEconomySeat() throws Exception {
 
     int flightId = 10;
     int userId = 9;
@@ -392,7 +394,7 @@ public class AirlineRestControllerTest {
   }
 
   @Test
-  public void TestMakeReservationWithInvalidId() throws Exception {
+  public void testMakeReservationWithInvalidId() throws Exception {
     int flightId = 10;
     int userId = 120;
     int seatId = 350;
@@ -415,7 +417,7 @@ public class AirlineRestControllerTest {
   }
 
   @Test
-  public void TestMakeReservationWithUnavailableSeat() throws Exception {
+  public void testMakeReservationWithUnavailableSeat() throws Exception {
     int flightId = 10;
     int userId = 9;
     int seatId = 350;
@@ -451,6 +453,22 @@ public class AirlineRestControllerTest {
 
     // Compare expected result to actual result
     assertEquals("", response.getContentAsString()); // Nothing should be returned
+  }
+
+  @Test
+  public void testCancelReservationSuccess() throws Exception {
+    int reservationId = 10;
+    int userId = 12;
+
+    given(airlineService.isValidReservation(userId, reservationId)).willReturn(true);
+    given(airlineService.cancelReservation(reservationId)).willReturn(true);
+
+    // Perform simulated HTTP call
+    // Find out how to test a post request!!!
+
+
+    // Verify that the status code is as expected
+    // assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
   }
 
 
