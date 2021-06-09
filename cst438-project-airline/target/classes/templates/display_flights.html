@@ -28,7 +28,7 @@
 					<td th:text="${#dates.format(flight.departureDate, 'E, MM-dd-yy')}"></td>
 					<td th:text="${#dates.format(flight.departureTime, 'h:mm aa z')}"></td>
 					<td>
-						<form action="/searchFlights/provideDetails" method="post">
+						<form action="/searchFlights/seats" method="post">
 							<input type="hidden" name="flightId" th:attr="value=${flight.flightId}" />
 							<input type="hidden" name="numberOfPassengers" th:attr="value=${numberOfPassengers}"/>
 							<input type="submit" value="Book"  />
