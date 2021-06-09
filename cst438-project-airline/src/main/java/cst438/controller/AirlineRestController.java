@@ -66,6 +66,9 @@ public class AirlineRestController {
   public ArrayList<Seat> getSeats(@RequestParam("flightId") int flightId,
       @RequestParam("isFirstClass") int isFirstClass) {
 
+    System.out.println(
+        "Rest: Get Seats " + "Flight ID: " + flightId + " Is First Class: " + isFirstClass);
+
     ArrayList<Seat> seats = airlineService.getSeatsByFlightId(flightId, isFirstClass);
 
     return seats;
