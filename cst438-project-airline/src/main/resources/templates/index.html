@@ -26,6 +26,10 @@
     		<select id="departure-date" name="departureDate" form="flight-form" disabled>
     			<option value="" disabled selected>Flight Dates</option>
     		</select>
+    		<select id="number-of-passengers" name="numberOfPassengers" form="flight-form" disabled>
+    			<option value="" selected>Passengers</option>
+    			<option th:each="i : ${#numbers.sequence(1,10)}" th:value="${i}" th:text="${i}" ></option>
+    		</select>
     		<!-- Submit -->
     		<input type="submit" value="submit">
     	</form>
@@ -45,45 +49,57 @@
 	
 		$("#origin-city").change(function() {
 			event.preventDefault();
-			$("#destination-city").removeAttr("disabled");
-		    originCityChanged = true;
+			if (!originCityChanged){
+				$("#destination-city").removeAttr("disabled");
+		    	originCityChanged = true;
+			} else {
+				triggerDropdowns();
+			}
 		});
 		
 		// Will load avalable flight dates for a city combo
-		$("#destination-city").change(function(){
+		$("#destination-city").on("change", function(){
 			if(originCityChanged){
-				
-				$("#response-message").empty(); // resets span 
-				
-				$.ajax({
-					method: "GET",
-					url: "/api/getFlightDates", 
-					data: {
-							"originCity": $("#origin-city").val(),
-							"destinationCity":$("#destination-city").val()		
-					},
-					success: function(data) {
-						console.log(data);
-						
-						// reset the drop down menu
-						$("#departure-date").empty();
-						// displays a message if no flights are available.
-						if (data.length == 0) {
-							$("#response-message").text("No flights avaiable"); 
-							$("#departure-date").append($("<option>").text("Flight Dates"));
-						}
-											
-						// add all the option tags for departure date.
-						data.forEach(function (date) {
-							  $("#departure-date").append($("<option>").val(date).text(date));
-							});
-						
-						$("#departure-date").removeAttr("disabled");
-					}
-				}); // ajax
+				triggerDropdowns();
 			}
 		}); // destination-city change
 		
+		function triggerDropdowns() {
+							
+			$("#response-message").empty(); // resets span 
+							
+			$.ajax({
+				method: "GET",
+				url: "/api/getFlightDates", 
+				data: {
+						"originCity": $("#origin-city").val(),
+						"destinationCity":$("#destination-city").val()		
+				    	},
+				success: function(data) {
+					console.log(data);
+									
+					// reset the drop down menu
+					$("#departure-date").empty();
+					// displays a message if no flights are available.
+					if (data.length == 0) {
+						$("#response-message").text("No flights avaiable"); 
+						$("#departure-date").append($("<option>").text("Flight Dates"));
+									
+						$("#departure-date").attr("disabled", true);
+						$("#number-of-passengers").attr("disabled", true);
+										
+					} else {
+						// add all the option tags for departure date.
+						data.forEach(function (date) {
+				    	$("#departure-date").append($("<option>").val(date).text(date));
+					});
+										
+						$("#departure-date").removeAttr("disabled");
+						$("#number-of-passengers").removeAttr("disabled");
+					 }	
+				 } // success
+			}); // ajax
+		} // triggerDropdowns()
 	});// ready
 </script>	
 
