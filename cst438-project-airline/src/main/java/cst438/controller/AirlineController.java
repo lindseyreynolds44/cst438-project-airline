@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import cst438.domain.Flight;
 import cst438.domain.Reservation;
+import cst438.domain.Seat;
 import cst438.service.AirlineService;
 
 @Controller
@@ -48,34 +49,52 @@ public class AirlineController {
     return "display_flights";
   }
 
-  @PostMapping("/searchFlights/provideDetails")
-  public String provideDetails(@RequestParam("flightId") String flightId,
-      @RequestParam(value = "numberOfPassengers") String numberOfPassengers, Model model) {
+  @PostMapping("/searchFlights/seats")
+  public String pickSeats(@RequestParam("flightId") int flightId,
+      @RequestParam(value = "numberOfPassengers") int numberOfPassengers, Model model) {
 
-    System.out.println("Search Flights Provide Details " + " FlightID: " + flightId
+    System.out.println("Search Flights Seats: " + " FlightID: " + flightId
         + " Number Of Passengers: " + numberOfPassengers);
-    model.addAttribute("flightId", flightId);
 
-    return "provide_details";
+    ArrayList<Seat> firstClassSeats = airlineService.getSeatsByFlightId(flightId, 1);
+    ArrayList<Seat> coachSeats = airlineService.getSeatsByFlightId(flightId, 0);
+
+    model.addAttribute("flightId", flightId);
+    model.addAttribute("numberOfPassengers", numberOfPassengers);
+    model.addAttribute("firstClassSeats", firstClassSeats);
+    model.addAttribute("coachSeats", coachSeats);
+
+
+    return "pick_seats";
+
   }
 
+  @PostMapping("/searchFlights/passengers")
+  public String passengers(@RequestParam("flightId") String flightId,
+      @RequestParam(value = "numberOfPassengers") int numberOfPassengers, Model model) {
 
+    System.out.println("Search Flights Passengers " + " FlightID: " + flightId
+        + " Number Of Passengers: " + numberOfPassengers);
 
-  // TODO This happens on a button press on the flight table
-  // Parameters: flight_id, how many passengers
-  @GetMapping("/chooseFlight")
-  public String chooseFlight(@RequestParam("flightId") String flightId,
-      @RequestParam("numPassengers") String numPassengers, Model model) {
+    ArrayList<Reservation> reservations = new ArrayList<>(numberOfPassengers);
+    System.out.println(reservations.size());
 
-    // add this flight to model
+    model.addAttribute("flightId", flightId);
+    model.addAttribute("numberOfPassengers", numberOfPassengers);
+    model.addAttribute("reservations", reservations);
 
-    return "reservation_form";
+    return "provide_details";
   }
 
 
   @PostMapping("/bookFlight")
   public String bookFlight(@RequestParam("reservations") ArrayList<Reservation> reservations,
       Model model) {
+
+    for (Reservation r : reservations) {
+      System.out.println(r.toString());
+    }
+
     return "flight_confirmation";
   }
 
