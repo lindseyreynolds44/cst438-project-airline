@@ -22,7 +22,9 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cst438.domain.Flight;
+import cst438.domain.Reservation;
 import cst438.domain.Seat;
+import cst438.domain.User;
 import cst438.service.AirlineService;
 
 @WebMvcTest(AirlineRestController.class)
@@ -38,6 +40,7 @@ public class AirlineRestControllerTest {
   private JacksonTester<ArrayList<Seat>> jsonSeatAttempt;
   private JacksonTester<ArrayList<Date>> jsonDateAttempt;
   private JacksonTester<ArrayList<String>> jsonRouteAttempt;
+  private JacksonTester<Reservation> jsonReservationAttempt;
 
   SimpleDateFormat sdf;
 
@@ -283,23 +286,171 @@ public class AirlineRestControllerTest {
   }
 
   @Test
-  public void TestMakeReservation() throws Exception {
+  public void TestMakeReservationWithValidInfoFirstClassSeat() throws Exception {
 
+    int flightId = 10;
+    int userId = 9;
+    int seatId = 350;
+    int price = 400;
+    int firstClassPrice = price * 2;
+    int numStops = 0;
+
+    Date deptDate = Date.valueOf("2021-06-15");
+    Time deptTime = Time.valueOf("12:12:12");
+    String firstName = "Fake";
+    String lastName = "Data";
+    String originCity = "Doge";
+    String destCity = "Unicorn";
+
+    User user = new User(userId, firstName, lastName);
+    Flight flight =
+        new Flight(flightId, "United", deptDate, deptTime, numStops, originCity, destCity, price);
+    Seat seat = new Seat(seatId, flightId, 2, "B", 1, 1);
+    Reservation reservation =
+        new Reservation(0, user, firstName, lastName, flight, seat, null, firstClassPrice);
+
+    given(airlineService.isSeatAvailable(seatId)).willReturn(true);
+    given(airlineService.makeReservation(flightId, userId, seatId, firstName, lastName))
+        .willReturn(reservation);
+
+    // Perform simulated HTTP call
+    MockHttpServletResponse response = mvc
+        .perform(get("/api/makeReservation?flightId=" + flightId + "&userId=" + userId + "&seatId="
+            + seatId + "&passengerFirstName=" + firstName + "&passengerLastName=" + lastName))
+        .andReturn().getResponse();
+
+    // Verify that the status code is as expected
+    assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+
+    // Convert returned data from JSON string format to Reservation object
+    Reservation actual = jsonReservationAttempt.parseObject(response.getContentAsString());
+
+    // Create the expected Reservation object
+    Reservation expected =
+        new Reservation(0, user, firstName, lastName, flight, seat, null, firstClassPrice);
+
+    // Compare expected data to actual data
+    assertEquals(expected.getReservationId(), actual.getReservationId());
+    assertEquals(expected.getFlight().getFlightId(), actual.getFlight().getFlightId());
+    assertEquals(expected.getUser(), actual.getUser());
+    assertEquals(expected.getSeat(), actual.getSeat());
+    assertEquals(expected.getFirstName(), actual.getFirstName());
+    assertEquals(expected.getLastName(), actual.getLastName());
+    assertEquals(expected.getPrice(), actual.getPrice());
   }
 
   @Test
-  public void TestMakeReservationNonExistentUserId() throws Exception {
+  public void TestMakeReservationWithValidInfoEconomySeat() throws Exception {
 
+    int flightId = 10;
+    int userId = 9;
+    int seatId = 350;
+    int price = 400;
+    int numStops = 0;
+
+    Date deptDate = Date.valueOf("2021-06-15");
+    Time deptTime = Time.valueOf("12:12:12");
+    String firstName = "Fake";
+    String lastName = "Data";
+    String originCity = "Doge";
+    String destCity = "Unicorn";
+
+    User user = new User(userId, firstName, lastName);
+    Flight flight =
+        new Flight(flightId, "United", deptDate, deptTime, numStops, originCity, destCity, price);
+    Seat seat = new Seat(seatId, flightId, 20, "B", 1, 0);
+    Reservation reservation =
+        new Reservation(0, user, firstName, lastName, flight, seat, null, price);
+
+    given(airlineService.isSeatAvailable(seatId)).willReturn(true);
+    given(airlineService.makeReservation(flightId, userId, seatId, firstName, lastName))
+        .willReturn(reservation);
+
+    // Perform simulated HTTP call
+    MockHttpServletResponse response = mvc
+        .perform(get("/api/makeReservation?flightId=" + flightId + "&userId=" + userId + "&seatId="
+            + seatId + "&passengerFirstName=" + firstName + "&passengerLastName=" + lastName))
+        .andReturn().getResponse();
+
+    // Verify that the status code is as expected
+    assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+
+    // Convert returned data from JSON string format to Reservation object
+    Reservation actual = jsonReservationAttempt.parseObject(response.getContentAsString());
+
+    // Create the expected Reservation object
+    Reservation expected = new Reservation(0, user, firstName, lastName, flight, seat, null, price);
+
+    // Compare expected data to actual data
+    assertEquals(expected.getReservationId(), actual.getReservationId());
+    assertEquals(expected.getFlight().getFlightId(), actual.getFlight().getFlightId());
+    assertEquals(expected.getUser(), actual.getUser());
+    assertEquals(expected.getSeat(), actual.getSeat());
+    assertEquals(expected.getFirstName(), actual.getFirstName());
+    assertEquals(expected.getLastName(), actual.getLastName());
+    assertEquals(expected.getPrice(), actual.getPrice());
   }
 
   @Test
-  public void TestMakeReservationNonExistentFlightId() throws Exception {
+  public void TestMakeReservationWithInvalidId() throws Exception {
+    int flightId = 10;
+    int userId = 120;
+    int seatId = 350;
 
+    String firstName = "Fake";
+    String lastName = "Data";
+
+    given(airlineService.isSeatAvailable(seatId)).willReturn(true);
+    given(airlineService.makeReservation(flightId, userId, seatId, firstName, lastName))
+        .willReturn(null);
+
+    // Perform simulated HTTP call
+    MockHttpServletResponse response = mvc
+        .perform(get("/api/makeReservation?flightId=" + flightId + "&userId=" + userId + "&seatId="
+            + seatId + "&passengerFirstName=" + firstName + "&passengerLastName=" + lastName))
+        .andReturn().getResponse();
+
+    // Verify that the status code is as expected
+    assertThat(response.getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
   }
 
   @Test
   public void TestMakeReservationWithUnavailableSeat() throws Exception {
+    int flightId = 10;
+    int userId = 9;
+    int seatId = 350;
+    int price = 400;
+    int numStops = 0;
 
+    Date deptDate = Date.valueOf("2021-06-15");
+    Time deptTime = Time.valueOf("12:12:12");
+    String firstName = "Fake";
+    String lastName = "Data";
+    String originCity = "Doge";
+    String destCity = "Unicorn";
+
+    User user = new User(userId, firstName, lastName);
+    Flight flight =
+        new Flight(flightId, "United", deptDate, deptTime, numStops, originCity, destCity, price);
+    Seat seat = new Seat(seatId, flightId, 20, "B", 1, 0);
+    Reservation reservation =
+        new Reservation(0, user, firstName, lastName, flight, seat, null, price);
+
+    given(airlineService.isSeatAvailable(seatId)).willReturn(false);
+    given(airlineService.makeReservation(flightId, userId, seatId, firstName, lastName))
+        .willReturn(reservation);
+
+    // Perform simulated HTTP call
+    MockHttpServletResponse response = mvc
+        .perform(get("/api/makeReservation?flightId=" + flightId + "&userId=" + userId + "&seatId="
+            + seatId + "&passengerFirstName=" + firstName + "&passengerLastName=" + lastName))
+        .andReturn().getResponse();
+
+    // Verify that the status code is as expected
+    assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+
+    // Compare expected result to actual result
+    assertEquals("", response.getContentAsString()); // Nothing should be returned
   }
 
 

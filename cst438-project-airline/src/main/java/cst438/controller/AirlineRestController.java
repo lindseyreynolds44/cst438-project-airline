@@ -75,13 +75,20 @@ public class AirlineRestController {
 
   }
 
-  // Example call (will put in readme)
-  // http://localhost:8080/api/makeReservation?flightId=7&userId=9&seatId=890&passengerFirstName=Lindsey&passengerLastName=Reynolds
+  /**
+   * Creates a reservation using the flight ID, User ID, seat ID and passenger information. If it
+   * was successful, this method will return the newly created reservation, otherwise it will return
+   * with an "incorrect ID" exception or a "seat not available" exception.
+   */
   @GetMapping("/makeReservation")
   public Reservation makeReservation(@RequestParam("flightId") int flightId,
       @RequestParam("userId") int userId, @RequestParam("seatId") int seatId,
       @RequestParam("passengerFirstName") String passengerFirstName,
       @RequestParam("passengerLastName") String passengerLastName) {
+
+    System.out.println("Attempting to make a reservation for " + passengerFirstName + " "
+        + passengerLastName + "\nReservation Details \nFlight ID: " + flightId + " | User ID: "
+        + userId + " | Seat ID: " + seatId);
 
     // Check if this seat is available to book
     if (!airlineService.isSeatAvailable(seatId)) {
@@ -89,7 +96,6 @@ public class AirlineRestController {
       throw new ResponseStatusException(HttpStatus.OK,
           "MESSAGE: This seat is not available. Seat ID: " + seatId);
     }
-
 
     Reservation reservation = airlineService.makeReservation(flightId, userId, seatId,
         passengerFirstName, passengerLastName);
@@ -101,6 +107,7 @@ public class AirlineRestController {
           "MESSAGE: Request contains incorrect flight ID, user ID or seat ID.");
     }
 
+    System.out.println("\n-- Reservation Created ID: " + reservation.getReservationId() + " --");
     return reservation;
   }
 

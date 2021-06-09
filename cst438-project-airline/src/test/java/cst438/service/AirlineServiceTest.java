@@ -100,7 +100,7 @@ public class AirlineServiceTest {
 
 
   @Test
-  public void testMakeReservationWithValidInfo() {
+  public void testMakeReservationWithValidInfoEconomySeat() {
     // Service object that will be tested
     as = new AirlineService(flightRepository, reservationRepository, seatRepository,
         userRepository);
@@ -115,15 +115,52 @@ public class AirlineServiceTest {
     Flight flight = new Flight(flightId, "unicorn", Date.valueOf("2021-06-01"),
         Time.valueOf("12:12:12"), numStops, "Lala Land", "Over the Rainbow", price);
     Seat seat = new Seat(seatId, flightId, 30, "A", 1, 0);
+    Reservation reservation = new Reservation(0, user, "Test", "Person", flight, seat, null, price);
 
     // Create stubs for the MOCK databases
     given(userRepository.findByUserId(userId)).willReturn(user);
     given(flightRepository.findByFlightId(flightId)).willReturn(flight);
     given(seatRepository.findBySeatId(seatId)).willReturn(seat);
+    given(reservationRepository.findByReservationId(0)).willReturn(reservation);
 
     Reservation actual = as.makeReservation(flightId, userId, seatId, "Test", "Person");
 
     Reservation expected = new Reservation(0, user, "Test", "Person", flight, seat, null, price);
+
+    assertEquals(expected, actual);
+  }
+
+  @Test
+  public void testMakeReservationWithValidInfoFirstClassSeat() {
+    // Service object that will be tested
+    as = new AirlineService(flightRepository, reservationRepository, seatRepository,
+        userRepository);
+
+    // Data for creating stubs
+    int flightId = 12;
+    int userId = 10;
+    int seatId = 25;
+    int numStops = 0;
+    int price = 200;
+    int firstClassPrice = price * 2;
+    User user = new User(userId, "Test", "Person");
+    Flight flight = new Flight(flightId, "unicorn", Date.valueOf("2021-06-01"),
+        Time.valueOf("12:12:12"), numStops, "Lala Land", "Over the Rainbow", price);
+    Seat seat = new Seat(seatId, flightId, 2, "A", 1, 1);
+    Reservation reservation =
+        new Reservation(0, user, "Test", "Person", flight, seat, null, firstClassPrice);
+
+
+    // Create stubs for the MOCK databases
+    given(userRepository.findByUserId(userId)).willReturn(user);
+    given(flightRepository.findByFlightId(flightId)).willReturn(flight);
+    given(seatRepository.findBySeatId(seatId)).willReturn(seat);
+    given(reservationRepository.findByReservationId(0)).willReturn(reservation);
+
+    Reservation actual = as.makeReservation(flightId, userId, seatId, "Test", "Person");
+
+    Reservation expected =
+        new Reservation(0, user, "Test", "Person", flight, seat, null, firstClassPrice);
 
     assertEquals(expected, actual);
   }

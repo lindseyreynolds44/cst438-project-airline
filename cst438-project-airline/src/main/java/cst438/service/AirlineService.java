@@ -93,8 +93,10 @@ public class AirlineService {
     // Set seat to unavailable
     seatRepository.setSeatToUnavailable(seatId);
 
-    Reservation reservation = new Reservation(user, passengerFirstName, passengerLastName, flight,
-        seat, flight.getPrice());
+    int price = getSeatPrice(seat, flight);
+
+    Reservation reservation =
+        new Reservation(user, passengerFirstName, passengerLastName, flight, seat, price);
 
     reservationRepository.save(reservation);
 
@@ -102,6 +104,17 @@ public class AirlineService {
         reservationRepository.findByReservationId(reservation.getReservationId());
 
     return reservationFromDb;
+  }
+
+  /**
+   * Provides the price for a seat, considering its class and associated flight
+   */
+  private int getSeatPrice(Seat seat, Flight flight) {
+    int price = flight.getPrice();
+    if (seat.getIsFirstClass() == 1) {
+      price = price * 2;
+    }
+    return price;
   }
 
   /**
