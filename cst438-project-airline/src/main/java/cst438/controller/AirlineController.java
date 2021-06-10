@@ -81,6 +81,7 @@ public class AirlineController {
 
     model.addAttribute("flightId", flightId);
     model.addAttribute("numberOfPassengers", numberOfPassengers);
+    model.addAttribute("seats", selectedSeatIds);
     // model.addAttribute("reservations", reservations);
 
     System.out.println("Sending Model: " + model);
