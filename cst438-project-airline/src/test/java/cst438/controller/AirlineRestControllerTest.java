@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import java.sql.Date;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
@@ -20,6 +22,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cst438.domain.Flight;
 import cst438.domain.Reservation;
@@ -464,11 +467,19 @@ public class AirlineRestControllerTest {
     given(airlineService.cancelReservation(reservationId)).willReturn(true);
 
 
+    ObjectMapper objectMapper = new ObjectMapper();
+    String json = objectMapper.writeValueAsString("?&reservationId=10&userId=12");
+
+
+    MvcResult result = mvc.perform(post("/cancelReservation?&reservationId=10&userId=12"))
+        .andExpect(status().isOk()).andReturn();
+
     // MvcResult result =
     // mvc.perform(post("/api/cancelReservation?&reservationId=19&userId=2").contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).content("json").andExpect(status().isOk()).andReturn();
 
-    // String content = result.getResponse().getContentAsString();
+    String content = result.getResponse().getContentAsString();
 
+    System.out.println("-----------TESTING--------------\n" + content + "\n------END------\n");
     // Perform simulated HTTP call
     // Find out how to test a post request!!!
 
