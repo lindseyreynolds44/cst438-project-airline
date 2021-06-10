@@ -6,30 +6,111 @@
 </head>
 <body>
 <!--/*/ <th:block th:include="fragments/topnav :: navbar"></th:block> /*/-->
-		
-<div th:each="i : ${#numbers.sequence(0,firstClassSeats.size() - 5)}" >
-		<div class="row" th:if="${i} % 4 == 0">
-			<div class="col">
-				<div class="btn btn-info" th:attr="data-seat-id=${firstClassSeats.get(i+0).getSeatId()}" th:text="${firstClassSeats.get(i+0).getSeatRow()}+${firstClassSeats.get(i+0).getSeatLetter()}"></div>
-				<div class="btn btn-info" th:attr="data-seat-id=${firstClassSeats.get(i+1).getSeatId()}" th:text="${firstClassSeats.get(i+1).getSeatRow()}+${firstClassSeats.get(i+1).getSeatLetter()}"></div>
-			</div>
-			<div class="col">
-				<div class="btn btn-info" th:attr="data-seat-id=${firstClassSeats.get(i+2).getSeatId()}" th:text="${firstClassSeats.get(i+2).getSeatRow()}+${firstClassSeats.get(i+2).getSeatLetter()}"></div>
-				<div class="btn btn-info" th:attr="data-seat-id=${firstClassSeats.get(i+3).getSeatId()}" th:text="${firstClassSeats.get(i+3).getSeatRow()}+${firstClassSeats.get(i+3).getSeatLetter()}"></div>
+	<br>
+	<h1 class="text-center" th:if="${numberOfPassengers} > 1">Select your seats</h1>
+	<h1 class="text-center" th:unless="${numberOfPassengers} > 1">Select your seat</h1>
+	<br>
+	<div class="container">
+		<div class="justify-content-center" th:each="i : ${#numbers.sequence(0,firstClassSeats.size() - 1)}" >
+			<div class="row justify-content-center" th:if="${i} % 4 == 0">
+				<div class="col-sm-2 text-center">
+					<div class="seat btn m-1" th:each="j : ${#numbers.sequence(0,1)}" th:attr="data-seat-id=${firstClassSeats.get(i+j).getSeatId()}" th:text="${firstClassSeats.get(i+j).getSeatRow()}+${firstClassSeats.get(i+j).getSeatLetter()}"	th:classappend="${firstClassSeats.get(i+j).getIsAvailable() == 1} ? btn-light : btn-secondary"></div>
+				</div>
+				<div class="col-sm-2 text-center">
+					<div class="seat btn m-1" th:each="j : ${#numbers.sequence(2,3)}" th:attr="data-seat-id=${firstClassSeats.get(i+j).getSeatId()}" th:text="${firstClassSeats.get(i+j).getSeatRow()}+${firstClassSeats.get(i+j).getSeatLetter()}"	th:classappend="${firstClassSeats.get(i+j).getIsAvailable() == 1} ? btn-light : btn-secondary"></div>
+				</div>
 			</div>
 		</div>
-
-	</div>	
-
+		<br>
+		<div class="justify-content-center" th:each="i : ${#numbers.sequence(0,coachSeats.size() - 1)}" >
+			<div class="row justify-content-center" th:if="${i} % 6 == 0">
+				<div class="col-sm-3 text-center">
+					<div class="seat btn m-1" th:each="j : ${#numbers.sequence(0,2)}" th:attr="data-seat-id=${coachSeats.get(i+j).getSeatId()}" th:text="${coachSeats.get(i+j).getSeatRow()}+${coachSeats.get(i+j).getSeatLetter()}" th:classappend="${coachSeats.get(i+j).getIsAvailable() == 1} ? btn-light : btn-secondary"></div>
+				</div>
+				<div class="col-sm-3 text-center">
+					<div class="seat btn m-1" th:each="j : ${#numbers.sequence(3,5)}" th:attr="data-seat-id=${coachSeats.get(i+j).getSeatId()}" th:text="${coachSeats.get(i+j).getSeatRow()}+${coachSeats.get(i+j).getSeatLetter()}" th:classappend="${coachSeats.get(i+j).getIsAvailable() == 1} ? btn-light : btn-secondary"></div>
+				</div>
+			</div>
+		</div>	
+	</div>
+	<br>
+	<br>
+	
+	<!-- Modal -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="modalCenterTitle" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="exampleModalLongTitle">Done with seats?</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	       	<p>Click <strong>cancel</strong> to make changes.</p>
+	       	<p>Click <strong>Add Passenger Info</strong> to continue booking.</p>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	        <!-- <button id="finish" class="btn btn-primary">Add Passenger Info</button> -->
+	        
+	        <form action="/searchFlights/passengers" method="POST">
+	        	<input type="hidden" name="flightId" th:value=${flightId}>
+	        	<input type="hidden" name="numberOfPassengers" th:value=${numberOfPassengers}>
+	        	<input id="finish" class="btn btn-primary" type="submit" value="Add Passenger Info">
+	        </form> 
+	      </div>
+	    </div>
+	  </div>
+	</div>
 
 	<!-- Scripts -->	
 	<!--/*/ <th:block th:include="fragments/fragments :: scripts"></th:block> /*/-->
-	<script>
+	<script th:inline="javascript">
 		$(document).ready(function(){
-			let counter = 0;
+			let numSeatsSelected = 0;
+			const numPassengers = [[${numberOfPassengers}]];
+			const flightId = [[${flightId}]];
+			const seats = [[${seats}]]
+			const seatBtn = "btn-light";
+			const seatBtnClicked = "btn-primary";
+			let selectedSeats = [];
+			
+			// seat selected event listener
+			$(".seat").on("click", function () {
+				const seatSelected = $(this).attr("data-seat-id");
+
+				//
+				if($(this).hasClass(seatBtn) && numSeatsSelected < numPassengers){
+					$(this).addClass(seatBtnClicked).removeClass(seatBtn);
+					selectedSeats.push(seatSelected);
+					numSeatsSelected++;
+				} else if ($(this).hasClass(seatBtnClicked)) {
+					$(this).addClass(seatBtn).removeClass(seatBtnClicked);
+					// removes added seat from array
+					const index = selectedSeats.indexOf(seatSelected);
+					if (index > -1){
+						selectedSeats.splice(index, 1);
+					}
+					numSeatsSelected--;
+				}
+				if (numSeatsSelected == numPassengers){
+					build_form();
+					$("#myModal").modal("show");
+				}
+				
+			}); // seat click
 			
 			
-		});
+			
+			function build_form(){
+				selectedSeats.forEach(function (seat) {
+					$("form").append(`<input type="hidden" name="selectedSeats[]" value="${seat}" />`);
+				})
+			}
+			
+			
+		}); // doc ready
 		
 	</script>
 </body>

@@ -64,31 +64,33 @@ public class AirlineController {
     model.addAttribute("firstClassSeats", firstClassSeats);
     model.addAttribute("coachSeats", coachSeats);
 
-
     return "pick_seats";
 
   }
 
   @PostMapping("/searchFlights/passengers")
   public String passengers(@RequestParam("flightId") String flightId,
-      @RequestParam(value = "numberOfPassengers") int numberOfPassengers, Model model) {
+      @RequestParam("numberOfPassengers") int numberOfPassengers,
+      @RequestParam("selectedSeats[]") ArrayList<String> selectedSeatIds, Model model) {
 
     System.out.println("Search Flights Passengers " + " FlightID: " + flightId
-        + " Number Of Passengers: " + numberOfPassengers);
+        + " Number Of Passengers: " + numberOfPassengers + " selectedSeatIds " + selectedSeatIds);
 
     ArrayList<Reservation> reservations = new ArrayList<>(numberOfPassengers);
-    System.out.println(reservations.size());
+    // System.out.println(reservations.size());
 
     model.addAttribute("flightId", flightId);
     model.addAttribute("numberOfPassengers", numberOfPassengers);
-    model.addAttribute("reservations", reservations);
+    // model.addAttribute("reservations", reservations);
 
-    return "provide_details";
+    System.out.println("Sending Model: " + model);
+
+    return "passenger_booking";
   }
 
 
   @PostMapping("/bookFlight")
-  public String bookFlight(@RequestParam("reservations") ArrayList<Reservation> reservations,
+  public String bookFlight(@RequestParam("reservations[]") ArrayList<Reservation> reservations,
       Model model) {
 
     for (Reservation r : reservations) {
