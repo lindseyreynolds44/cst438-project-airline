@@ -56,8 +56,8 @@ public class AirlineController {
     System.out.println("Search Flights Seats: " + " FlightID: " + flightId
         + " Number Of Passengers: " + numberOfPassengers);
 
-    ArrayList<Seat> firstClassSeats = airlineService.getSeatsByFlightId(flightId, 1);
-    ArrayList<Seat> coachSeats = airlineService.getSeatsByFlightId(flightId, 0);
+    ArrayList<Seat> firstClassSeats = airlineService.getSeatsByFlightId(flightId, true);
+    ArrayList<Seat> coachSeats = airlineService.getSeatsByFlightId(flightId, false);
 
     model.addAttribute("flightId", flightId);
     model.addAttribute("numberOfPassengers", numberOfPassengers);

@@ -22,14 +22,14 @@ public class Seat {
   @Column(name = "seat_letter")
   private String seatLetter;
   @Column(name = "available")
-  private int isAvailable;
+  private boolean isAvailable;
   @Column(name = "is_first_class")
-  private int isFirstClass;
+  private boolean isFirstClass;
 
   public Seat() {}
 
-  public Seat(int seatId, int flightId, int seatRow, String seatLetter, int isAvailable,
-      int isFirstClass) {
+  public Seat(int seatId, int flightId, int seatRow, String seatLetter, boolean isAvailable,
+      boolean isFirstClass) {
     super();
     this.seatId = seatId;
     this.flightId = flightId;
@@ -68,19 +68,19 @@ public class Seat {
     this.seatLetter = seatLetter;
   }
 
-  public int getIsAvailable() {
+  public boolean getIsAvailable() {
     return isAvailable;
   }
 
-  public void setIsAvailable(int isAvailable) {
+  public void setIsAvailable(boolean isAvailable) {
     this.isAvailable = isAvailable;
   }
 
-  public int getIsFirstClass() {
+  public boolean getIsFirstClass() {
     return isFirstClass;
   }
 
-  public void setIsFirstClass(int isFirstClass) {
+  public void setIsFirstClass(boolean isFirstClass) {
     this.isFirstClass = isFirstClass;
   }
 

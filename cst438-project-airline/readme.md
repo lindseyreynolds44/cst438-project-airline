@@ -203,11 +203,11 @@ This endpoint will return all the available seats for a given flight.
 #### Parameters
 
     - flightID (required) int
-    - isFirstClass(required) int (0 or 1)
+    - isFirstClass(required) boolean
 
 ##### Request Example
 
-`/api/getSeats?flightID=19`
+`/api/getSeats?flightId=19&isFirstClass=true`
 
 #### Response
 
@@ -218,29 +218,29 @@ A successful response will return all the available seats for a flight.
 ```
 [
     {
-        "seatId": 577,
-        "flightId": 5,
-        "seatRow": 7,
+        "seatId": 2485,
+        "flightId": 19,
+        "seatRow": 1,
         "seatLetter": "A",
-        "available": 1,
-        "isFirstClass": 0
+        "isAvailable": true,
+        "isFirstClass": true
     },
     {
-        "seatId": 578,
-        "flightId": 5,
-        "seatRow": 7,
+        "seatId": 2486,
+        "flightId": 19,
+        "seatRow": 1,
         "seatLetter": "B",
-        "available": 1,
-        "isFirstClass": 0
+        "isAvailable": true,
+        "isFirstClass": true
     },
     {
-        "seatId": 579,
-        "flightId": 5,
-        "seatRow": 7,
+        "seatId": 2487,
+        "flightId": 19,
+        "seatRow": 1,
         "seatLetter": "C",
-        "available": 1,
-        "isFirstClass": 0
-    },
+        "isAvailable": true,
+        "isFirstClass": true
+    }
 ]
 ```
 <br/>
@@ -311,5 +311,53 @@ This endpoint will allow a thirdparty end user to book a flight reservation.
     },
     "dateCreated": "2021-06-08T03:39:37.318+00:00",
     "price": 545
+}
+```
+
+
+### Cancel a Reservation
+`/api/cancelReservation`
+
+`TYPE: POST`
+
+#### Description
+
+This endpoint will allow a thirdparty end user to cancel a flight reservation using their user ID and reservation ID.
+
+#### Parameters
+
+    - reservationId (required) int
+    - userId (required) int
+
+#### Request Example
+
+`/api/cancelReservation?&reservationId=19&userId=2`
+
+
+##### Note 1: This updates the database, so each time you call this endpoint, the specified reservation will be deleted.
+##### Note 2: The user ID entered must match the user ID associated with the reservation.
+ 
+<br/>
+
+#### Response
+
+- A successful response will return the reservation ID of the cancelled reservation. 
+- If the user ID and reservation ID do not match up with an existing reservation, an invalid reservation error will be displayed
+
+
+##### Response Example (Success)
+
+```
+{
+    "status": "Success",
+    "data": 19
+}
+```
+
+##### Response Example (Failure)
+```
+{
+    "status": "Error: Invalid Reservation",
+    "data": null
 }
 ```
