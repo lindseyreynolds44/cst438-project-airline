@@ -82,7 +82,7 @@ public class AirlineRestController {
    * was successful, this method will return the newly created reservation, otherwise it will return
    * with an "incorrect ID" exception or a "seat not available" exception.
    */
-  @GetMapping("/makeReservation")
+  @PostMapping(value = "/makeReservation")
   public Reservation makeReservation(@RequestParam("flightId") int flightId,
       @RequestParam("userId") int userId, @RequestParam("seatId") int seatId,
       @RequestParam("passengerFirstName") String passengerFirstName,
@@ -118,8 +118,6 @@ public class AirlineRestController {
    * will return the reservation ID that was just cancelled. If this reservation ID and user ID pair
    * do not have a corresponding reservation, a 404 not found exception will be returned.
    */
-
-
   @PostMapping(value = "/cancelReservation")
   public Response cancelReservation(@RequestParam("reservationId") int reservationId,
       @RequestParam("userId") int userId) {

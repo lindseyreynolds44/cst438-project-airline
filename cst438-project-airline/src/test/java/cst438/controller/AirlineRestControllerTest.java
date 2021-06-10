@@ -463,6 +463,12 @@ public class AirlineRestControllerTest {
     given(airlineService.isValidReservation(userId, reservationId)).willReturn(true);
     given(airlineService.cancelReservation(reservationId)).willReturn(true);
 
+
+    // MvcResult result =
+    // mvc.perform(post("/api/cancelReservation?&reservationId=19&userId=2").contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).content("json").andExpect(status().isOk()).andReturn();
+
+    // String content = result.getResponse().getContentAsString();
+
     // Perform simulated HTTP call
     // Find out how to test a post request!!!
 
