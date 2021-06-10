@@ -14,10 +14,10 @@
 		<div class="justify-content-center" th:each="i : ${#numbers.sequence(0,firstClassSeats.size() - 1)}" >
 			<div class="row justify-content-center" th:if="${i} % 4 == 0">
 				<div class="col-sm-2 text-center">
-					<div class="seat btn m-1" th:each="j : ${#numbers.sequence(0,1)}" th:attr="data-seat-id=${firstClassSeats.get(i+j).getSeatId()}" th:text="${firstClassSeats.get(i+j).getSeatRow()}+${firstClassSeats.get(i+j).getSeatLetter()}"	th:classappend="${firstClassSeats.get(i+j).getIsAvailable() == 1} ? btn-light : btn-secondary"></div>
+					<div class="seat btn m-1" th:each="j : ${#numbers.sequence(0,1)}" th:attr="data-seat-id=${firstClassSeats.get(i+j).getSeatId()}" th:text="${firstClassSeats.get(i+j).getSeatRow()}+${firstClassSeats.get(i+j).getSeatLetter()}"	th:classappend="${firstClassSeats.get(i+j).getIsAvailable()} ? btn-light : btn-secondary"></div>
 				</div>
 				<div class="col-sm-2 text-center">
-					<div class="seat btn m-1" th:each="j : ${#numbers.sequence(2,3)}" th:attr="data-seat-id=${firstClassSeats.get(i+j).getSeatId()}" th:text="${firstClassSeats.get(i+j).getSeatRow()}+${firstClassSeats.get(i+j).getSeatLetter()}"	th:classappend="${firstClassSeats.get(i+j).getIsAvailable() == 1} ? btn-light : btn-secondary"></div>
+					<div class="seat btn m-1" th:each="j : ${#numbers.sequence(2,3)}" th:attr="data-seat-id=${firstClassSeats.get(i+j).getSeatId()}" th:text="${firstClassSeats.get(i+j).getSeatRow()}+${firstClassSeats.get(i+j).getSeatLetter()}"	th:classappend="${firstClassSeats.get(i+j).getIsAvailable()} ? btn-light : btn-secondary"></div>
 				</div>
 			</div>
 		</div>
@@ -25,10 +25,10 @@
 		<div class="justify-content-center" th:each="i : ${#numbers.sequence(0,coachSeats.size() - 1)}" >
 			<div class="row justify-content-center" th:if="${i} % 6 == 0">
 				<div class="col-sm-3 text-center">
-					<div class="seat btn m-1" th:each="j : ${#numbers.sequence(0,2)}" th:attr="data-seat-id=${coachSeats.get(i+j).getSeatId()}" th:text="${coachSeats.get(i+j).getSeatRow()}+${coachSeats.get(i+j).getSeatLetter()}" th:classappend="${coachSeats.get(i+j).getIsAvailable() == 1} ? btn-light : btn-secondary"></div>
+					<div class="seat btn m-1" th:each="j : ${#numbers.sequence(0,2)}" th:attr="data-seat-id=${coachSeats.get(i+j).getSeatId()}" th:text="${coachSeats.get(i+j).getSeatRow()}+${coachSeats.get(i+j).getSeatLetter()}" th:classappend="${coachSeats.get(i+j).getIsAvailable()} ? btn-light : btn-secondary"></div>
 				</div>
 				<div class="col-sm-3 text-center">
-					<div class="seat btn m-1" th:each="j : ${#numbers.sequence(3,5)}" th:attr="data-seat-id=${coachSeats.get(i+j).getSeatId()}" th:text="${coachSeats.get(i+j).getSeatRow()}+${coachSeats.get(i+j).getSeatLetter()}" th:classappend="${coachSeats.get(i+j).getIsAvailable() == 1} ? btn-light : btn-secondary"></div>
+					<div class="seat btn m-1" th:each="j : ${#numbers.sequence(3,5)}" th:attr="data-seat-id=${coachSeats.get(i+j).getSeatId()}" th:text="${coachSeats.get(i+j).getSeatRow()}+${coachSeats.get(i+j).getSeatLetter()}" th:classappend="${coachSeats.get(i+j).getIsAvailable()} ? btn-light : btn-secondary"></div>
 				</div>
 			</div>
 		</div>	
