@@ -66,7 +66,7 @@ public class AirlineRestController {
 
   @GetMapping("/getSeats")
   public ArrayList<Seat> getSeats(@RequestParam("flightId") int flightId,
-      @RequestParam("isFirstClass") int isFirstClass) {
+      @RequestParam("isFirstClass") boolean isFirstClass) {
 
     System.out.println(
         "Rest: Get Seats " + "Flight ID: " + flightId + " Is First Class: " + isFirstClass);
@@ -83,6 +83,7 @@ public class AirlineRestController {
    * with an "incorrect ID" exception or a "seat not available" exception.
    */
   @PostMapping(value = "/makeReservation")
+  // @GetMapping(value = "/makeReservation")
   public Reservation makeReservation(@RequestParam("flightId") int flightId,
       @RequestParam("userId") int userId, @RequestParam("seatId") int seatId,
       @RequestParam("passengerFirstName") String passengerFirstName,

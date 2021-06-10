@@ -203,11 +203,11 @@ This endpoint will return all the available seats for a given flight.
 #### Parameters
 
     - flightID (required) int
-    - isFirstClass(required) int (0 or 1)
+    - isFirstClass(required) boolean
 
 ##### Request Example
 
-`/api/getSeats?flightID=19`
+`/api/getSeats?flightId=19&isFirstClass=true`
 
 #### Response
 
@@ -218,29 +218,29 @@ A successful response will return all the available seats for a flight.
 ```
 [
     {
-        "seatId": 577,
-        "flightId": 5,
-        "seatRow": 7,
+        "seatId": 2485,
+        "flightId": 19,
+        "seatRow": 1,
         "seatLetter": "A",
-        "available": 1,
-        "isFirstClass": 0
+        "isAvailable": true,
+        "isFirstClass": true
     },
     {
-        "seatId": 578,
-        "flightId": 5,
-        "seatRow": 7,
+        "seatId": 2486,
+        "flightId": 19,
+        "seatRow": 1,
         "seatLetter": "B",
-        "available": 1,
-        "isFirstClass": 0
+        "isAvailable": true,
+        "isFirstClass": true
     },
     {
-        "seatId": 579,
-        "flightId": 5,
-        "seatRow": 7,
+        "seatId": 2487,
+        "flightId": 19,
+        "seatRow": 1,
         "seatLetter": "C",
-        "available": 1,
-        "isFirstClass": 0
-    },
+        "isAvailable": true,
+        "isFirstClass": true
+    }
 ]
 ```
 <br/>

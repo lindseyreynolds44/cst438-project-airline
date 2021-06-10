@@ -125,16 +125,16 @@ public class AirlineRestControllerTest {
 
   @Test
   public void testGetSeatShouldReturnSeats() throws Exception {
-    Seat seat = new Seat(254, 23, 4, "A", 1, 1);
+    Seat seat = new Seat(254, 23, 4, "A", true, true);
     ArrayList<Seat> seats = new ArrayList<Seat>(Arrays.asList(seat));
 
-    given(airlineService.getSeatsByFlightId(254, 1)).willReturn(seats);
+    given(airlineService.getSeatsByFlightId(254, true)).willReturn(seats);
     MockHttpServletResponse response =
         mvc.perform(get("/api/getSeats?flightId=254&isFirstClass=1")).andReturn().getResponse();
 
     ArrayList<Seat> results = jsonSeatAttempt.parseObject(response.getContentAsString());
 
-    Seat expected = new Seat(254, 23, 4, "A", 1, 1);
+    Seat expected = new Seat(254, 23, 4, "A", true, true);
     Seat result = results.get(0);
 
     assertEquals(expected, result);
@@ -143,10 +143,10 @@ public class AirlineRestControllerTest {
 
   @Test
   public void testGetSeatsReturnsEmptyIfNotFound() throws Exception {
-    Seat seat = new Seat(254, 23, 4, "A", 1, 1);
+    Seat seat = new Seat(254, 23, 4, "A", true, true);
     ArrayList<Seat> seats = new ArrayList<Seat>(Arrays.asList(seat));
 
-    given(airlineService.getSeatsByFlightId(254, 1)).willReturn(seats);
+    given(airlineService.getSeatsByFlightId(254, true)).willReturn(seats);
     MockHttpServletResponse response =
         mvc.perform(get("/api/getSeats?flightId=0&isFirstClass=1")).andReturn().getResponse();
 
@@ -307,7 +307,7 @@ public class AirlineRestControllerTest {
     User user = new User(userId, firstName, lastName);
     Flight flight =
         new Flight(flightId, "United", deptDate, deptTime, numStops, originCity, destCity, price);
-    Seat seat = new Seat(seatId, flightId, 2, "B", 1, 1);
+    Seat seat = new Seat(seatId, flightId, 2, "B", true, true);
     Reservation reservation =
         new Reservation(0, user, firstName, lastName, flight, seat, null, firstClassPrice);
 
@@ -360,7 +360,7 @@ public class AirlineRestControllerTest {
     User user = new User(userId, firstName, lastName);
     Flight flight =
         new Flight(flightId, "United", deptDate, deptTime, numStops, originCity, destCity, price);
-    Seat seat = new Seat(seatId, flightId, 20, "B", 1, 0);
+    Seat seat = new Seat(seatId, flightId, 20, "B", true, false);
     Reservation reservation =
         new Reservation(0, user, firstName, lastName, flight, seat, null, price);
 
@@ -434,7 +434,7 @@ public class AirlineRestControllerTest {
     User user = new User(userId, firstName, lastName);
     Flight flight =
         new Flight(flightId, "United", deptDate, deptTime, numStops, originCity, destCity, price);
-    Seat seat = new Seat(seatId, flightId, 20, "B", 1, 0);
+    Seat seat = new Seat(seatId, flightId, 20, "B", false, false);
     Reservation reservation =
         new Reservation(0, user, firstName, lastName, flight, seat, null, price);
 

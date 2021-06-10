@@ -15,7 +15,7 @@ public interface SeatRepository extends JpaRepository<Seat, Long> {
 
   @Query(value = "SELECT * from seat s WHERE s.flight_id = ?1 AND s.is_first_class = ?2",
       nativeQuery = true)
-  ArrayList<Seat> findSeatsByFlightID(int flightId, int isFirstClass);
+  ArrayList<Seat> findSeatsByFlightID(int flightId, boolean isFirstClass);
 
   @Query(value = "SELECT available FROM seat s WHERE s.seat_id = ?1", nativeQuery = true)
   int isSeatAvailable(int seatId);

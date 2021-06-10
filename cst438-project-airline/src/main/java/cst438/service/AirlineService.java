@@ -62,7 +62,7 @@ public class AirlineService {
     return flightRepository.findFlightsByRoute(originCity, destinationCity);
   }
 
-  public ArrayList<Seat> getSeatsByFlightId(int flightId, int isFirstClass) {
+  public ArrayList<Seat> getSeatsByFlightId(int flightId, boolean isFirstClass) {
     return seatRepository.findSeatsByFlightID(flightId, isFirstClass);
   }
 
@@ -111,7 +111,7 @@ public class AirlineService {
    */
   private int getSeatPrice(Seat seat, Flight flight) {
     int price = flight.getPrice();
-    if (seat.getIsFirstClass() == 1) {
+    if (seat.getIsFirstClass()) {
       price = price * 2;
     }
     return price;
@@ -129,8 +129,8 @@ public class AirlineService {
     }
 
     // Check if this seat is available to book
-    int isAvailable = seat.getIsAvailable();
-    if (isAvailable == 0) {
+    boolean isAvailable = seat.getIsAvailable();
+    if (!isAvailable) {
       return false;
     }
     return true;
