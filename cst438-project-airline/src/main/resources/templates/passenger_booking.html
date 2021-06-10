@@ -7,49 +7,33 @@
 <body>
 	<!--/*/ <th:block th:include="fragments/topnav :: navbar"></th:block> /*/-->
 	
-	<!-- Modal -->
-	<div class="modal fade" id="seatModal" tabindex="-1" role="dialog" aria-labelledby="seatModal" aria-hidden="true" th:attr="data-flight-id=${flightId}">
-	  <div class="modal-dialog modal-dialog-centered" role="document">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <h5 class="modal-title" id="seatModal">Modal title</h5>
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-	          <span aria-hidden="true">&times;</span>
-	        </button>
-	      </div>
-	      <div class="modal-body">
-	      	<div class="seat" th:each="i : ${#numbers.sequence(1,numberOfPassengers)}">
-	      		<select class="seat-row">
-					<option value="" selected>Seat Row</option>
-				</select>
-				<select class="seat-letter">
-					<option value="" selected>Seat</option>
-				</select>
-				<br/>
-	      	</div>
-	      </div>
-	      <div class="modal-footer">
-	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-	        <button type="button" class="btn btn-primary">Save changes</button>
-	      </div>
-	    </div>
-	  </div>
-	</div>
-	<!-- End Modal -->
+	
 	<div id="content">
-		<form action="/bookFlight" th:object=${reservation}>
-			<div th:id="'passenger-'+${i}" class="card" th:each="i : ${#numbers.sequence(1,numberOfPassengers)}">
-					<span th:text="'Passenger ' + ${i}"></span>
+	<!-- 	<form action="/bookFlight" th:object=${reservation} method="POST">
+			<div th:id="'passenger-'+${iStat.count}" class="card" th:each="seat, iStat : ${seats}">
+					<span th:text="'Passenger ' + ${iStat.count}"></span>
 					<input type="hidden" name="flightId" th:value="${flightId}">
-					<input type="hidden" name="numberOfPassengers" th:value="${numberOfPassengers}">
-					<input type="hidden" name="seatId" value="">
+					<input type="hidden" name="seatId[]" th:value=${seat}>
 					<label>First Name</label>
-					<input class="input-group-text" type="text" required>
+					<input class="input-group-text" type="text" name="firstName[]" required>
 					<label>Last Name</label>
-					<input class="input-group-text" type="text" required>
+					<input class="input-group-text" type="text" name="lastName[]" required>
 			</div>
 			<input class="btn btn-primary" type="submit" value="Finish Booking">
-		</form>
+		</form> -->
+		<div th:id="'passenger-'+${iStat.count}" class="card" th:each="seat, iStat : ${seats}">
+			<span th:text="'Passenger ' + ${iStat.count}"></span>
+			<input class="user-id-input" type="hidden" name="userId" value="1"> 
+			<input class="flight-id-input" type="hidden" name="flightId" th:value="${flightId}">
+			<input class="seat-id-input" type="hidden" name="seatId" th:value=${seat}>
+			<input class="price-input" type="hidden" name="price" value="500"> <!-- I need to add pricing -->
+			<label>First Name</label>
+			<input class="first-name-input input-group-text" type="text" name="firstName" value="" required>
+			<label>Last Name</label>
+			<input class="last-name-input input-group-text" type="text" name="lastName" value="" required>
+		</div>
+			<button id="book-btn"  class="btn btn-primary">Book Flight</button>
+		
 	</div>
 
 
@@ -58,55 +42,54 @@
 	<script th:inline="javascript">
 		
 		<!--/* allows me to use controller variables in JS! */-->
-		const numberOfPassengers = [[${numberOfPassengers}]]; 
+		const numberOfPassengers = [[${numberOfPassengers}]];
+		let reservations = []
+
 	
 		$(document).ready(function() {
-			getSeats();
-
-		});
-		/**
-		* Calls the rest API to get the available seats for a specific flight
-		*/
-	    function getSeats() {
-	        const flight_id = $("#seatModal").attr("data-flight-id");
-	        let isFirstClass = 0;
-	        //alert("Flight ID: " + flight_id + "\n" + "isFirstClass: " + isFirstClass);
-	        
-	        $.ajax({
-	        	method: "GET",
-	        	url: "/api/getSeats",
-	        	data: {
-	        		"flightId": flight_id,
-	        		"isFirstClass": isFirstClass
-	        	},
-	        	success: function(response) {
-	        		console.log(response);
-	        		launchModal(response);
-	        	}
-	        });	 
-		  }
-		/**
-		* This function will open the modal, which will contain a form
-		* that will send data to the server.
-		*/
-		function launchModal(response){
-			$("#seatModal").modal("show");
-			const seatRows = response.filter(unique);
-			console.log(seatRows);
-				for (const seat of seats){
-					console.log("adding seat row" + seat.seatRow);
-					$(".seat-row").append($("<option>").val(seat.seatRow).text(seat.seatRow));
-					$(".seat-letter").append($("<option>").val(seat.seatLetter).text(seat.seatLetter));
-				}
-		}
+			$("#book-btn").on("click", function () {
+				reservations = buildReservationObjects();
+				console.log(reservations);
+				
+				$.ajax({
+					method: "POST",
+					url: "/bookFlight",
+					data: {
+						"reservations[]": reservations
+					},
+					success: function (response, status) {
+						console.log(status);
+					}
+				}); //ajax
+			}); // book
+		}); // ready
 		
-		const unique = (value, index, self) => {
-			  return self.indexOf(value) === index
-		}
-
-		const ages = [26, 27, 26, 26, 28, 28, 29, 29, 30]
-		const uniqueAges = ages.filter(unique)
-		console.log(uniqueAges)
+		function buildReservationObjects(){
+			let temp = [];
+			let reservation = {};
+			for(let x = 1; x < numberOfPassengers+1; x++){
+				let userId = $(`#passenger-${x}`).find('.user-id-input').val()
+				let flightId = $(`#passenger-${x}`).find('.flight-id-input').val()
+				let seatId = $(`#passenger-${x}`).find('.seat-id-input').val()
+				let firstName = $(`#passenger-${x}`).find('.first-name-input').val()
+				let lastName = $(`#passenger-${x}`).find('.last-name-input').val()
+				let price = $(`#passenger-${x}`).find('.price-input').val()
+				
+				reservation["reservationId"] = 1;
+				reservation["user"] = userId;
+				reservation["flight"] = flightId;
+				reservation["seat"] = seatId;
+				reservation["firstName"] = firstName;
+				reservation["lastName"] = lastName;
+				reservation["price"] = price;
+				reservation["dateCreated"] = "";
+				
+				temp.push(reservation);
+			}
+			return temp;	
+		} // build res objs
+		
+		
 	</script>
 </body>
 </html>
