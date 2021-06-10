@@ -3,13 +3,11 @@ package cst438.controller;
 import java.sql.Date;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 import cst438.domain.Flight;
 import cst438.domain.Reservation;
 import cst438.domain.Response;
@@ -82,9 +80,10 @@ public class AirlineRestController {
    * was successful, this method will return the newly created reservation, otherwise it will return
    * with an "incorrect ID" exception or a "seat not available" exception.
    */
+
   @PostMapping(value = "/makeReservation")
   // @GetMapping(value = "/makeReservation")
-  public Reservation makeReservation(@RequestParam("flightId") int flightId,
+  public Response makeReservation(@RequestParam("flightId") int flightId,
       @RequestParam("userId") int userId, @RequestParam("seatId") int seatId,
       @RequestParam("passengerFirstName") String passengerFirstName,
       @RequestParam("passengerLastName") String passengerLastName) {
@@ -96,8 +95,7 @@ public class AirlineRestController {
     // Check if this seat is available to book
     if (!airlineService.isSeatAvailable(seatId)) {
       // The seat is not available
-      throw new ResponseStatusException(HttpStatus.OK,
-          "MESSAGE: This seat is not available. Seat ID: " + seatId);
+      return new Response("Error: Seat ID " + seatId + " is not available.", null);
     }
 
     Reservation reservation = airlineService.makeReservation(flightId, userId, seatId,
@@ -106,13 +104,14 @@ public class AirlineRestController {
     // Check that the reservation was created correctly
     if (reservation == null) {
       // At least one ID was incorrect
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-          "ERROR: Request contains incorrect flight ID, user ID or seat ID.");
+      return new Response("Error: Request contains incorrect flight ID, user ID or seat ID.", null);
     }
 
     System.out.println("\n-- Reservation Created ID: " + reservation.getReservationId() + " --");
-    return reservation;
+    return new Response("Success", reservation);
   }
+
+
 
   /**
    * Cancels a reservation using a reservation ID and user ID. If it was successful, this method
@@ -142,6 +141,7 @@ public class AirlineRestController {
 
     return new Response("Success", reservationId);
   }
+
 
 
 }

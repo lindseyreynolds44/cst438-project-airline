@@ -273,44 +273,55 @@ This endpoint will allow a thirdparty end user to book a flight reservation.
 
 #### Response
 
-- A successful response will return a 200 code and a json response with the newly created reservation information.
-- If the seat is not available to book, a 200 code along with an error message will be displayed.
-- If any of the ID numbers are invalid, a 404 not found code will be displayed. 
+- A successful response will return a 200 code and a json response object with a status code of "Success" and the newly created reservation information.
+- If the seat is not available to book or if any of the ID numbers are invalid, a 200 code along with an error message will be displayed.
 
 
 
-##### Response Example
+##### Response Example (Success)
 
 ```
 {
-    "reservationId": 27,
-    "user": {
-        "userId": 9,
-        "userName": "clumox8",
-        "password": "rZbtCC"
-    },
-    "firstName": "Hello",
-    "lastName": "World",
-    "flight": {
-        "flightId": 20,
-        "airlineName": "america",
-        "departureDate": "2022-02-01",
-        "departureTime": "19:13:23",
-        "numberOfStops": 2,
-        "originCity": "seattle",
-        "destinationCity": "new york",
-        "price": 545
-    },
-    "seat": {
-        "seatId": 840,
-        "flightId": 7,
-        "seatRow": 3,
-        "seatLetter": "D",
-        "available": 1,
-        "isFirstClass": 1
-    },
-    "dateCreated": "2021-06-08T03:39:37.318+00:00",
-    "price": 545
+    "status": "Success",
+    "data": {
+        "reservationId": 22,
+        "user": {
+            "userId": 9,
+            "userName": "clumox8",
+            "password": "rZbtCC"
+        },
+        "firstName": "Fake",
+        "lastName": "Data",
+        "flight": {
+            "flightId": 10,
+            "airlineName": "jet-blue",
+            "departureDate": "2021-09-09",
+            "departureTime": "11:02:26",
+            "numberOfStops": 1,
+            "originCity": "san diego",
+            "destinationCity": "washington d.c.",
+            "price": 675
+        },
+        "seat": {
+            "seatId": 900,
+            "flightId": 7,
+            "seatRow": 14,
+            "seatLetter": "F",
+            "isAvailable": true,
+            "isFirstClass": false
+        },
+        "dateCreated": "2021-06-10T21:58:13.273+00:00",
+        "price": 675
+    }
+}
+```
+
+##### Response Example (Failure)
+
+```
+{
+    "status": "Error: Seat ID 900 is not available.",
+    "data": null
 }
 ```
 
