@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import java.sql.Date;
 import java.sql.Time;
@@ -20,13 +19,16 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import cst438.domain.CancelResponse;
+import cst438.domain.CreateResponse;
 import cst438.domain.Flight;
 import cst438.domain.Reservation;
-import cst438.domain.Response;
 import cst438.domain.Seat;
 import cst438.domain.User;
 import cst438.service.AirlineService;
@@ -45,7 +47,8 @@ public class AirlineRestControllerTest {
   private JacksonTester<ArrayList<Date>> jsonDateAttempt;
   private JacksonTester<ArrayList<String>> jsonRouteAttempt;
   private JacksonTester<Reservation> jsonReservationAttempt;
-  private JacksonTester<Response> jsonResponseAttempt;
+  private JacksonTester<CancelResponse> jsonCancelResponseAttempt;
+  private JacksonTester<CreateResponse> jsonCreateResponseAttempt;
 
   SimpleDateFormat sdf;
 
@@ -319,29 +322,28 @@ public class AirlineRestControllerTest {
         .willReturn(reservation);
 
     // Perform simulated HTTP call
-    MockHttpServletResponse response = mvc
-        .perform(get("/api/makeReservation?flightId=" + flightId + "&userId=" + userId + "&seatId="
-            + seatId + "&passengerFirstName=" + firstName + "&passengerLastName=" + lastName))
-        .andReturn().getResponse();
+    MvcResult response = mvc
+        .perform(MockMvcRequestBuilders
+            .post("/api/makeReservation?flightId=" + flightId + "&userId=" + userId + "&seatId="
+                + seatId + "&passengerFirstName=" + firstName + "&passengerLastName=" + lastName)
+            .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk()).andReturn();
+    CreateResponse actual =
+        jsonCreateResponseAttempt.parseObject(response.getResponse().getContentAsString());
 
-    // Verify that the status code is as expected
-    assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
-
-    // Convert returned data from JSON string format to Reservation object
-    Reservation actual = jsonReservationAttempt.parseObject(response.getContentAsString());
-
-    // Create the expected Reservation object
-    Reservation expected =
+    // Create expected result
+    Reservation expectedReservation =
         new Reservation(0, user, firstName, lastName, flight, seat, null, firstClassPrice);
+    CreateResponse expected = new CreateResponse("Success", expectedReservation);
 
-    // Compare expected data to actual data
-    assertEquals(expected.getReservationId(), actual.getReservationId());
-    assertEquals(expected.getFlight().getFlightId(), actual.getFlight().getFlightId());
-    assertEquals(expected.getUser(), actual.getUser());
-    assertEquals(expected.getSeat(), actual.getSeat());
-    assertEquals(expected.getFirstName(), actual.getFirstName());
-    assertEquals(expected.getLastName(), actual.getLastName());
-    assertEquals(expected.getPrice(), actual.getPrice());
+    // Compare expected result to actual result
+    assertEquals(expected.getStatus(), actual.getStatus());
+    assertEquals(expected.getData().getFlight().getFlightId(),
+        actual.getData().getFlight().getFlightId());
+    assertEquals(expected.getData().getReservationId(), actual.getData().getReservationId());
+    assertEquals(expected.getData().getPrice(), actual.getData().getPrice());
+    assertEquals(expected.getData().getSeat(), actual.getData().getSeat());
+    assertEquals(expected.getData().getUser(), actual.getData().getUser());
   }
 
   @Test
@@ -372,28 +374,29 @@ public class AirlineRestControllerTest {
         .willReturn(reservation);
 
     // Perform simulated HTTP call
-    MockHttpServletResponse response = mvc
-        .perform(get("/api/makeReservation?flightId=" + flightId + "&userId=" + userId + "&seatId="
-            + seatId + "&passengerFirstName=" + firstName + "&passengerLastName=" + lastName))
-        .andReturn().getResponse();
+    MvcResult response = mvc
+        .perform(MockMvcRequestBuilders
+            .post("/api/makeReservation?flightId=" + flightId + "&userId=" + userId + "&seatId="
+                + seatId + "&passengerFirstName=" + firstName + "&passengerLastName=" + lastName)
+            .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk()).andReturn();
+    CreateResponse actual =
+        jsonCreateResponseAttempt.parseObject(response.getResponse().getContentAsString());
 
-    // Verify that the status code is as expected
-    assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+    // Create expected result
+    Reservation expectedReservation =
+        new Reservation(0, user, firstName, lastName, flight, seat, null, price);
+    CreateResponse expected = new CreateResponse("Success", expectedReservation);
 
-    // Convert returned data from JSON string format to Reservation object
-    Reservation actual = jsonReservationAttempt.parseObject(response.getContentAsString());
+    // Compare expected result to actual result
+    assertEquals(expected.getStatus(), actual.getStatus());
+    assertEquals(expected.getData().getFlight().getFlightId(),
+        actual.getData().getFlight().getFlightId());
+    assertEquals(expected.getData().getReservationId(), actual.getData().getReservationId());
+    assertEquals(expected.getData().getPrice(), actual.getData().getPrice());
+    assertEquals(expected.getData().getSeat(), actual.getData().getSeat());
+    assertEquals(expected.getData().getUser(), actual.getData().getUser());
 
-    // Create the expected Reservation object
-    Reservation expected = new Reservation(0, user, firstName, lastName, flight, seat, null, price);
-
-    // Compare expected data to actual data
-    assertEquals(expected.getReservationId(), actual.getReservationId());
-    assertEquals(expected.getFlight().getFlightId(), actual.getFlight().getFlightId());
-    assertEquals(expected.getUser(), actual.getUser());
-    assertEquals(expected.getSeat(), actual.getSeat());
-    assertEquals(expected.getFirstName(), actual.getFirstName());
-    assertEquals(expected.getLastName(), actual.getLastName());
-    assertEquals(expected.getPrice(), actual.getPrice());
   }
 
   @Test
@@ -410,13 +413,22 @@ public class AirlineRestControllerTest {
         .willReturn(null);
 
     // Perform simulated HTTP call
-    MockHttpServletResponse response = mvc
-        .perform(get("/api/makeReservation?flightId=" + flightId + "&userId=" + userId + "&seatId="
-            + seatId + "&passengerFirstName=" + firstName + "&passengerLastName=" + lastName))
-        .andReturn().getResponse();
+    MvcResult response = mvc
+        .perform(MockMvcRequestBuilders
+            .post("/api/makeReservation?flightId=" + flightId + "&userId=" + userId + "&seatId="
+                + seatId + "&passengerFirstName=" + firstName + "&passengerLastName=" + lastName)
+            .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk()).andReturn();
+    CreateResponse actual =
+        jsonCreateResponseAttempt.parseObject(response.getResponse().getContentAsString());
 
-    // Verify that the status code is as expected
-    assertThat(response.getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
+    // Create expected result
+    CreateResponse expected = new CreateResponse(
+        "Error: Request contains incorrect flight ID, user ID or seat ID.", null);
+
+    // Compare expected result to actual result
+    assertEquals(expected.getData(), actual.getData());
+    assertEquals(expected.getStatus(), actual.getStatus());
   }
 
   @Test
@@ -446,16 +458,22 @@ public class AirlineRestControllerTest {
         .willReturn(reservation);
 
     // Perform simulated HTTP call
-    MockHttpServletResponse response = mvc
-        .perform(get("/api/makeReservation?flightId=" + flightId + "&userId=" + userId + "&seatId="
-            + seatId + "&passengerFirstName=" + firstName + "&passengerLastName=" + lastName))
-        .andReturn().getResponse();
+    MvcResult response = mvc
+        .perform(MockMvcRequestBuilders
+            .post("/api/makeReservation?flightId=" + flightId + "&userId=" + userId + "&seatId="
+                + seatId + "&passengerFirstName=" + firstName + "&passengerLastName=" + lastName)
+            .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk()).andReturn();
+    CreateResponse actual =
+        jsonCreateResponseAttempt.parseObject(response.getResponse().getContentAsString());
 
-    // Verify that the status code is as expected
-    assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+    // Create expected result
+    CreateResponse expected =
+        new CreateResponse("Error: Seat ID " + seatId + " is not available.", null);
 
     // Compare expected result to actual result
-    assertEquals("", response.getContentAsString()); // Nothing should be returned
+    assertEquals(expected.getData(), actual.getData());
+    assertEquals(expected.getStatus(), actual.getStatus());
   }
 
   @Test
@@ -463,29 +481,51 @@ public class AirlineRestControllerTest {
     int reservationId = 10;
     int userId = 12;
 
-    given(airlineService.isValidReservation(userId, reservationId)).willReturn(true);
+    given(airlineService.isValidReservation(reservationId, userId)).willReturn(true);
     given(airlineService.cancelReservation(reservationId)).willReturn(true);
 
-
-    ObjectMapper objectMapper = new ObjectMapper();
-    String json = objectMapper.writeValueAsString("?&reservationId=10&userId=12");
-
-
-    MvcResult result = mvc.perform(post("/cancelReservation?&reservationId=10&userId=12"))
+    // Perform simulated HTTP call
+    MvcResult result = mvc
+        .perform(MockMvcRequestBuilders.post("/api/cancelReservation?&reservationId=10&userId=12")
+            .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk()).andReturn();
 
-    // MvcResult result =
-    // mvc.perform(post("/api/cancelReservation?&reservationId=19&userId=2").contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).content("json").andExpect(status().isOk()).andReturn();
+    // Get the response object
+    CancelResponse actual =
+        jsonCancelResponseAttempt.parseObject(result.getResponse().getContentAsString());
 
-    String content = result.getResponse().getContentAsString();
+    // Create the expected response object
+    CancelResponse expected = new CancelResponse("Success", reservationId);
 
-    System.out.println("-----------TESTING--------------\n" + content + "\n------END------\n");
+    // Verify that the results are as expected
+    assertThat(expected.getStatus()).isEqualTo(actual.getStatus());
+    assertThat(expected.getData()).isEqualTo(actual.getData());
+  }
+
+  @Test
+  public void testCancelReservationFailure() throws Exception {
+    int reservationId = 10;
+    int userId = 12;
+
+    given(airlineService.isValidReservation(reservationId, userId)).willReturn(false);
+    given(airlineService.cancelReservation(reservationId)).willReturn(true);
+
     // Perform simulated HTTP call
-    // Find out how to test a post request!!!
+    MvcResult result = mvc
+        .perform(MockMvcRequestBuilders.post("/api/cancelReservation?&reservationId=10&userId=12")
+            .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk()).andReturn();
 
+    // Get the response object
+    CancelResponse actual =
+        jsonCancelResponseAttempt.parseObject(result.getResponse().getContentAsString());
 
-    // Verify that the status code is as expected
-    // assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+    // Create the expected response object
+    CancelResponse expected = new CancelResponse("Error: Invalid Reservation", null);
+
+    // Verify that the results are as expected
+    assertThat(expected.getStatus()).isEqualTo(actual.getStatus());
+    assertThat(expected.getData()).isEqualTo(actual.getData());
   }
 
 
