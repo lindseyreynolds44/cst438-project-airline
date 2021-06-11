@@ -31,7 +31,7 @@
     			<option th:each="i : ${#numbers.sequence(1,10)}" th:value="${i}" th:text="${i}" ></option>
     		</select>
     		<!-- Submit -->
-    		<input type="submit" value="submit">
+    		<input class="btn btn-primary" type="submit" value="See Flights">
     	</form>
     	<br>
     	<span id="response-message"></span>
@@ -53,18 +53,21 @@
 				$("#destination-city").removeAttr("disabled");
 		    	originCityChanged = true;
 			} else {
-				triggerDropdowns();
+				fillDepDateDropdown();
 			}
 		});
 		
 		// Will load avalable flight dates for a city combo
 		$("#destination-city").on("change", function(){
 			if(originCityChanged){
-				triggerDropdowns();
+				fillDepDateDropdown();
 			}
 		}); // destination-city change
 		
-		function triggerDropdowns() {
+		/**
+		* Fills the date dropdown based on flight route.
+		*/
+		function fillDepDateDropdown() {
 							
 			$("#response-message").empty(); // resets span 
 							
@@ -91,7 +94,7 @@
 					} else {
 						// add all the option tags for departure date.
 						data.forEach(function (date) {
-				    	$("#departure-date").append($("<option>").val(date).text(date));
+				    	$("#departure-date").append($("<option>").val(date).text(formatDate(date)));
 					});
 										
 						$("#departure-date").removeAttr("disabled");
@@ -99,7 +102,17 @@
 					 }	
 				 } // success
 			}); // ajax
-		} // triggerDropdowns()
+		} // fillDepDateDropdown()
+		
+		/**
+		* Returns a formatted date string from sql date format
+		*/
+		function formatDate(dateString){
+			const date = new Date(dateString);
+			return (date.getMonth()+1) + "/" + (date.getDate()+1) + "/" + date.getFullYear();
+		}
+		
+		
 	});// ready
 </script>	
 

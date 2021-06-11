@@ -33,6 +33,8 @@
 			<input class="last-name-input input-group-text" type="text" name="lastName" value="" required>
 		</div>
 			<button id="book-btn"  class="btn btn-primary">Book Flight</button>
+			
+			<div id="modal-container"></div>
 		
 	</div>
 
@@ -43,22 +45,40 @@
 		
 		<!--/* allows me to use controller variables in JS! */-->
 		const numberOfPassengers = [[${numberOfPassengers}]];
-		let reservations = []
-
+		const userId = 1
+		flightId = [[${flightId}]];
+		let reservations = [];
+		
+		seats = [];
+		firstNames = [];
+		lastNames = [];
 	
 		$(document).ready(function() {
 			$("#book-btn").on("click", function () {
-				reservations = buildReservationObjects();
-				console.log(reservations);
+				//reservations = buildReservationObjects();
+				buildReservationObjects();
+				console.log(userId);
+				console.log(flightId);
+				console.log(seats);
+				console.log(firstNames);
+				console.log(lastNames);
 				
 				$.ajax({
-					method: "POST",
+					type: "POST",
 					url: "/bookFlight",
 					data: {
-						"reservations[]": reservations
+						//"reservations[]": reservations
+						"user": userId,
+						"flightId": flightId,
+						"seats[]": seats,
+						"firstNames[]": firstNames,
+						"lastNames[]": lastNames,
 					},
 					success: function (response, status) {
 						console.log(status);
+						console.log(response);
+						$("#modal-container").html(response);
+						$("#confirmation-modal").modal("show");
 					}
 				}); //ajax
 			}); // book
@@ -67,6 +87,7 @@
 		function buildReservationObjects(){
 			let temp = [];
 			let reservation = {};
+			
 			for(let x = 1; x < numberOfPassengers+1; x++){
 				let userId = $(`#passenger-${x}`).find('.user-id-input').val()
 				let flightId = $(`#passenger-${x}`).find('.flight-id-input').val()
@@ -75,18 +96,25 @@
 				let lastName = $(`#passenger-${x}`).find('.last-name-input').val()
 				let price = $(`#passenger-${x}`).find('.price-input').val()
 				
-				reservation["reservationId"] = 1;
-				reservation["user"] = userId;
-				reservation["flight"] = flightId;
-				reservation["seat"] = seatId;
-				reservation["firstName"] = firstName;
-				reservation["lastName"] = lastName;
-				reservation["price"] = price;
-				reservation["dateCreated"] = "";
+				console.log("counter" + x);
+				
+				
+				seats.push(seatId);
+				firstNames.push(firstName);
+				lastNames.push(lastName);
+				
+				//reservation["reservationId"] = 1;
+// 				reservation["user"] = userId;
+// 				reservation["flight"] = flightId;
+// 				reservation["seat"] = seatId;
+// 				reservation["firstName"] = firstName;
+// 				reservation["lastName"] = lastName;
+				//reservation["price"] = price;
+				//reservation["dateCreated"] = "";
 				
 				temp.push(reservation);
 			}
-			return temp;	
+			//return temp;	
 		} // build res objs
 		
 		
