@@ -145,10 +145,10 @@ public class AirlineService {
       if (user == null || flight == null || seat == null || firstName == "" || lastName == "") {
         return null;
       }
-
       if (!isSeatAvailable(seat.getSeatId())) {
         return null;
       }
+
       seatRepository.setSeatToUnavailable(seat.getSeatId());
       reservation = new Reservation(user, firstName, lastName, flight, seat, price);
       reservations.add(reservation);
