@@ -2,7 +2,6 @@ package cst438.controller;
 
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -84,12 +83,10 @@ public class AirlineController {
         + " Number Of Passengers: " + numberOfPassengers + " selectedSeatIds " + selectedSeatIds);
 
     ArrayList<Reservation> reservations = new ArrayList<>(numberOfPassengers);
-    // System.out.println(reservations.size());
 
     model.addAttribute("flightId", flightId);
     model.addAttribute("numberOfPassengers", numberOfPassengers);
     model.addAttribute("seats", selectedSeatIds);
-    // model.addAttribute("reservations", reservations);
 
     System.out.println("Search Flights Passengers Sending Model:\n" + model);
 
@@ -98,26 +95,19 @@ public class AirlineController {
 
 
   @PostMapping("/bookFlight")
-  public String bookFlight(@RequestParam("user") int user, @RequestParam("flightId") int flightId,
+  public String bookFlight(@RequestParam("user") int userId, @RequestParam("flightId") int flightId,
       @RequestParam("seats[]") ArrayList<Integer> seatIds,
       @RequestParam("firstNames[]") ArrayList<String> firstNames,
       @RequestParam("lastNames[]") ArrayList<String> lastNames, Model model) {
 
-    System.out.println("User " + user + " FlightId " + flightId + " Seats " + seatIds
-        + " First Names " + firstNames + " Last Names " + lastNames);
+    System.out.println("Book Flight Incoming:\n User " + userId + " FlightId " + flightId
+        + " Seats " + seatIds + " First Names " + firstNames + " Last Names " + lastNames);
 
-    /**
-     * TODO: Need to send these vars to airlineService and have it perform the conversation. It
-     * needs to return an object like a Confirmation object that will return the vars needed to
-     * match those being added to the model.
-     */
 
-    // DEMO VARS BELOW NOT ACTUALL DATA
-    model.addAttribute("flightNumber", "FL123");
-    model.addAttribute("passengers",
-        new ArrayList<String>(Arrays.asList("test person", "tester person", "testee person")));
-    model.addAttribute("seats", new ArrayList<String>(Arrays.asList("1A", "1B", "1C")));
-    model.addAttribute("totalPrice", "1500");
+    ArrayList<Reservation> reservations =
+        airlineService.makeReservation(userId, flightId, seatIds, firstNames, lastNames);
+
+    model.addAttribute("reservations", reservations);
 
     System.out.println("Book Flight Sending:\n" + model);
 
