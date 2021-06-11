@@ -17,6 +17,7 @@
 					<th scope="col">Destination</th>
 					<th scope="col">Departure Date</th>
 					<th scope="col">Departure Time</th>
+					<th scope="col">Price</th>
 					<th scope="col">Like this flight?</th>
 				</tr>
 			</thead>
@@ -27,6 +28,7 @@
 					<td th:text="${flight.destinationCity}"></td>
 					<td th:text="${#dates.format(flight.departureDate, 'E, MM-dd-yy')}"></td>
 					<td th:text="${#dates.format(flight.departureTime, 'h:mm aa z')}"></td>
+					<td th:text="${#strings.replace(#numbers.formatCurrency(flight.price), '.00', '')}"></td>
 					<td>
 						<form action="/searchFlights/seats" method="post">
 							<input type="hidden" name="flightId" th:attr="value=${flight.flightId}" />
