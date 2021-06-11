@@ -87,6 +87,7 @@ public class AirlineController {
     model.addAttribute("flightId", flightId);
     model.addAttribute("numberOfPassengers", numberOfPassengers);
     model.addAttribute("seats", selectedSeatIds);
+    model.addAttribute("userId", 1); // ****TODO NEED TO PULL THIS FROM SESSION VARIABLE***
 
     System.out.println("Search Flights Passengers Sending Model:\n" + model);
 
