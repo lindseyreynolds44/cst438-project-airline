@@ -1,0 +1,43 @@
+
+<html xmlns:th="www.thymeleaf.org">
+
+
+	<!-- Modal -->
+<div class="modal fade" id="confirmation-modal" tabindex="-1" role="dialog" aria-labelledby="confirmation-modal" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+	       <h1>Flight Confirmation</h1>
+			<h2 th:text="'Flight Number ' + ${flightNumber}"></h2>
+			<table>
+				<thead>
+					<tr>
+						<th>Passenger</th>
+						<th>Seats</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="passenger, iStat : ${passengers}">
+						<td th:text=${passenger}></td>
+						<td th:text=${seats.get(iStat.count-1)}></td>
+					</tr>
+				</tbody>
+			</table>
+			<h3 th:text="'Total Price' + ${#strings.replace(#numbers.formatCurrency(totalPrice), '.00', '')}"></h3>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+	
+	
+</html>
