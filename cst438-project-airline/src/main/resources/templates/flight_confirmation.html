@@ -13,7 +13,7 @@
         </button>
       </div>
       <div class="modal-body">
-			<h3 th:text="'Flight Number ' + ${flightNumber}"></h3>
+			<h3 th:text="'Flight Number ' + ${reservations.get(0).getFlight().getFlightId()}"></h3>
 			<table class="m-auto">
 				<thead>
 					<tr>
@@ -22,17 +22,16 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="passenger, iStat : ${passengers}">
-						<td th:text=${passenger}></td>
-						<td th:text=${seats.get(iStat.count-1)}></td>
+					<tr th:each="r, iStat : ${reservations}">
+						<td th:text="${r.getFirstName() + ' ' + r.getLastName()}"></td>
+						<td th:text="${r.getSeat().getSeatRow() + r.getSeat().getSeatLetter()}"></td>
 					</tr>
 				</tbody>
 			</table>
-			<p class="text-right" th:text="'Total Price' + ${#strings.replace(#numbers.formatCurrency(totalPrice), '.00', '')}"></p>
+			<p class="text-right" th:text="'Total Price' + ${#strings.replace(#numbers.formatCurrency(#aggregates.sum(reservations.![price])), '.00', '')}"></p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
       </div>
     </div>
   </div>
