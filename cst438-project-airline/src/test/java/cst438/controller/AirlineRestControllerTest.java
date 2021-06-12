@@ -66,8 +66,9 @@ public class AirlineRestControllerTest {
   public void testGetFlights() throws Exception {
     Date deptDate = Date.valueOf("2021-06-01");
     Time deptTime = Time.valueOf("12:12:12");
-    Flight dogeFlight =
-        new Flight(99, "doge airlines", deptDate, deptTime, 0, "dogeville", "dogeland", 300);
+    String flightNumber = "TS123";
+    Flight dogeFlight = new Flight(99, flightNumber, "doge airlines", deptDate, deptTime, 0,
+        "dogeville", "dogeland", 300);
 
     ArrayList<Flight> Flights = new ArrayList<Flight>(Arrays.asList(dogeFlight));
 
@@ -91,8 +92,9 @@ public class AirlineRestControllerTest {
   public void testGetFlightsShouldReturnEmptyIfNotFound() throws Exception {
     Date deptDate = Date.valueOf("2021-06-01");
     Time deptTime = Time.valueOf("12:12:12");
-    Flight dogeFlight =
-        new Flight(99, "doge airlines", deptDate, deptTime, 0, "dogeville", "dogeland", 300);
+    String flightNumber = "TS123";
+    Flight dogeFlight = new Flight(99, flightNumber, "doge airlines", deptDate, deptTime, 0,
+        "dogeville", "dogeland", 300);
 
     ArrayList<Flight> Flights = new ArrayList<Flight>(Arrays.asList(dogeFlight));
 
@@ -112,8 +114,9 @@ public class AirlineRestControllerTest {
   public void testGetFlightsShouldReturnEmptyIfWrongVarType() throws Exception {
     Date deptDate = Date.valueOf("2021-06-01");
     Time deptTime = Time.valueOf("12:12:12");
-    Flight dogeFlight =
-        new Flight(99, "doge airlines", deptDate, deptTime, 0, "dogeville", "dogeland", 300);
+    String flightNumber = "TS123";
+    Flight dogeFlight = new Flight(99, flightNumber, "doge airlines", deptDate, deptTime, 0,
+        "dogeville", "dogeland", 300);
 
     ArrayList<Flight> Flights = new ArrayList<Flight>(Arrays.asList(dogeFlight));
 
@@ -210,12 +213,16 @@ public class AirlineRestControllerTest {
   public void testGetAllFlights() throws Exception {
     Date deptDate1 = Date.valueOf("2021-06-01");
     Time deptTime1 = Time.valueOf("12:12:12");
-    Flight flight1 =
-        new Flight(99, "doge airlines", deptDate1, deptTime1, 0, "dogeville", "dogeland", 300);
+    String flightNumber1 = "TS123";
+
+    Flight flight1 = new Flight(99, flightNumber1, "doge airlines", deptDate1, deptTime1, 0,
+        "dogeville", "dogeland", 300);
+
     Date deptDate2 = Date.valueOf("2021-07-11");
     Time deptTime2 = Time.valueOf("02:15:00");
-    Flight flight2 =
-        new Flight(100, "unicorn airlines", deptDate2, deptTime2, 2, "uni", "corn", 555);
+    String flightNumber2 = "TS456";
+    Flight flight2 = new Flight(100, flightNumber2, "unicorn airlines", deptDate2, deptTime2, 2,
+        "uni", "corn", 555);
 
     ArrayList<Flight> Flights = new ArrayList<Flight>(Arrays.asList(flight1, flight2));
 
@@ -297,6 +304,7 @@ public class AirlineRestControllerTest {
   public void testMakeReservationWithValidInfoFirstClassSeat() throws Exception {
 
     int flightId = 10;
+    String flightNumber = "TS123";
     int userId = 9;
     int seatId = 350;
     int price = 400;
@@ -310,9 +318,10 @@ public class AirlineRestControllerTest {
     String originCity = "Doge";
     String destCity = "Unicorn";
 
+
     User user = new User(userId, firstName, lastName);
-    Flight flight =
-        new Flight(flightId, "United", deptDate, deptTime, numStops, originCity, destCity, price);
+    Flight flight = new Flight(flightId, flightNumber, "United", deptDate, deptTime, numStops,
+        originCity, destCity, price);
     Seat seat = new Seat(seatId, flightId, 2, "B", true, true);
     Reservation reservation =
         new Reservation(0, user, firstName, lastName, flight, seat, null, firstClassPrice);
@@ -350,6 +359,7 @@ public class AirlineRestControllerTest {
   public void testMakeReservationWithValidInfoEconomySeat() throws Exception {
 
     int flightId = 10;
+    String flightNumber = "TS123";
     int userId = 9;
     int seatId = 350;
     int price = 400;
@@ -363,8 +373,8 @@ public class AirlineRestControllerTest {
     String destCity = "Unicorn";
 
     User user = new User(userId, firstName, lastName);
-    Flight flight =
-        new Flight(flightId, "United", deptDate, deptTime, numStops, originCity, destCity, price);
+    Flight flight = new Flight(flightId, flightNumber, "United", deptDate, deptTime, numStops,
+        originCity, destCity, price);
     Seat seat = new Seat(seatId, flightId, 20, "B", true, false);
     Reservation reservation =
         new Reservation(0, user, firstName, lastName, flight, seat, null, price);
@@ -434,6 +444,7 @@ public class AirlineRestControllerTest {
   @Test
   public void testMakeReservationWithUnavailableSeat() throws Exception {
     int flightId = 10;
+    String flightNumber = "TS123";
     int userId = 9;
     int seatId = 350;
     int price = 400;
@@ -446,9 +457,10 @@ public class AirlineRestControllerTest {
     String originCity = "Doge";
     String destCity = "Unicorn";
 
+
     User user = new User(userId, firstName, lastName);
-    Flight flight =
-        new Flight(flightId, "United", deptDate, deptTime, numStops, originCity, destCity, price);
+    Flight flight = new Flight(flightId, flightNumber, "United", deptDate, deptTime, numStops,
+        originCity, destCity, price);
     Seat seat = new Seat(seatId, flightId, 20, "B", false, false);
     Reservation reservation =
         new Reservation(0, user, firstName, lastName, flight, seat, null, price);
