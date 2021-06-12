@@ -139,12 +139,14 @@ public class AirlineService {
       firstName = passengerFirstNames.get(x);
       lastName = passengerLastNames.get(x);
       seat = seatRepository.findBySeatId(seatIds.get(x));
-      price = getSeatPrice(seat, flight);
 
       // Check if any of the entered IDs are invalid
       if (user == null || flight == null || seat == null || firstName == "" || lastName == "") {
         return null;
       }
+
+      price = getSeatPrice(seat, flight);
+
       if (!isSeatAvailable(seat.getSeatId())) {
         return null;
       }
