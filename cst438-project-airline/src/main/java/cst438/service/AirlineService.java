@@ -27,6 +27,8 @@ public class AirlineService {
 
   public AirlineService() {}
 
+  private static final int FIRST_CLASS_MULTIPLIER = 2;
+
   public AirlineService(FlightRepository flightRepository,
       ReservationRepository reservationRepository, SeatRepository seatRepository,
       UserRepository userRepository) {
@@ -107,12 +109,63 @@ public class AirlineService {
   }
 
   /**
+   * Creates a reservation for multiple passengers. Designed to be used with the web application and
+   * Airline. Controller.
+   * 
+   * @param flightId
+   * @param userId
+   * @param seatId
+   * @param passengerFirstName
+   * @param passengerLastName
+   * @return Returns an ArrayList of type Reservation or null for invalid input.
+   */
+  public ArrayList<Reservation> makeReservation(int userId, int flightId,
+      ArrayList<Integer> seatIds, ArrayList<String> passengerFirstNames,
+      ArrayList<String> passengerLastNames) {
+
+    final int numPassengers = seatIds.size();
+    ArrayList<Reservation> reservations = new ArrayList<>();
+
+    final User user = userRepository.findByUserId(userId);
+    final Flight flight = flightRepository.findByFlightId(flightId);
+    int price;
+    Seat seat;
+    String firstName;
+    String lastName;
+    Reservation reservation;
+
+    // creates a reservation for each passenger
+    for (int x = 0; x < numPassengers; x++) {
+      firstName = passengerFirstNames.get(x);
+      lastName = passengerLastNames.get(x);
+      seat = seatRepository.findBySeatId(seatIds.get(x));
+      price = getSeatPrice(seat, flight);
+
+      // Check if any of the entered IDs are invalid
+      if (user == null || flight == null || seat == null || firstName == "" || lastName == "") {
+        return null;
+      }
+      if (!isSeatAvailable(seat.getSeatId())) {
+        return null;
+      }
+
+      seatRepository.setSeatToUnavailable(seat.getSeatId());
+      reservation = new Reservation(user, firstName, lastName, flight, seat, price);
+      reservations.add(reservation);
+    }
+    reservationRepository.saveAll(reservations);
+    return reservations;
+  }
+
+
+
+  /**
    * Provides the price for a seat, considering its class and associated flight
    */
   private int getSeatPrice(Seat seat, Flight flight) {
     int price = flight.getPrice();
     if (seat.getIsFirstClass()) {
-      price = price * 2;
+      price = price * FIRST_CLASS_MULTIPLIER;
     }
     return price;
   }
