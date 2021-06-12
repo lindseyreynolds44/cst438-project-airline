@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
 import java.sql.Date;
 import java.sql.Time;
+import java.util.ArrayList;
+import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
@@ -39,6 +41,9 @@ public class AirlineServiceTest {
   @BeforeEach
   public void setUpBefore() {
     MockitoAnnotations.initMocks(this);
+
+    as = new AirlineService(flightRepository, reservationRepository, seatRepository,
+        userRepository);
   }
 
   @Test
@@ -104,7 +109,6 @@ public class AirlineServiceTest {
     // Service object that will be tested
     as = new AirlineService(flightRepository, reservationRepository, seatRepository,
         userRepository);
-
     // Data for creating stubs
     int flightId = 12;
     int userId = 10;
@@ -348,5 +352,306 @@ public class AirlineServiceTest {
 
     assertEquals(false, result);
   }
+
+  @Test
+  public void testFrontEndMakeReservationWithEconomySeatShouldReturnArrayOfReservations() {
+
+    // Data for creating stubs
+    int flightId = 12;
+    int userId = 10;
+    int numStops = 0;
+    int price = 200;
+
+    User user = new User(userId, "Test", "Person");
+
+    Flight flight = new Flight(flightId, "unicorn", Date.valueOf("2021-06-01"),
+        Time.valueOf("12:12:12"), numStops, "Lala Land", "Over the Rainbow", price);
+
+    ArrayList<Integer> seatIds = new ArrayList<>(Arrays.asList(198, 199, 200));
+    Seat seat1 = new Seat(seatIds.get(0), flightId, 23, "A", true, false);
+    Seat seat2 = new Seat(seatIds.get(1), flightId, 23, "B", true, false);
+    Seat seat3 = new Seat(seatIds.get(2), flightId, 23, "C", true, false);
+
+    ArrayList<String> firstNames = new ArrayList<>(Arrays.asList("Geralt", "Master", "The"));
+    ArrayList<String> lastNames = new ArrayList<>(Arrays.asList("Of Rivia", "Chief", "Doctor"));
+
+    Reservation r1 = new Reservation(user, "Geralt", "Of Rivia", flight, seat1, price);
+    Reservation r2 = new Reservation(user, "Master", "Chief", flight, seat2, price);
+    Reservation r3 = new Reservation(user, "The", "Doctor", flight, seat3, price);
+
+    // Create stubs for the MOCK databases
+    given(userRepository.findByUserId(userId)).willReturn(user);
+    given(flightRepository.findByFlightId(flightId)).willReturn(flight);
+    given(seatRepository.findBySeatId(seatIds.get(0))).willReturn(seat1);
+    given(seatRepository.findBySeatId(seatIds.get(1))).willReturn(seat2);
+    given(seatRepository.findBySeatId(seatIds.get(2))).willReturn(seat3);
+
+    // Test the makeReservation method
+    ArrayList<Reservation> actual =
+        as.makeReservation(userId, flightId, seatIds, firstNames, lastNames);
+
+    ArrayList<Reservation> expected = new ArrayList<>(Arrays.asList(r1, r2, r3));
+
+    assertEquals(expected, actual);
+
+  }
+
+  @Test
+  public void testFrontEndMakeReservationWithFirstClassSeatShouldReturnArrayOfReservations() {
+
+    // Data for creating stubs
+    int flightId = 12;
+    int userId = 10;
+    int numStops = 0;
+    int price = 200;
+    int firstClassPrice = price * 2;
+
+    User user = new User(userId, "Test", "Person");
+
+    Flight flight = new Flight(flightId, "unicorn", Date.valueOf("2021-06-01"),
+        Time.valueOf("12:12:12"), numStops, "Lala Land", "Over the Rainbow", price);
+
+    ArrayList<Integer> seatIds = new ArrayList<>(Arrays.asList(198, 199, 200));
+    Seat seat1 = new Seat(seatIds.get(0), flightId, 2, "A", true, true);
+    Seat seat2 = new Seat(seatIds.get(1), flightId, 2, "B", true, true);
+    Seat seat3 = new Seat(seatIds.get(2), flightId, 2, "C", true, true);
+
+    ArrayList<String> firstNames = new ArrayList<>(Arrays.asList("Geralt", "Master", "The"));
+    ArrayList<String> lastNames = new ArrayList<>(Arrays.asList("Of Rivia", "Chief", "Doctor"));
+
+    Reservation r1 = new Reservation(user, "Geralt", "Of Rivia", flight, seat1, firstClassPrice);
+    Reservation r2 = new Reservation(user, "Master", "Chief", flight, seat2, firstClassPrice);
+    Reservation r3 = new Reservation(user, "The", "Doctor", flight, seat3, firstClassPrice);
+
+    // Create stubs for the MOCK databases
+    given(userRepository.findByUserId(userId)).willReturn(user);
+    given(flightRepository.findByFlightId(flightId)).willReturn(flight);
+    given(seatRepository.findBySeatId(seatIds.get(0))).willReturn(seat1);
+    given(seatRepository.findBySeatId(seatIds.get(1))).willReturn(seat2);
+    given(seatRepository.findBySeatId(seatIds.get(2))).willReturn(seat3);
+
+    // Test the makeReservation method
+    ArrayList<Reservation> actual =
+        as.makeReservation(userId, flightId, seatIds, firstNames, lastNames);
+
+    ArrayList<Reservation> expected = new ArrayList<>(Arrays.asList(r1, r2, r3));
+
+    assertEquals(expected, actual);
+
+  }
+
+
+  @Test
+  public void testFrontEndMakeReservationWithInvalidUserShouldFail() {
+    // Data for creating stubs
+    int flightId = 12;
+    int userId = 10;
+    int numStops = 0;
+    int price = 200;
+    int firstClassPrice = price * 2;
+
+    User user = null;
+
+    Flight flight = new Flight(flightId, "unicorn", Date.valueOf("2021-06-01"),
+        Time.valueOf("12:12:12"), numStops, "Lala Land", "Over the Rainbow", price);
+
+    ArrayList<Integer> seatIds = new ArrayList<>(Arrays.asList(198, 199, 200));
+    Seat seat1 = new Seat(seatIds.get(0), flightId, 2, "A", true, true);
+    Seat seat2 = new Seat(seatIds.get(1), flightId, 2, "B", true, true);
+    Seat seat3 = new Seat(seatIds.get(2), flightId, 2, "C", true, true);
+
+    ArrayList<String> firstNames = new ArrayList<>(Arrays.asList("Geralt", "Master", "The"));
+    ArrayList<String> lastNames = new ArrayList<>(Arrays.asList("Of Rivia", "Chief", "Doctor"));
+
+    Reservation r1 = new Reservation(user, "Geralt", "Of Rivia", flight, seat1, firstClassPrice);
+    Reservation r2 = new Reservation(user, "Master", "Chief", flight, seat2, firstClassPrice);
+    Reservation r3 = new Reservation(user, "The", "Doctor", flight, seat3, firstClassPrice);
+
+    // Create stubs for the MOCK databases
+    given(userRepository.findByUserId(userId)).willReturn(user);
+    given(flightRepository.findByFlightId(flightId)).willReturn(flight);
+    given(seatRepository.findBySeatId(seatIds.get(0))).willReturn(seat1);
+    given(seatRepository.findBySeatId(seatIds.get(1))).willReturn(seat2);
+    given(seatRepository.findBySeatId(seatIds.get(2))).willReturn(seat3);
+
+    // Test the makeReservation method
+    ArrayList<Reservation> actual =
+        as.makeReservation(userId, flightId, seatIds, firstNames, lastNames);
+
+    ArrayList<Reservation> expected = null;
+
+    assertEquals(expected, actual);
+  }
+
+  @Test
+  public void testFrontEndMakeReservationWithInvalidFlightIdShouldFail() {
+    // Data for creating stubs
+    int flightId = 12;
+    int userId = 10;
+    int numStops = 0;
+    int price = 200;
+    int firstClassPrice = price * 2;
+
+    User user = new User(userId, "Test", "Person");
+
+    Flight flight = null;
+
+    ArrayList<Integer> seatIds = new ArrayList<>(Arrays.asList(198, 199, 200));
+    Seat seat1 = new Seat(seatIds.get(0), flightId, 2, "A", true, true);
+    Seat seat2 = new Seat(seatIds.get(1), flightId, 2, "B", true, true);
+    Seat seat3 = new Seat(seatIds.get(2), flightId, 2, "C", true, true);
+
+    ArrayList<String> firstNames = new ArrayList<>(Arrays.asList("Geralt", "Master", "The"));
+    ArrayList<String> lastNames = new ArrayList<>(Arrays.asList("Of Rivia", "Chief", "Doctor"));
+
+    Reservation r1 = new Reservation(user, "Geralt", "Of Rivia", flight, seat1, firstClassPrice);
+    Reservation r2 = new Reservation(user, "Master", "Chief", flight, seat2, firstClassPrice);
+    Reservation r3 = new Reservation(user, "The", "Doctor", flight, seat3, firstClassPrice);
+
+    // Create stubs for the MOCK databases
+    given(userRepository.findByUserId(userId)).willReturn(user);
+    given(flightRepository.findByFlightId(flightId)).willReturn(flight);
+    given(seatRepository.findBySeatId(seatIds.get(0))).willReturn(seat1);
+    given(seatRepository.findBySeatId(seatIds.get(1))).willReturn(seat2);
+    given(seatRepository.findBySeatId(seatIds.get(2))).willReturn(seat3);
+
+    // Test the makeReservation method
+    ArrayList<Reservation> actual =
+        as.makeReservation(userId, flightId, seatIds, firstNames, lastNames);
+
+    ArrayList<Reservation> expected = null;
+
+    assertEquals(expected, actual);
+
+  }
+
+  @Test
+  public void testFrontEndMakeReservationWithInvalidSeatIdShouldFail() {
+    // Data for creating stubs
+    int flightId = 12;
+    int userId = 10;
+    int numStops = 0;
+    int price = 200;
+    int firstClassPrice = price * 2;
+
+    User user = new User(userId, "Test", "Person");
+
+    Flight flight = new Flight(flightId, "unicorn", Date.valueOf("2021-06-01"),
+        Time.valueOf("12:12:12"), numStops, "Lala Land", "Over the Rainbow", price);
+
+    ArrayList<Integer> seatIds = new ArrayList<>(Arrays.asList(198, 199, 200));
+    Seat seat1 = null;
+    Seat seat2 = new Seat(seatIds.get(1), flightId, 2, "B", true, true);
+    Seat seat3 = new Seat(seatIds.get(2), flightId, 2, "C", true, true);
+
+    ArrayList<String> firstNames = new ArrayList<>(Arrays.asList("Geralt", "Master", "The"));
+    ArrayList<String> lastNames = new ArrayList<>(Arrays.asList("Of Rivia", "Chief", "Doctor"));
+
+    Reservation r1 = new Reservation(user, "Geralt", "Of Rivia", flight, seat1, firstClassPrice);
+    Reservation r2 = new Reservation(user, "Master", "Chief", flight, seat2, firstClassPrice);
+    Reservation r3 = new Reservation(user, "The", "Doctor", flight, seat3, firstClassPrice);
+
+    // Create stubs for the MOCK databases
+    given(userRepository.findByUserId(userId)).willReturn(user);
+    given(flightRepository.findByFlightId(flightId)).willReturn(flight);
+    given(seatRepository.findBySeatId(seatIds.get(0))).willReturn(seat1);
+    given(seatRepository.findBySeatId(seatIds.get(1))).willReturn(seat2);
+    given(seatRepository.findBySeatId(seatIds.get(2))).willReturn(seat3);
+
+    // Test the makeReservation method
+    ArrayList<Reservation> actual =
+        as.makeReservation(userId, flightId, seatIds, firstNames, lastNames);
+
+    ArrayList<Reservation> expected = null;
+
+    assertEquals(expected, actual);
+
+  }
+
+  @Test
+  public void testFrontEndMakeReservationWithInvalidFirstNameShouldFail() {
+    // Data for creating stubs
+    int flightId = 12;
+    int userId = 10;
+    int numStops = 0;
+    int price = 200;
+    int firstClassPrice = price * 2;
+
+    User user = new User(userId, "Test", "Person");
+
+    Flight flight = new Flight(flightId, "unicorn", Date.valueOf("2021-06-01"),
+        Time.valueOf("12:12:12"), numStops, "Lala Land", "Over the Rainbow", price);
+
+    ArrayList<Integer> seatIds = new ArrayList<>(Arrays.asList(198, 199, 200));
+    Seat seat1 = new Seat(seatIds.get(0), flightId, 2, "A", true, true);
+    Seat seat2 = new Seat(seatIds.get(1), flightId, 2, "B", true, true);
+    Seat seat3 = new Seat(seatIds.get(2), flightId, 2, "C", true, true);
+
+    ArrayList<String> firstNames = new ArrayList<>(Arrays.asList("", "Master", "The"));
+    ArrayList<String> lastNames = new ArrayList<>(Arrays.asList("Of Rivia", "Chief", "Doctor"));
+
+    Reservation r1 = new Reservation(user, "Geralt", "Of Rivia", flight, seat1, firstClassPrice);
+    Reservation r2 = new Reservation(user, "Master", "Chief", flight, seat2, firstClassPrice);
+    Reservation r3 = new Reservation(user, "The", "Doctor", flight, seat3, firstClassPrice);
+
+    // Create stubs for the MOCK databases
+    given(userRepository.findByUserId(userId)).willReturn(user);
+    given(flightRepository.findByFlightId(flightId)).willReturn(flight);
+    given(seatRepository.findBySeatId(seatIds.get(0))).willReturn(seat1);
+    given(seatRepository.findBySeatId(seatIds.get(1))).willReturn(seat2);
+    given(seatRepository.findBySeatId(seatIds.get(2))).willReturn(seat3);
+
+    // Test the makeReservation method
+    ArrayList<Reservation> actual =
+        as.makeReservation(userId, flightId, seatIds, firstNames, lastNames);
+
+    ArrayList<Reservation> expected = null;
+
+    assertEquals(expected, actual);
+
+  }
+
+  @Test
+  public void testFrontEndMakeReservationWithInvalidLastNameShouldFail() {
+    // Data for creating stubs
+    int flightId = 12;
+    int userId = 10;
+    int numStops = 0;
+    int price = 200;
+    int firstClassPrice = price * 2;
+
+    User user = new User(userId, "Test", "Person");
+
+    Flight flight = new Flight(flightId, "unicorn", Date.valueOf("2021-06-01"),
+        Time.valueOf("12:12:12"), numStops, "Lala Land", "Over the Rainbow", price);
+
+    ArrayList<Integer> seatIds = new ArrayList<>(Arrays.asList(198, 199, 200));
+    Seat seat1 = new Seat(seatIds.get(0), flightId, 2, "A", true, true);
+    Seat seat2 = new Seat(seatIds.get(1), flightId, 2, "B", true, true);
+    Seat seat3 = new Seat(seatIds.get(2), flightId, 2, "C", true, true);
+
+    ArrayList<String> firstNames = new ArrayList<>(Arrays.asList("Geralt", "Master", "The"));
+    ArrayList<String> lastNames = new ArrayList<>(Arrays.asList("", "Chief", "Doctor"));
+
+    Reservation r1 = new Reservation(user, "Geralt", "Of Rivia", flight, seat1, firstClassPrice);
+    Reservation r2 = new Reservation(user, "Master", "Chief", flight, seat2, firstClassPrice);
+    Reservation r3 = new Reservation(user, "The", "Doctor", flight, seat3, firstClassPrice);
+
+    // Create stubs for the MOCK databases
+    given(userRepository.findByUserId(userId)).willReturn(user);
+    given(flightRepository.findByFlightId(flightId)).willReturn(flight);
+    given(seatRepository.findBySeatId(seatIds.get(0))).willReturn(seat1);
+    given(seatRepository.findBySeatId(seatIds.get(1))).willReturn(seat2);
+    given(seatRepository.findBySeatId(seatIds.get(2))).willReturn(seat3);
+
+    // Test the makeReservation method
+    ArrayList<Reservation> actual =
+        as.makeReservation(userId, flightId, seatIds, firstNames, lastNames);
+
+    ArrayList<Reservation> expected = null;
+
+    assertEquals(expected, actual);
+  }
+
 
 }
