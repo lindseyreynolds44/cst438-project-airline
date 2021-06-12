@@ -365,13 +365,14 @@ public class AirlineServiceTest {
 
     // Data for creating stubs
     int flightId = 12;
+    String flightNumber = "TS123";
     int userId = 10;
     int numStops = 0;
     int price = 200;
 
     User user = new User(userId, "Test", "Person");
 
-    Flight flight = new Flight(flightId, "unicorn", Date.valueOf("2021-06-01"),
+    Flight flight = new Flight(flightId, flightNumber, "unicorn", Date.valueOf("2021-06-01"),
         Time.valueOf("12:12:12"), numStops, "Lala Land", "Over the Rainbow", price);
 
     ArrayList<Integer> seatIds = new ArrayList<>(Arrays.asList(198, 199, 200));
@@ -408,6 +409,7 @@ public class AirlineServiceTest {
 
     // Data for creating stubs
     int flightId = 12;
+    String flightNumber = "TS123";
     int userId = 10;
     int numStops = 0;
     int price = 200;
@@ -415,7 +417,7 @@ public class AirlineServiceTest {
 
     User user = new User(userId, "Test", "Person");
 
-    Flight flight = new Flight(flightId, "unicorn", Date.valueOf("2021-06-01"),
+    Flight flight = new Flight(flightId, flightNumber, "unicorn", Date.valueOf("2021-06-01"),
         Time.valueOf("12:12:12"), numStops, "Lala Land", "Over the Rainbow", price);
 
     ArrayList<Integer> seatIds = new ArrayList<>(Arrays.asList(198, 199, 200));
@@ -452,6 +454,7 @@ public class AirlineServiceTest {
   public void testFrontEndMakeReservationWithInvalidUserShouldFail() {
     // Data for creating stubs
     int flightId = 12;
+    String flightNumber = "TS123";
     int userId = 10;
     int numStops = 0;
     int price = 200;
@@ -459,7 +462,7 @@ public class AirlineServiceTest {
 
     User user = null;
 
-    Flight flight = new Flight(flightId, "unicorn", Date.valueOf("2021-06-01"),
+    Flight flight = new Flight(flightId, flightNumber, "unicorn", Date.valueOf("2021-06-01"),
         Time.valueOf("12:12:12"), numStops, "Lala Land", "Over the Rainbow", price);
 
     ArrayList<Integer> seatIds = new ArrayList<>(Arrays.asList(198, 199, 200));
@@ -494,6 +497,7 @@ public class AirlineServiceTest {
   public void testFrontEndMakeReservationWithInvalidFlightIdShouldFail() {
     // Data for creating stubs
     int flightId = 12;
+    String flightNumber = "TS123";
     int userId = 10;
     int numStops = 0;
     int price = 200;
@@ -536,6 +540,7 @@ public class AirlineServiceTest {
   public void testFrontEndMakeReservationWithInvalidSeatIdShouldFail() {
     // Data for creating stubs
     int flightId = 12;
+    String flightNumber = "TS123";
     int userId = 10;
     int numStops = 0;
     int price = 200;
@@ -543,7 +548,7 @@ public class AirlineServiceTest {
 
     User user = new User(userId, "Test", "Person");
 
-    Flight flight = new Flight(flightId, "unicorn", Date.valueOf("2021-06-01"),
+    Flight flight = new Flight(flightId, flightNumber, "unicorn", Date.valueOf("2021-06-01"),
         Time.valueOf("12:12:12"), numStops, "Lala Land", "Over the Rainbow", price);
 
     ArrayList<Integer> seatIds = new ArrayList<>(Arrays.asList(198, 199, 200));
@@ -579,6 +584,7 @@ public class AirlineServiceTest {
   public void testFrontEndMakeReservationWithInvalidFirstNameShouldFail() {
     // Data for creating stubs
     int flightId = 12;
+    String flightNumber = "TS123";
     int userId = 10;
     int numStops = 0;
     int price = 200;
@@ -586,7 +592,7 @@ public class AirlineServiceTest {
 
     User user = new User(userId, "Test", "Person");
 
-    Flight flight = new Flight(flightId, "unicorn", Date.valueOf("2021-06-01"),
+    Flight flight = new Flight(flightId, flightNumber, "unicorn", Date.valueOf("2021-06-01"),
         Time.valueOf("12:12:12"), numStops, "Lala Land", "Over the Rainbow", price);
 
     ArrayList<Integer> seatIds = new ArrayList<>(Arrays.asList(198, 199, 200));
@@ -622,6 +628,7 @@ public class AirlineServiceTest {
   public void testFrontEndMakeReservationWithInvalidLastNameShouldFail() {
     // Data for creating stubs
     int flightId = 12;
+    String flightNumber = "TS123";
     int userId = 10;
     int numStops = 0;
     int price = 200;
@@ -629,7 +636,7 @@ public class AirlineServiceTest {
 
     User user = new User(userId, "Test", "Person");
 
-    Flight flight = new Flight(flightId, "unicorn", Date.valueOf("2021-06-01"),
+    Flight flight = new Flight(flightId, flightNumber, "unicorn", Date.valueOf("2021-06-01"),
         Time.valueOf("12:12:12"), numStops, "Lala Land", "Over the Rainbow", price);
 
     ArrayList<Integer> seatIds = new ArrayList<>(Arrays.asList(198, 199, 200));
