@@ -88,7 +88,8 @@ public class AirlineService {
     Seat seat = seatRepository.findBySeatId(seatId);
 
     // Check if any of the entered IDs are invalid
-    if (user == null || flight == null || seat == null) {
+    if (user == null || flight == null || seat == null || passengerFirstName == ""
+        || passengerLastName == "") {
       return null;
     }
 

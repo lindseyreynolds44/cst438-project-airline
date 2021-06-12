@@ -107,12 +107,14 @@ public class AirlineServiceTest {
 
     // Data for creating stubs
     int flightId = 12;
+    String flightNumber = "TS123";
     int userId = 10;
     int seatId = 198;
     int numStops = 0;
     int price = 200;
+
     User user = new User(userId, "Test", "Person");
-    Flight flight = new Flight(flightId, "unicorn", Date.valueOf("2021-06-01"),
+    Flight flight = new Flight(flightId, flightNumber, "unicorn", Date.valueOf("2021-06-01"),
         Time.valueOf("12:12:12"), numStops, "Lala Land", "Over the Rainbow", price);
     Seat seat = new Seat(seatId, flightId, 30, "A", true, false);
     Reservation reservation = new Reservation(0, user, "Test", "Person", flight, seat, null, price);
@@ -139,13 +141,14 @@ public class AirlineServiceTest {
 
     // Data for creating stubs
     int flightId = 12;
+    String flightNumber = "TS123";
     int userId = 10;
     int seatId = 25;
     int numStops = 0;
     int price = 200;
     int firstClassPrice = price * 2;
     User user = new User(userId, "Test", "Person");
-    Flight flight = new Flight(flightId, "unicorn", Date.valueOf("2021-06-01"),
+    Flight flight = new Flight(flightId, flightNumber, "unicorn", Date.valueOf("2021-06-01"),
         Time.valueOf("12:12:12"), numStops, "Lala Land", "Over the Rainbow", price);
     Seat seat = new Seat(seatId, flightId, 2, "A", true, true);
     Reservation reservation =
@@ -201,11 +204,12 @@ public class AirlineServiceTest {
 
     // Data for creating stubs
     int flightId = 12;
+    String flightNumber = "TS123";
     int userId = 10;
     int seatId = 198;
     int numStops = 0;
     int price = 200;
-    Flight flight = new Flight(flightId, "unicorn", Date.valueOf("2021-06-01"),
+    Flight flight = new Flight(flightId, flightNumber, "unicorn", Date.valueOf("2021-06-01"),
         Time.valueOf("12:12:12"), numStops, "Lala Land", "Over the Rainbow", price);
     Seat seat = new Seat(seatId, flightId, 30, "A", true, false);
 
@@ -230,12 +234,13 @@ public class AirlineServiceTest {
 
     // Data for creating stubs
     int flightId = 12;
+    String flightNumber = "TS123";
     int userId = 10;
     int seatId = 198;
     int numStops = 0;
     int price = 200;
     User user = new User(userId, "Test", "Person");
-    Flight flight = new Flight(flightId, "unicorn", Date.valueOf("2021-06-01"),
+    Flight flight = new Flight(flightId, flightNumber, "unicorn", Date.valueOf("2021-06-01"),
         Time.valueOf("12:12:12"), numStops, "Lala Land", "Over the Rainbow", price);
 
     // Create stubs for the MOCK databases
@@ -260,13 +265,14 @@ public class AirlineServiceTest {
 
     // Data for creating stub
     int flightId = 12;
+    String flightNumber = "TS123";
     int userId = 10;
     int seatId = 25;
     int numStops = 0;
     int price = 200;
     int reservationId = 15;
     User user = new User(userId, "Test", "Person");
-    Flight flight = new Flight(flightId, "unicorn", Date.valueOf("2021-06-01"),
+    Flight flight = new Flight(flightId, flightNumber, "unicorn", Date.valueOf("2021-06-01"),
         Time.valueOf("12:12:12"), numStops, "Lala Land", "Over the Rainbow", price);
     Seat seat = new Seat(seatId, flightId, 2, "A", true, true);
     Reservation reservation = new Reservation(0, user, "Test", "Person", flight, seat, null, price);
@@ -311,13 +317,14 @@ public class AirlineServiceTest {
 
     // Data for creating stub
     int flightId = 12;
+    String flightNumber = "TS123";
     int userId = 10;
     int seatId = 25;
     int numStops = 0;
     int price = 200;
     int reservationId = 15;
     User user = new User(userId, "Test", "Person");
-    Flight flight = new Flight(flightId, "unicorn", Date.valueOf("2021-06-01"),
+    Flight flight = new Flight(flightId, flightNumber, "unicorn", Date.valueOf("2021-06-01"),
         Time.valueOf("12:12:12"), numStops, "Lala Land", "Over the Rainbow", price);
     Seat seat = new Seat(seatId, flightId, 2, "A", true, true);
     Reservation reservation = new Reservation(0, user, "Test", "Person", flight, seat, null, price);

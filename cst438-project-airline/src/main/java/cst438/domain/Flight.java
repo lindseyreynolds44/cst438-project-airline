@@ -14,6 +14,8 @@ public class Flight {
   @Id
   @Column(name = "flight_id")
   private int flightId;
+  @Column(name = "flight_number")
+  private String flightNumber;
   @Column(name = "airline_name")
   private String airlineName;
   @Column(name = "departure_date")
@@ -30,10 +32,11 @@ public class Flight {
 
   public Flight() {}
 
-  public Flight(int flightId, String airlineName, Date departureDate, Time departureTime,
-      int numberOfStops, String originCity, String destinationCity, int price) {
+  public Flight(int flightId, String flightNumber, String airlineName, Date departureDate,
+      Time departureTime, int numberOfStops, String originCity, String destinationCity, int price) {
     super();
     this.flightId = flightId;
+    this.flightNumber = flightNumber;
     this.airlineName = airlineName;
     this.departureDate = departureDate;
     this.departureTime = departureTime;
@@ -43,10 +46,20 @@ public class Flight {
     this.price = price;
   }
 
-
-
   public int getFlightId() {
     return flightId;
+  }
+
+  public void setFlightId(int flightId) {
+    this.flightId = flightId;
+  }
+
+  public String getFlightNumber() {
+    return flightNumber;
+  }
+
+  public void setFlightNumber(String flightNumber) {
+    this.flightNumber = flightNumber;
   }
 
   public String getAirlineName() {
@@ -105,7 +118,6 @@ public class Flight {
     this.price = price;
   }
 
-
   @Override
   public boolean equals(Object obj) {
     if (this == obj)
@@ -137,6 +149,11 @@ public class Flight {
       return false;
     if (flightId != other.flightId)
       return false;
+    if (flightNumber == null) {
+      if (other.flightNumber != null)
+        return false;
+    } else if (!flightNumber.equals(other.flightNumber))
+      return false;
     if (numberOfStops != other.numberOfStops)
       return false;
     if (originCity == null) {
@@ -151,12 +168,10 @@ public class Flight {
 
   @Override
   public String toString() {
-    return "Flight [flightId=" + flightId + ", airlineName=" + airlineName + ", departureDate="
-        + departureDate + ", departureTime=" + departureTime + ", numberOfStops=" + numberOfStops
-        + ", originCity=" + originCity + ", destinationCity=" + destinationCity + ", price=" + price
-        + "]";
+    return "Flight [flightId=" + flightId + ", flightNumber=" + flightNumber + ", airlineName="
+        + airlineName + ", departureDate=" + departureDate + ", departureTime=" + departureTime
+        + ", numberOfStops=" + numberOfStops + ", originCity=" + originCity + ", destinationCity="
+        + destinationCity + ", price=" + price + "]";
   }
-
-
 
 }
