@@ -1,9 +1,15 @@
 # Flights R Us API Documentation
 
-## Heroku URL
-`https://cst438w3a-airline-service.herokuapp.com`
+## Database ER Diagram
+![](/readme_images/er_diagram.png)
+
+<br/>
+
 
 ## Endpoints
+
+### Heroku URL
+`https://cst438w3a-airline-service.herokuapp.com`
 
 <br/>
 
@@ -294,6 +300,7 @@ This endpoint will allow a thirdparty end user to book a flight reservation.
         "lastName": "Data",
         "flight": {
             "flightId": 10,
+            "flightNumber": "JB452",
             "airlineName": "jet-blue",
             "departureDate": "2021-09-09",
             "departureTime": "11:02:26",
