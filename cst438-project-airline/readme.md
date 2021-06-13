@@ -1,9 +1,15 @@
 # Flights R Us API Documentation
 
-## Heroku URL
-`https://cst438w3a-airline-service.herokuapp.com`
+## Database ER Diagram
+![](/readme_images/er_diagram.png)
+
+<br/>
+
 
 ## Endpoints
+
+### Heroku URL
+`https://cst438w3a-airline-service.herokuapp.com`
 
 <br/>
 
