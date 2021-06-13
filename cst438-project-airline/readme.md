@@ -300,6 +300,7 @@ This endpoint will allow a thirdparty end user to book a flight reservation.
         "lastName": "Data",
         "flight": {
             "flightId": 10,
+            "flightNumber": "JB452",
             "airlineName": "jet-blue",
             "departureDate": "2021-09-09",
             "departureTime": "11:02:26",
