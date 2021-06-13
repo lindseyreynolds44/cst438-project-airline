@@ -9,8 +9,10 @@ import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
 import cst438.domain.Flight;
 import cst438.domain.FlightRepository;
 import cst438.domain.Reservation;
@@ -21,6 +23,8 @@ import cst438.domain.User;
 import cst438.domain.UserRepository;
 
 @WebMvcTest(AirlineService.class)
+@AutoConfigureMockMvc
+@ActiveProfiles("test")
 public class AirlineServiceTest {
 
   @MockBean
@@ -36,6 +40,7 @@ public class AirlineServiceTest {
   private UserRepository userRepository;
 
   private AirlineService as;
+  private CustomUserDetailsService uds;
 
   @SuppressWarnings("deprecation")
   @BeforeEach
@@ -283,8 +288,8 @@ public class AirlineServiceTest {
 
 
     // Create stubs for the MOCK databases
-    given(reservationRepository.findByReservationIdAndUserId(reservationId, userId))
-        .willReturn(reservation);
+    given(reservationRepository.findByReservationIdAndUserId(reservationId, userId)).willReturn(
+        reservation);
 
     // Test the isValidReservation method
     boolean result = as.isValidReservation(reservationId, userId);
@@ -304,8 +309,8 @@ public class AirlineServiceTest {
     int reservationId = 15;
 
     // Create stubs for the MOCK databases
-    given(reservationRepository.findByReservationIdAndUserId(reservationId, userId))
-        .willReturn(null);
+    given(reservationRepository.findByReservationIdAndUserId(reservationId, userId)).willReturn(
+        null);
 
     // Test the isValidReservation method
     boolean result = as.isValidReservation(reservationId, userId);
