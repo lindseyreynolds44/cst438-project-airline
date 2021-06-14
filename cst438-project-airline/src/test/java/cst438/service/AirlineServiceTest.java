@@ -9,10 +9,8 @@ import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ActiveProfiles;
 import cst438.domain.Flight;
 import cst438.domain.FlightRepository;
 import cst438.domain.Reservation;
@@ -23,8 +21,7 @@ import cst438.domain.User;
 import cst438.domain.UserRepository;
 
 @WebMvcTest(AirlineService.class)
-@AutoConfigureMockMvc
-@ActiveProfiles("test")
+
 public class AirlineServiceTest {
 
   @MockBean
