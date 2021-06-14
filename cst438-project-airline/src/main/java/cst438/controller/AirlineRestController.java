@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import cst438.domain.CancelResponse;
 import cst438.domain.CreateResponse;
 import cst438.domain.Flight;
 import cst438.domain.Reservation;
+import cst438.domain.Response;
 import cst438.domain.Seat;
 import cst438.service.AirlineService;
 
@@ -120,7 +120,7 @@ public class AirlineRestController {
    * do not have a corresponding reservation, a 404 not found exception will be returned.
    */
   @PostMapping(value = "/cancelReservation")
-  public CancelResponse cancelReservation(@RequestParam("reservationId") int reservationId,
+  public Response cancelReservation(@RequestParam("reservationId") int reservationId,
       @RequestParam("userId") int userId) {
 
     System.out.println("\nAttempting to cancel reservation with Reservation ID: " + reservationId
@@ -129,25 +129,25 @@ public class AirlineRestController {
     // Check that this reservation is valid
     if (!airlineService.isValidReservation(reservationId, userId)) {
       // This is not a valid reservation
-      return new CancelResponse("Error: Invalid Reservation", null);
+      return new Response("Error: Invalid Reservation", null);
     }
 
     // Cancel the reservation
     if (!airlineService.cancelReservation(reservationId)) {
       // This is not a valid reservation
-      return new CancelResponse("Error: Invalid Reservation", null);
+      return new Response("Error: Invalid Reservation", null);
     }
 
     System.out.println("-- Cancelled Reservation with ID: " + reservationId + " --");
 
-    return new CancelResponse("Success", reservationId);
+    return new Response("Success", reservationId);
   }
 
   /**
    * Provides a list of all the reservations for the specified user ID.
    */
   @GetMapping("/getAllReservations")
-  public CancelResponse getSeats(@RequestParam("userId") int userId,
+  public Response getSeats(@RequestParam("userId") int userId,
       @RequestParam("password") String password) {
 
     System.out.println("Getting all reservations for user with User ID: " + userId);
@@ -156,11 +156,11 @@ public class AirlineRestController {
         airlineService.getAllReservationsForUser(userId, password);
 
     if (reservations.isEmpty()) {
-      return new CancelResponse(
-          "Error: Could not find any reservations for this User ID and password.", null);
+      return new Response("Error: Could not find any reservations for this User ID and password.",
+          null);
     }
 
-    return new CancelResponse("Success", reservations);
+    return new Response("Success", reservations);
 
   }
 

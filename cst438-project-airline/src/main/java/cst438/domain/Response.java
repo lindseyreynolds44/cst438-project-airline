@@ -1,12 +1,12 @@
 package cst438.domain;
 
-public class CancelResponse {
+public class Response {
   private String status;
   private Object data;
 
-  public CancelResponse() {}
+  public Response() {}
 
-  public CancelResponse(String status, Object data) {
+  public Response(String status, Object data) {
     super();
     this.status = status;
     this.data = data;
@@ -36,7 +36,7 @@ public class CancelResponse {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    CancelResponse other = (CancelResponse) obj;
+    Response other = (Response) obj;
     if (data == null) {
       if (other.data != null)
         return false;
