@@ -1,11 +1,11 @@
 # Flights R Us API Documentation
 
 ## Database ER Diagram
-![](/readme_images/er_diagram.jpg)
+![](/cst438-project-airline/readme_images/er_diagram.jpg)
 
 ## UML Class Diagram
-![](/readme_images/uml_1.jpg)
-![](/readme_images/uml_2.jpg)
+![](/cst438-project-airline/readme_images/uml_1.jpg)
+![](/cst438-project-airline/readme_images/uml_2.jpg)
 
 <br/>
 
