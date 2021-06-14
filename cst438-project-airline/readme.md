@@ -264,7 +264,7 @@ A successful response will return all the available seats for a flight.
 This endpoint will allow a thirdparty end user to book a flight reservation.
 
 #### Auth
-This endpoint requires authorization using Basic Auth. See the [example below](#Sample-how-to-use-with-Ajax) for how to use with AJAX.
+This endpoint requires authorization using Basic Auth. See the [example below](#sample-how-to-use-with-ajax) for how to use with AJAX.
 
 #### Parameters
 
