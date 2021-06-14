@@ -1,5 +1,6 @@
 package cst438.domain;
 
+import java.util.ArrayList;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -22,10 +23,8 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
   @Query(value = "DELETE FROM reservation r WHERE r.reservation_id = :id", nativeQuery = true)
   void cancelByReservationId(@Param(value = "id") int id);
 
+  @Query(value = "SELECT * FROM reservation WHERE user_id = ?1 ORDER BY date_created",
+      nativeQuery = true)
+  ArrayList<Reservation> findAllReservationsWithUserId(int userId);
 
-  // We'll need a query to select all the reservations a user name grouping it by date.
-  // We'll need a query to update a reservation
-  // We'll need a query to delete a reservation
-  // Maybe we can add an aggregate query to get the total of a cost, but I think we can do that on
-  // the service end.
 }

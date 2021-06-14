@@ -114,8 +114,6 @@ public class AirlineRestController {
     return response;
   }
 
-
-
   /**
    * Cancels a reservation using a reservation ID and user ID. If it was successful, this method
    * will return the reservation ID that was just cancelled. If this reservation ID and user ID pair
@@ -144,5 +142,27 @@ public class AirlineRestController {
 
     return new CancelResponse("Success", reservationId);
   }
+
+  /**
+   * Provides a list of all the reservations for the specified user ID.
+   */
+  @GetMapping("/getAllReservations")
+  public CancelResponse getSeats(@RequestParam("userId") int userId,
+      @RequestParam("password") String password) {
+
+    System.out.println("Getting all reservations for user with User ID: " + userId);
+
+    ArrayList<Reservation> reservations =
+        airlineService.getAllReservationsForUser(userId, password);
+
+    if (reservations.isEmpty()) {
+      return new CancelResponse(
+          "Error: Could not find any reservations for this User ID and password.", null);
+    }
+
+    return new CancelResponse("Success", reservations);
+
+  }
+
 
 }

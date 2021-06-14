@@ -382,3 +382,109 @@ This endpoint will allow a thirdparty end user to cancel a flight reservation us
     "data": null
 }
 ```
+
+
+### Get All Reservations
+`/api/getAllReservations`
+
+`TYPE: GET`
+
+#### Description
+
+This endpoint retrieves all reservations associated with the specified user ID. 
+
+#### Parameters
+
+    - userId (required) int
+    - password (required) String
+
+#### Request Example
+
+`/api/getAllReservations?userId=11&password=deals`
+ 
+<br/>
+
+#### Response
+
+- A successful response will return a success status and a list of reservation objects in the data field.
+- If no reservations are found, an error will be returned.
+
+
+##### Response Example (Success)
+
+```
+"status": "Success",
+"data": [
+    {
+        "reservationId": 24,
+        "user": {
+            "userId": 11,
+            "userName": "deals",
+            "password": "deals"
+        },
+        "firstName": "Fake",
+        "lastName": "Data",
+        "flight": {
+            "flightId": 10,
+            "flightNumber": "JB452",
+            "airlineName": "jet-blue",
+            "departureDate": "2021-09-09",
+            "departureTime": "11:02:26",
+            "numberOfStops": 1,
+            "originCity": "san diego",
+            "destinationCity": "washington d.c.",
+            "price": 675
+        },
+        "seat": {
+            "seatId": 900,
+            "flightId": 7,
+            "seatRow": 14,
+            "seatLetter": "F",
+            "isAvailable": false,
+            "isFirstClass": false
+        },
+        "dateCreated": "2021-06-14T20:45:31.000+00:00",
+        "price": 675
+    },
+    {
+        "reservationId": 25,
+        "user": {
+            "userId": 11,
+            "userName": "deals",
+            "password": "deals"
+        },
+        "firstName": "Fake2",
+        "lastName": "Data2",
+        "flight": {
+            "flightId": 10,
+            "flightNumber": "JB452",
+            "airlineName": "jet-blue",
+            "departureDate": "2021-09-09",
+            "departureTime": "11:02:26",
+            "numberOfStops": 1,
+            "originCity": "san diego",
+            "destinationCity": "washington d.c.",
+            "price": 675
+        },
+        "seat": {
+            "seatId": 901,
+            "flightId": 7,
+            "seatRow": 15,
+            "seatLetter": "A",
+            "isAvailable": false,
+            "isFirstClass": false
+        },
+        "dateCreated": "2021-06-14T20:45:47.000+00:00",
+        "price": 675
+    }
+]
+}
+```
+
+##### Response Example (Failure)
+```
+{
+    "status": "Error: Could not find any reservations for this User ID and password.",
+    "data": null
+}
+```
