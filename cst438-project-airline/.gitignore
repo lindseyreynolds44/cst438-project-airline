@@ -4,6 +4,7 @@
 ### Custom ###
 .env
 system.properties
+.ucls
 
 ### Eclipse ###
 .metadata
