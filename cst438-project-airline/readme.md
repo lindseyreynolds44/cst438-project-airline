@@ -3,10 +3,6 @@
 ## Database ER Diagram
 ![](/readme_images/er_diagram.png)
 
-## UML Class Diagram
-![](/readme_images/uml_1.png)
-![](/readme_images/uml_2.png)
-
 <br/>
 
 
