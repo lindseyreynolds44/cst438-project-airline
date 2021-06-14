@@ -1,14 +1,13 @@
 # Flights R Us API Documentation
 
 ## Database ER Diagram
-![](/readme_images/er_diagram.png)
+![](/readme_images/er_diagram.jpg)
 
 ## UML Class Diagram
-![](/readme_images/uml_1.png)
-![](/readme_images/uml_2.png)
+![](/readme_images/uml_1.jpg)
+![](/readme_images/uml_2.jpg)
 
 <br/>
-
 
 ## Endpoints
 
