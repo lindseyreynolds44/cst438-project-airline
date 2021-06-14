@@ -37,18 +37,18 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
   protected void configure(HttpSecurity http) throws Exception {
 
     http.csrf()
-        .disable()
+        .disable() // allows post request
         .authorizeRequests()
         .antMatchers("/searchFlights/passengers")
-        .hasAuthority("user")
+        .hasAuthority("user") // allows only authenticated users to view /searchFlights/passengers
         .antMatchers("/api/makeReservation")
-        .hasAuthority("vendor")
+        .hasAuthority("vendor") // allows only authenticated vendors to use /api/makeReservation
         .antMatchers("/")
-        .permitAll()
+        .permitAll() // allows all others pages to not require auth
         .and()
-        .formLogin()
+        .formLogin() // displays login page for browser requests
         .and()
-        .httpBasic();
+        .httpBasic(); // allows for http basic auth for http requests
   }
 
 }

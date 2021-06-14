@@ -260,6 +260,9 @@ A successful response will return all the available seats for a flight.
 
 This endpoint will allow a thirdparty end user to book a flight reservation.
 
+#### Auth
+This endpoint requires authorization using Basic Auth. See the [example below](#Sample-how-to-use-with-Ajax) for how to use with AJAX.
+
 #### Parameters
 
     - flightId (required) int
@@ -331,7 +334,39 @@ This endpoint will allow a thirdparty end user to book a flight reservation.
     "data": null
 }
 ```
+#### Sample how to use with Ajax
+```
+const username = "deals";
+const password = "deals"
 
+$.ajax({
+	type: "POST",
+	url: "/api/makeReservation",
+	beforeSend: function (xhr) {
+	    xhr.setRequestHeader ("Authorization", "Basic " + btoa(`${username}:${password}`));
+	},
+	data: {
+			"flightId": flightId,
+			"userId": userId,
+			"seatId": seatId,
+			"passengerFirstName": passengerFirstName,
+			"passengerLastName": passengerLastName,
+	    	},
+	success: function(data) {
+		console.log("success");
+		console.log(data);
+		// implement your on success code here
+		
+		 },
+	error: function(error){
+		console.log("error");
+		console.log(error);
+		
+		// implement your on error code here
+	}
+
+}); // ajax
+```
 
 ### Cancel a Reservation
 `/api/cancelReservation`
