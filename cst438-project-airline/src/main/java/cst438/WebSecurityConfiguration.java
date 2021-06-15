@@ -1,3 +1,7 @@
+/**
+ * LINK:
+ * https://stackoverflow.com/questions/35761181/securing-only-rest-controller-with-spring-security-custom-token-stateless-while
+ */
 package cst438;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,16 +43,17 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     http.csrf()
         .disable() // allows post request
         .authorizeRequests()
-        .antMatchers("/searchFlights/passengers")
+        .antMatchers("/searchFlights/passengers", "/reservations")
         .hasAuthority("user") // allows only authenticated users to view /searchFlights/passengers
-        .antMatchers("/api/makeReservation")
+        .antMatchers("/api/makeReservation", "/api/cancelReservation", "/api/getAllReservations")
         .hasAuthority("vendor") // allows only authenticated vendors to use /api/makeReservation
-        .antMatchers("/")
+        .antMatchers("/**")
         .permitAll() // allows all others pages to not require auth
         .and()
         .formLogin() // displays login page for browser requests
         .and()
         .httpBasic(); // allows for http basic auth for http requests
+
   }
 
 }

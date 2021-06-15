@@ -566,7 +566,7 @@ public class AirlineRestControllerTest {
   public void testGetAllReservationsSuccess() throws Exception {
     int userId = 12;
     String password = "password";
-    User user = new User(userId, "Test", "Person");
+    User user = new User(userId, "Test", "Person", "user");
 
     // Create an Array of Reservation objects
     int flightId = 14;
@@ -588,7 +588,8 @@ public class AirlineRestControllerTest {
     // Perform simulated HTTP call
     MockHttpServletResponse response =
         mvc.perform(get("/api/getAllReservations?userId=" + userId + "&password=" + password))
-            .andReturn().getResponse();
+           .andReturn()
+           .getResponse();
 
     // Get the response object
     Response actual = jsonResponseAttempt.parseObject(response.getContentAsString());
@@ -607,13 +608,14 @@ public class AirlineRestControllerTest {
     int userId = 12;
     String password = "password";
 
-    given(airlineService.getAllReservationsForUser(userId, password))
-        .willReturn(new ArrayList<Reservation>());
+    given(airlineService.getAllReservationsForUser(userId, password)).willReturn(
+        new ArrayList<Reservation>());
 
     // Perform simulated HTTP call
     MockHttpServletResponse response =
         mvc.perform(get("/api/getAllReservations?userId=" + userId + "&password=" + password))
-            .andReturn().getResponse();
+           .andReturn()
+           .getResponse();
 
     // Get the response object
     Response actual = jsonResponseAttempt.parseObject(response.getContentAsString());

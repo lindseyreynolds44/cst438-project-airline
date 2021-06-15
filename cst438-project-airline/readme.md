@@ -370,7 +370,48 @@ $.ajax({
 
 }); // ajax
 ```
+#### Sample how to use with Java
+This is just a sample
+```
+  @GetMapping("/request")
+  public String getData() {
 
+    final String url = "http://localhost:8080/api/makeReservation"; // make sure to include "http://"
+
+    // request parameters
+    MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+    map.add("flightId", "10");
+    map.add("userId", "9");
+    map.add("seatId", "900");
+    map.add("passengerFirstName", "Fake");
+    map.add("passengerLastName", "Data");
+    
+    // encodes authentication
+    String plainCreds = "deals:deals";
+    byte[] plainCredsBytes = plainCreds.getBytes();
+    byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
+    String base64Creds = new String(base64CredsBytes);
+    
+    // adds auth to headers
+    HttpHeaders headers = new HttpHeaders();
+    headers.add("Authorization", "Basic " + base64Creds);
+    
+    // creates request
+    HttpEntity<MultiValueMap<String, String>> request =
+        new HttpEntity<MultiValueMap<String, String>>(map, headers);
+    
+    // sends and receives request/response
+    restTemplate = new RestTemplate();
+    ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class); 
+    // ***you may need to change this to return a specific object.*** //
+
+    System.out.println("Status " + response.getStatusCode());
+    System.out.println("RESPONSE " + response.getBody());
+
+    return response.getBody();
+  }
+
+```
 ### Cancel a Reservation
 `/api/cancelReservation`
 

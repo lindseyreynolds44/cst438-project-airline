@@ -37,7 +37,7 @@ public class AirlineServiceTest {
   private UserRepository userRepository;
 
   private AirlineService as;
-  private CustomUserDetailsService uds;
+
 
   @SuppressWarnings("deprecation")
   @BeforeEach
@@ -626,7 +626,7 @@ public class AirlineServiceTest {
     // Data for creating stubs
     int userId = 15;
     String password = "password";
-    User user = new User(userId, "Test", "Person");
+    User user = new User(userId, "Test", "Person", "user");
 
     // Create an Array of Reservation objects
     int flightId = 12;
@@ -676,12 +676,12 @@ public class AirlineServiceTest {
     // Data for creating stubs
     int userId = 15;
     String password = "password";
-    User user = new User(userId, "Test", "Person");
+    User user = new User(userId, "Test", "Person", "user");
 
     // Create stubs for the MOCK databases
     given(userRepository.findUserByIdAndPassword(userId, password)).willReturn(user);
-    given(reservationRepository.findAllReservationsWithUserId(userId))
-        .willReturn(new ArrayList<Reservation>());
+    given(reservationRepository.findAllReservationsWithUserId(userId)).willReturn(
+        new ArrayList<Reservation>());
 
     // Test the getAllReservationsForUser method
     ArrayList<Reservation> actual = as.getAllReservationsForUser(userId, password);
