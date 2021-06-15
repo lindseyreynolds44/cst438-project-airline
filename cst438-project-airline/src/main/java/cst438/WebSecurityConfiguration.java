@@ -45,14 +45,14 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         .authorizeRequests()
         .antMatchers("/searchFlights/passengers", "/reservations")
         .hasAuthority("user") // allows only authenticated users to view /searchFlights/passengers
-        .antMatchers("/api/makeReservation", "/api/cancelReservation", "/api/getAllReservations")
-        .hasAuthority("vendor") // allows only authenticated vendors to use /api/makeReservation
+        // .antMatchers("/api/makeReservation", "/api/cancelReservation", "/api/getAllReservations")
+        // .hasAuthority("vendor") // allows only authenticated vendors to use /api/makeReservation
         .antMatchers("/**")
         .permitAll() // allows all others pages to not require auth
         .and()
-        .formLogin() // displays login page for browser requests
-        .and()
-        .httpBasic(); // allows for http basic auth for http requests
+        .formLogin(); // displays login page for browser requests
+    // .and()
+    // .httpBasic(); // allows for http basic auth for http requests
 
   }
 
