@@ -27,10 +27,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import cst438.domain.CancelResponse;
 import cst438.domain.CreateResponse;
 import cst438.domain.Flight;
 import cst438.domain.Reservation;
+import cst438.domain.Response;
 import cst438.domain.Seat;
 import cst438.domain.User;
 import cst438.service.AirlineService;
@@ -50,8 +50,7 @@ public class AirlineRestControllerTest {
   private JacksonTester<ArrayList<Seat>> jsonSeatAttempt;
   private JacksonTester<ArrayList<Date>> jsonDateAttempt;
   private JacksonTester<ArrayList<String>> jsonRouteAttempt;
-  private JacksonTester<Reservation> jsonReservationAttempt;
-  private JacksonTester<CancelResponse> jsonCancelResponseAttempt;
+  private JacksonTester<Response> jsonResponseAttempt;
   private JacksonTester<CreateResponse> jsonCreateResponseAttempt;
 
   SimpleDateFormat sdf;
@@ -526,11 +525,10 @@ public class AirlineRestControllerTest {
                           .andReturn();
 
     // Get the response object
-    CancelResponse actual =
-        jsonCancelResponseAttempt.parseObject(result.getResponse().getContentAsString());
+    Response actual = jsonResponseAttempt.parseObject(result.getResponse().getContentAsString());
 
     // Create the expected response object
-    CancelResponse expected = new CancelResponse("Success", reservationId);
+    Response expected = new Response("Success", reservationId);
 
     // Verify that the results are as expected
     assertThat(expected.getStatus()).isEqualTo(actual.getStatus());
@@ -554,11 +552,77 @@ public class AirlineRestControllerTest {
                           .andReturn();
 
     // Get the response object
-    CancelResponse actual =
-        jsonCancelResponseAttempt.parseObject(result.getResponse().getContentAsString());
+    Response actual = jsonResponseAttempt.parseObject(result.getResponse().getContentAsString());
 
     // Create the expected response object
-    CancelResponse expected = new CancelResponse("Error: Invalid Reservation", null);
+    Response expected = new Response("Error: Invalid Reservation", null);
+
+    // Verify that the results are as expected
+    assertThat(expected.getStatus()).isEqualTo(actual.getStatus());
+    assertThat(expected.getData()).isEqualTo(actual.getData());
+  }
+
+  @Test
+  public void testGetAllReservationsSuccess() throws Exception {
+    int userId = 12;
+    String password = "password";
+    User user = new User(userId, "Test", "Person");
+
+    // Create an Array of Reservation objects
+    int flightId = 14;
+    String flightNumber = "TS123";
+    int seatId = 300;
+    int price = 200;
+    int reservationId = 1;
+    Seat seat = new Seat(seatId, flightId, 2, "A", true, false);
+    Flight flight = new Flight(flightId, flightNumber, "unicorn", Date.valueOf("2021-06-01"),
+        Time.valueOf("12:12:12"), 0, "Lala Land", "Over the Rainbow", price);
+    Reservation reservation =
+        new Reservation(reservationId, user, "Test", "Person", flight, seat, null, price);
+
+    ArrayList<Reservation> reservations = new ArrayList<Reservation>(Arrays.asList(reservation));
+
+
+    given(airlineService.getAllReservationsForUser(userId, password)).willReturn(reservations);
+
+    // Perform simulated HTTP call
+    MockHttpServletResponse response =
+        mvc.perform(get("/api/getAllReservations?userId=" + userId + "&password=" + password))
+            .andReturn().getResponse();
+
+    // Get the response object
+    Response actual = jsonResponseAttempt.parseObject(response.getContentAsString());
+
+    assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+
+    // Create the expected response object
+    Response expected = new Response("Success", reservations);
+
+    // Verify that the results are as expected
+    assertThat(expected.getStatus()).isEqualTo(actual.getStatus());
+  }
+
+  @Test
+  public void testGetAllReservationsWithNoResults() throws Exception {
+    int userId = 12;
+    String password = "password";
+
+    given(airlineService.getAllReservationsForUser(userId, password))
+        .willReturn(new ArrayList<Reservation>());
+
+    // Perform simulated HTTP call
+    MockHttpServletResponse response =
+        mvc.perform(get("/api/getAllReservations?userId=" + userId + "&password=" + password))
+            .andReturn().getResponse();
+
+    // Get the response object
+    Response actual = jsonResponseAttempt.parseObject(response.getContentAsString());
+
+    assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+
+    // Create the expected response object
+    Response expected =
+        new Response("Error: Could not find any reservations for this User ID and password.", null);
 
     // Verify that the results are as expected
     assertThat(expected.getStatus()).isEqualTo(actual.getStatus());
