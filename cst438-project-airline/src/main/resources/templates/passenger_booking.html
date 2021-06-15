@@ -10,7 +10,7 @@
 	
 	<div id="content">
 
-		<div th:id="'passenger-'+${iStat.count}" class="card" th:each="seat, iStat : ${seats}">
+		<div th:id="'passenger-'+${iStat.count}" class="card p-3 m-1" th:each="seat, iStat : ${seats}">
 			<span th:text="'Passenger ' + ${iStat.count}"></span>
 			<input class="user-id-input" type="hidden" name="userId" value="1"> 
 			<input class="flight-id-input" type="hidden" name="flightId" th:value="${flightId}">
@@ -21,7 +21,7 @@
 			<label>Last Name</label>
 			<input class="last-name-input input-group-text" type="text" name="lastName" value="" required>
 		</div>
-		<button id="book-btn"  class="btn btn-primary">Book Flight</button>
+		<button id="book-btn"  class="btn btn-primary m-2">Book Flight</button>
 			
 		<div id="modal-container"></div>
 		
@@ -82,7 +82,7 @@
 		
 		  // Modal hidden event fired
 		  $("#modal-container").on("hidden.bs.modal", "#confirmation-modal", function () {
-			  $(location).attr("href", "/"); // ******** TODO: will need to have this redirect to reservations page. **********
+			  $(location).attr("href", "/reservations"); 
 		  });
 		
 		/**
