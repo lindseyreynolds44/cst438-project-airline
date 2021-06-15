@@ -139,9 +139,11 @@ public class AirlineController {
     UserDetails userDetails = (UserDetails) auth.getPrincipal();
     User user = userRepository.findByUserName(userDetails.getUsername());
 
-    // int userId = (int) request.getSession().getAttribute("userId");
+    ArrayList<Reservation> reservations =
+        airlineService.getAllReservationsForUser(user.getUserId(), user.getPassword());
 
     model.addAttribute("userId", user.getUserId());
+    model.addAttribute("reservations", reservations);
     System.out.println("Reservations Sending:\n" + model);
 
     return "reservations";
