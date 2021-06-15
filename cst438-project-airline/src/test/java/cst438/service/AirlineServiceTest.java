@@ -48,9 +48,6 @@ public class AirlineServiceTest {
 
   @Test
   public void testIsSeatAvailableTrue() {
-    // Service object that will be tested
-    as = new AirlineService(flightRepository, reservationRepository, seatRepository,
-        userRepository);
 
     // Data for creating stubs
     int seatId = 12;
@@ -67,10 +64,6 @@ public class AirlineServiceTest {
 
   @Test
   public void testIsSeatAvailableFalse() {
-    // Service object that will be tested
-    as = new AirlineService(flightRepository, reservationRepository, seatRepository,
-        userRepository);
-
     // Data for creating stubs
     int seatId = 198;
     Seat seat = new Seat(198, 7, 30, "A", false, false);
@@ -86,10 +79,6 @@ public class AirlineServiceTest {
 
   @Test
   public void testIsSeatAvailableSeatDoesNotExist() {
-    // Service object that will be tested
-    as = new AirlineService(flightRepository, reservationRepository, seatRepository,
-        userRepository);
-
     // Data for creating stubs
     int seatId = 3000;
     Seat seat = null;
@@ -106,9 +95,6 @@ public class AirlineServiceTest {
 
   @Test
   public void testMakeReservationWithValidInfoEconomySeat() {
-    // Service object that will be tested
-    as = new AirlineService(flightRepository, reservationRepository, seatRepository,
-        userRepository);
     // Data for creating stubs
     int flightId = 12;
     String flightNumber = "TS123";
@@ -139,10 +125,6 @@ public class AirlineServiceTest {
 
   @Test
   public void testMakeReservationWithValidInfoFirstClassSeat() {
-    // Service object that will be tested
-    as = new AirlineService(flightRepository, reservationRepository, seatRepository,
-        userRepository);
-
     // Data for creating stubs
     int flightId = 12;
     String flightNumber = "TS123";
@@ -176,10 +158,6 @@ public class AirlineServiceTest {
 
   @Test
   public void testMakeReservationWithInvalidFlightId() {
-    // Service object that will be tested
-    as = new AirlineService(flightRepository, reservationRepository, seatRepository,
-        userRepository);
-
     // Data for creating stubs
     int flightId = 12;
     int userId = 10;
@@ -202,10 +180,6 @@ public class AirlineServiceTest {
 
   @Test
   public void testMakeReservationWithInvalidUserId() {
-    // Service object that will be tested
-    as = new AirlineService(flightRepository, reservationRepository, seatRepository,
-        userRepository);
-
     // Data for creating stubs
     int flightId = 12;
     String flightNumber = "TS123";
@@ -232,10 +206,6 @@ public class AirlineServiceTest {
 
   @Test
   public void testMakeReservationWithInvalidSeatId() {
-    // Service object that will be tested
-    as = new AirlineService(flightRepository, reservationRepository, seatRepository,
-        userRepository);
-
     // Data for creating stubs
     int flightId = 12;
     String flightNumber = "TS123";
@@ -262,11 +232,6 @@ public class AirlineServiceTest {
 
   @Test
   public void testIsValidReservationTrue() {
-
-    // Service object that will be tested
-    as = new AirlineService(flightRepository, reservationRepository, seatRepository,
-        userRepository);
-
     // Data for creating stub
     int flightId = 12;
     String flightNumber = "TS123";
@@ -295,10 +260,6 @@ public class AirlineServiceTest {
 
   @Test
   public void testIsValidReservationFalse() {
-    // Service object that will be tested
-    as = new AirlineService(flightRepository, reservationRepository, seatRepository,
-        userRepository);
-
     // Data for creating stub
     int userId = 10;
     int reservationId = 15;
@@ -315,10 +276,6 @@ public class AirlineServiceTest {
 
   @Test
   public void testCancelReservationSuccess() {
-    // Service object that will be tested
-    as = new AirlineService(flightRepository, reservationRepository, seatRepository,
-        userRepository);
-
     // Data for creating stub
     int flightId = 12;
     String flightNumber = "TS123";
@@ -344,10 +301,6 @@ public class AirlineServiceTest {
 
   @Test
   public void testCancelReservationFailure() {
-    // Service object that will be tested
-    as = new AirlineService(flightRepository, reservationRepository, seatRepository,
-        userRepository);
-
     // Data for creating stub
     int reservationId = 15;
 
@@ -497,9 +450,7 @@ public class AirlineServiceTest {
   public void testFrontEndMakeReservationWithInvalidFlightIdShouldFail() {
     // Data for creating stubs
     int flightId = 12;
-    String flightNumber = "TS123";
     int userId = 10;
-    int numStops = 0;
     int price = 200;
     int firstClassPrice = price * 2;
 
@@ -666,6 +617,78 @@ public class AirlineServiceTest {
 
     assertEquals(expected, actual);
   }
+
+  @Test
+  public void testGetAllReservationsForUser() {
+
+    // Data for creating stubs
+    int userId = 15;
+    String password = "password";
+    User user = new User(userId, "Test", "Person");
+
+    // Create an Array of Reservation objects
+    int flightId = 12;
+    String flightNumber = "TS123";
+    int seatId = 300;
+    int price = 200;
+    int reservationId = 1;
+    Seat seat = new Seat(seatId, flightId, 2, "A", true, false);
+    Flight flight = new Flight(flightId, flightNumber, "unicorn", Date.valueOf("2021-06-01"),
+        Time.valueOf("12:12:12"), 0, "Lala Land", "Over the Rainbow", price);
+    Reservation reservation =
+        new Reservation(reservationId, user, "Test", "Person", flight, seat, null, price);
+
+    ArrayList<Reservation> reservations = new ArrayList<Reservation>(Arrays.asList(reservation));
+
+    // Create stubs for the MOCK databases
+    given(userRepository.findUserByIdAndPassword(userId, password)).willReturn(user);
+    given(reservationRepository.findAllReservationsWithUserId(userId)).willReturn(reservations);
+
+    // Test the getAllReservationsForUser method
+    ArrayList<Reservation> actual = as.getAllReservationsForUser(userId, password);
+
+    assertEquals(reservations, actual);
+  }
+
+  @Test
+  public void testGetAllReservationsForUserWithInvalidUserShouldReturnEmptyArray() {
+
+    // Data for creating stubs
+    int userId = 15;
+    String password = "password";
+
+    // Create stubs for the MOCK databases
+    given(userRepository.findUserByIdAndPassword(userId, password)).willReturn(null);
+
+    // Test the getAllReservationsForUser method
+    ArrayList<Reservation> actual = as.getAllReservationsForUser(userId, password);
+
+    ArrayList<Reservation> expected = new ArrayList<Reservation>();
+
+    assertEquals(expected, actual);
+  }
+
+  @Test
+  public void testGetAllReservationsForUserNoReservationsShouldReturnEmptyArray() {
+
+    // Data for creating stubs
+    int userId = 15;
+    String password = "password";
+    User user = new User(userId, "Test", "Person");
+
+    // Create stubs for the MOCK databases
+    given(userRepository.findUserByIdAndPassword(userId, password)).willReturn(user);
+    given(reservationRepository.findAllReservationsWithUserId(userId))
+        .willReturn(new ArrayList<Reservation>());
+
+    // Test the getAllReservationsForUser method
+    ArrayList<Reservation> actual = as.getAllReservationsForUser(userId, password);
+
+    ArrayList<Reservation> expected = new ArrayList<Reservation>();
+
+    assertEquals(expected, actual);
+  }
+
 
 
 }
