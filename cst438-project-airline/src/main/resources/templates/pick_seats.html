@@ -78,36 +78,47 @@
 			
 			// seat selected event listener
 			$(".seat").on("click", function () {
-				const seatSelected = $(this).attr("data-seat-id");
+				const seatClicked = $(this).attr("data-seat-id");
 
 				//
 				if($(this).hasClass(seatBtn) && numSeatsSelected < numPassengers){
 					$(this).addClass(seatBtnClicked).removeClass(seatBtn);
-					selectedSeats.push(seatSelected);
+					selectedSeats.push(seatClicked);
 					numSeatsSelected++;
 				} else if ($(this).hasClass(seatBtnClicked)) {
 					$(this).addClass(seatBtn).removeClass(seatBtnClicked);
 					// removes added seat from array
-					const index = selectedSeats.indexOf(seatSelected);
+					const index = selectedSeats.indexOf(seatClicked);
 					if (index > -1){
 						selectedSeats.splice(index, 1);
 					}
 					numSeatsSelected--;
+					//removeUnselectedSeat(seatClicked);
 				}
 				if (numSeatsSelected == numPassengers){
 					build_form();
 					$("#myModal").modal("show");
 				}
+				console.log(selectedSeats);
 				
 			}); // seat click
 			
 			
-			
+			/**
+			* Adds all the selected seats to input form
+			*/
 			function build_form(){
+				// resets the form.
+				$("form").empty();
+				$("form").html(`<input type="hidden" name="flightId" value=${flightId}>` +
+			        			`<input type="hidden" name="numberOfPassengers" value=${numPassengers}>` +
+			        			`<input id="finish" class="btn btn-primary" type="submit" value="Add Passenger Info">`);
 				selectedSeats.forEach(function (seat) {
-					$("form").append(`<input type="hidden" name="selectedSeats[]" value="${seat}" />`);
+					$("form").append(`<input class="selected-seat" type="hidden" name="selectedSeats[]" value="${seat}" />`);
 				})
 			}
+			
+		
 			
 			
 		}); // doc ready
