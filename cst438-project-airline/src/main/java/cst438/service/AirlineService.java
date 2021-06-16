@@ -111,14 +111,7 @@ public class AirlineService {
 
   /**
    * Creates a reservation for multiple passengers. Designed to be used with the web application and
-   * Airline. Controller.
-   * 
-   * @param flightId
-   * @param userId
-   * @param seatId
-   * @param passengerFirstName
-   * @param passengerLastName
-   * @return Returns an ArrayList of type Reservation or null for invalid input.
+   * AirlineController.
    */
   public ArrayList<Reservation> makeReservation(int userId, int flightId,
       ArrayList<Integer> seatIds, ArrayList<String> passengerFirstNames,
@@ -243,23 +236,5 @@ public class AirlineService {
     return reservationRepository.findAllReservationsWithUserId(userId);
 
   }
-
-
-
-  // We need the following methods:
-
-  // A method to return available flights (Note From Dan: I will implement this)
-  // A method to return seats for a given origin city and destination (Note from Dan: This should be
-  // by flight ID, yeah?)
-  // if all seats are used up, then return "no flights"
-  // if there are no flights then we return "no flights"
-
-  // A method to book a reservation
-
-  // A method to change a reservation
-
-  // A method to cancel a reservation
-
-
 
 }

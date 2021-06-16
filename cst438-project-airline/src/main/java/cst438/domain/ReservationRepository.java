@@ -17,7 +17,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
       nativeQuery = true)
   Reservation findByReservationIdAndUserId(int reservationId, int userId);
 
-
   @Transactional
   @Modifying
   @Query(value = "DELETE FROM reservation r WHERE r.reservation_id = :id", nativeQuery = true)

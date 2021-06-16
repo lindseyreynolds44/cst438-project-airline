@@ -2924,7 +2924,8 @@ DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `user_id` int NOT NULL AUTO_INCREMENT,
   `user_name` varchar(50) NOT NULL,
-  `password` varchar(50) NOT NULL DEFAULT "password",
+  `password` varchar(60) NOT NULL DEFAULT "password",
+  `role` varchar(10) NOT NULL DEFAULT "user", 
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `user_id_UNIQUE` (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -2936,16 +2937,17 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` (`user_id`, `user_name`, `password`) VALUES (1,'vdudny0','jzBY6ZVBSELl');
-INSERT INTO `user` (`user_id`, `user_name`, `password`) VALUES (2,'bstowgill1','pfsoEVNcTB');
-INSERT INTO `user` (`user_id`, `user_name`, `password`) VALUES (3,'yfenners2','w8TxeG');
-INSERT INTO `user` (`user_id`, `user_name`, `password`) VALUES (4,'fhoovart3','BtMndq4S');
-INSERT INTO `user` (`user_id`, `user_name`, `password`) VALUES (5,'ndominy4','qcrQXSovl');
-INSERT INTO `user` (`user_id`, `user_name`, `password`) VALUES (6,'mfrackiewicz5','LchuhG');
-INSERT INTO `user` (`user_id`, `user_name`, `password`) VALUES (7,'hwilsee6','AbZKZFyzRK');
-INSERT INTO `user` (`user_id`, `user_name`, `password`) VALUES (8,'dsimenel7','qBTasr8wWRr');
-INSERT INTO `user` (`user_id`, `user_name`, `password`) VALUES (9,'clumox8','rZbtCC');
-INSERT INTO `user` (`user_id`, `user_name`, `password`) VALUES (10,'hpearce9','qT0RSBjbvk');
+INSERT INTO `user` (`user_id`, `user_name`, `password`, `role`) VALUES (1,'dandano','$2y$12$l5zCgR0jhIWkwrjMP/TwnO4CUzPYFih4YosQv5RU8AjlCKeYSEakC', "user");
+INSERT INTO `user` (`user_id`, `user_name`, `password`, `role`) VALUES (2,'bstowgill1','$2y$12$l5zCgR0jhIWkwrjMP/TwnO4CUzPYFih4YosQv5RU8AjlCKeYSEakC', "user");
+INSERT INTO `user` (`user_id`, `user_name`, `password`, `role`) VALUES (3,'yfenners2','$2y$12$l5zCgR0jhIWkwrjMP/TwnO4CUzPYFih4YosQv5RU8AjlCKeYSEakC', "user");
+INSERT INTO `user` (`user_id`, `user_name`, `password`, `role`) VALUES (4,'fhoovart3','$2y$12$l5zCgR0jhIWkwrjMP/TwnO4CUzPYFih4YosQv5RU8AjlCKeYSEakC', "user");
+INSERT INTO `user` (`user_id`, `user_name`, `password`, `role`) VALUES (5,'ndominy4','$2y$12$l5zCgR0jhIWkwrjMP/TwnO4CUzPYFih4YosQv5RU8AjlCKeYSEakC', "user");
+INSERT INTO `user` (`user_id`, `user_name`, `password`, `role`) VALUES (6,'mfrackiewicz5','$2y$12$l5zCgR0jhIWkwrjMP/TwnO4CUzPYFih4YosQv5RU8AjlCKeYSEakC', "user");
+INSERT INTO `user` (`user_id`, `user_name`, `password`, `role`) VALUES (7,'hwilsee6','$2y$12$l5zCgR0jhIWkwrjMP/TwnO4CUzPYFih4YosQv5RU8AjlCKeYSEakC', "user");
+INSERT INTO `user` (`user_id`, `user_name`, `password`, `role`) VALUES (8,'dsimenel7','$2y$12$l5zCgR0jhIWkwrjMP/TwnO4CUzPYFih4YosQv5RU8AjlCKeYSEakC', "user");
+INSERT INTO `user` (`user_id`, `user_name`, `password`, `role`) VALUES (9,'clumox8','$2y$12$l5zCgR0jhIWkwrjMP/TwnO4CUzPYFih4YosQv5RU8AjlCKeYSEakC', "user");
+INSERT INTO `user` (`user_id`, `user_name`, `password`, `role`) VALUES (10,'hpearce9','$2y$12$l5zCgR0jhIWkwrjMP/TwnO4CUzPYFih4YosQv5RU8AjlCKeYSEakC', "user");
+INSERT INTO `user` (`user_id`, `user_name`, `password`, `role`) VALUES (11,'deals','$2y$12$31OVTCbJm31zKcY7AQCMQetafvr4Vec40ImACagO2/Pvbku30gYPW', "vendor");
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

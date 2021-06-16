@@ -12,9 +12,6 @@ public class Seat {
   @Id
   @Column(name = "seat_id")
   private int seatId;
-  // @ManyToOne
-  // @JoinColumn(name = "flight_id", referencedColumnName = "flight_id")
-  // private Flight flight;
   @Column(name = "flight_id")
   private int flightId;
   @Column(name = "seat_row")

@@ -1,7 +1,17 @@
 # Flights R Us API Documentation
 
-## Database ER Diagram
+## Database Design
+The airline service database contains 4 tables. 
+- User table: This is where all user's usernames and passwords are stored. 
+- Flight table: Each flight has its own row, containing all the details about that flight, including origin and destination cities, departure date and time, etc. 
+- Seat table: Every seat from every flight is stored as a row on the seat table. Each seat has a column indicating whether or not it is available to be booked, if it is first class and its seat letter and number. Each seat also has a column with it's associated flight ID as a foreign key. 
+- Reservation table: Each row on the reservation table has foreign keys indicating its associated flight ID, user ID and seat ID. It also contains that reservation's agreed upon price and the first and last name of the passenger. 
+
+
+### ER Diagram
 ![](/cst438-project-airline/readme_images/er_diagram.jpg)
+
+<br/>
 
 ## UML Class Diagram
 ![](/cst438-project-airline/readme_images/uml_1.jpg)
@@ -338,7 +348,7 @@ This endpoint will allow a thirdparty end user to book a flight reservation.
 ### Cancel a Reservation
 `/api/cancelReservation`
 
-`TYPE: POST`
+`TYPE: DELETE`
 
 #### Description
 
@@ -362,7 +372,7 @@ This endpoint will allow a thirdparty end user to cancel a flight reservation us
 #### Response
 
 - A successful response will return the reservation ID of the cancelled reservation. 
-- If the user ID and reservation ID do not match up with an existing reservation, an invalid reservation error will be displayed
+- If the user ID and reservation ID do not match up with an existing reservation, an invalid reservation error will be displayed.
 
 
 ##### Response Example (Success)

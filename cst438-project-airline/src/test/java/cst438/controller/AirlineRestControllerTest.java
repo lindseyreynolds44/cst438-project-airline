@@ -501,7 +501,7 @@ public class AirlineRestControllerTest {
 
     // Perform simulated HTTP call
     MvcResult result = mvc
-        .perform(MockMvcRequestBuilders.post("/api/cancelReservation?&reservationId=10&userId=12")
+        .perform(MockMvcRequestBuilders.delete("/api/cancelReservation?&reservationId=10&userId=12")
             .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk()).andReturn();
 
@@ -526,7 +526,7 @@ public class AirlineRestControllerTest {
 
     // Perform simulated HTTP call
     MvcResult result = mvc
-        .perform(MockMvcRequestBuilders.post("/api/cancelReservation?&reservationId=10&userId=12")
+        .perform(MockMvcRequestBuilders.delete("/api/cancelReservation?&reservationId=10&userId=12")
             .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk()).andReturn();
 
