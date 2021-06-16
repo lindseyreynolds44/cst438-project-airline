@@ -348,7 +348,7 @@ This endpoint will allow a thirdparty end user to book a flight reservation.
 ### Cancel a Reservation
 `/api/cancelReservation`
 
-`TYPE: POST`
+`TYPE: DELETE`
 
 #### Description
 
@@ -372,7 +372,7 @@ This endpoint will allow a thirdparty end user to cancel a flight reservation us
 #### Response
 
 - A successful response will return the reservation ID of the cancelled reservation. 
-- If the user ID and reservation ID do not match up with an existing reservation, an invalid reservation error will be displayed
+- If the user ID and reservation ID do not match up with an existing reservation, an invalid reservation error will be displayed.
 
 
 ##### Response Example (Success)

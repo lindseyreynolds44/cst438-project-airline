@@ -3,6 +3,7 @@ package cst438.controller;
 import java.sql.Date;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -132,7 +133,7 @@ public class AirlineRestController {
    * will return the reservation ID that was just cancelled. If this reservation ID and user ID pair
    * do not have a corresponding reservation, a 404 not found exception will be returned.
    */
-  @PostMapping(value = "/cancelReservation")
+  @DeleteMapping(value = "/cancelReservation")
   public Response cancelReservation(@RequestParam("reservationId") int reservationId,
       @RequestParam("userId") int userId) {
 
