@@ -147,13 +147,11 @@ public class AirlineRestController {
    * Provides a list of all the reservations for the specified user ID.
    */
   @GetMapping("/getAllReservations")
-  public Response getSeats(@RequestParam("userId") int userId,
-      @RequestParam("password") String password) {
+  public Response getSeats(@RequestParam("userId") int userId) {
 
     System.out.println("Getting all reservations for user with User ID: " + userId);
 
-    ArrayList<Reservation> reservations =
-        airlineService.getAllReservationsForUser(userId, password);
+    ArrayList<Reservation> reservations = airlineService.getAllReservationsForUser(userId);
 
     if (reservations.isEmpty()) {
       return new Response("Error: Could not find any reservations for this User ID and password.",

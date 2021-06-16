@@ -231,10 +231,10 @@ public class AirlineService {
    * Gets all the reservations associated with a user ID. Takes the user ID and its corresponding
    * password. Returns an empty array if no reservations are found.
    */
-  public ArrayList<Reservation> getAllReservationsForUser(int userId, String password) {
-    User user = userRepository.findUserByIdAndPassword(userId, password);
+  public ArrayList<Reservation> getAllReservationsForUser(int userId) {
+    User user = userRepository.findUserByIdAndPassword(userId);
 
-    // Check if this user ID and password match with a record in the database
+    // Check if this user ID matches with a record in the database
     if (user == null) {
       // No record found
       return new ArrayList<Reservation>();
@@ -243,6 +243,7 @@ public class AirlineService {
     return reservationRepository.findAllReservationsWithUserId(userId);
 
   }
+
 
 
   // We need the following methods:

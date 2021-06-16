@@ -396,11 +396,10 @@ This endpoint retrieves all reservations associated with the specified user ID.
 #### Parameters
 
     - userId (required) int
-    - password (required) String
 
 #### Request Example
 
-`/api/getAllReservations?userId=11&password=deals`
+`/api/getAllReservations?userId=11`
  
 <br/>
 
@@ -484,7 +483,7 @@ This endpoint retrieves all reservations associated with the specified user ID.
 ##### Response Example (Failure)
 ```
 {
-    "status": "Error: Could not find any reservations for this User ID and password.",
+    "status": "Error: Could not find any reservations for this User ID.",
     "data": null
 }
 ```
