@@ -285,8 +285,6 @@ This endpoint will allow a thirdparty end user to book a flight reservation.
 - A successful response will return a 200 code and a json response object with a status code of "Success" and the newly created reservation information.
 - If the seat is not available to book or if any of the ID numbers are invalid, a 200 code along with an error message will be displayed.
 
-
-
 ##### Response Example (Success)
 
 ```
@@ -335,6 +333,7 @@ This endpoint will allow a thirdparty end user to book a flight reservation.
 }
 ```
 
+<br/>
 
 ### Cancel a Reservation
 `/api/cancelReservation`

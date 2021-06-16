@@ -15,12 +15,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -34,6 +36,8 @@ import cst438.domain.User;
 import cst438.service.AirlineService;
 
 @WebMvcTest(AirlineRestController.class)
+@AutoConfigureMockMvc(addFilters = false)
+@ActiveProfiles("test")
 public class AirlineRestControllerTest {
 
   @MockBean
@@ -75,7 +79,8 @@ public class AirlineRestControllerTest {
 
     MockHttpServletResponse response =
         mvc.perform(get("/api/getFlights?originCity=dogeville&destinationCity=dogeland"))
-            .andReturn().getResponse();
+           .andReturn()
+           .getResponse();
 
     ArrayList<Flight> resultFlights = jsonFlightAttempt.parseObject(response.getContentAsString());
     Flight resultFlight = resultFlights.get(0);
@@ -100,8 +105,9 @@ public class AirlineRestControllerTest {
     given(airlineService.getFlightsByRoute("dogeville", "dogeland")).willReturn(Flights);
 
     MockHttpServletResponse response =
-        mvc.perform(get("/api/getFlights?originCity=moon&destinationCity=dogeland")).andReturn()
-            .getResponse();
+        mvc.perform(get("/api/getFlights?originCity=moon&destinationCity=dogeland"))
+           .andReturn()
+           .getResponse();
 
     ArrayList<Flight> resultFlights = jsonFlightAttempt.parseObject(response.getContentAsString());
 
@@ -122,8 +128,9 @@ public class AirlineRestControllerTest {
     given(airlineService.getFlightsByRoute("dogeville", "dogeland")).willReturn(Flights);
 
     MockHttpServletResponse response =
-        mvc.perform(get("/api/getFlights?originCity=25&destinationCity=dogeland")).andReturn()
-            .getResponse();
+        mvc.perform(get("/api/getFlights?originCity=25&destinationCity=dogeland"))
+           .andReturn()
+           .getResponse();
 
     ArrayList<Flight> resultFlights = jsonFlightAttempt.parseObject(response.getContentAsString());
 
@@ -176,7 +183,8 @@ public class AirlineRestControllerTest {
 
     MockHttpServletResponse response =
         mvc.perform(get("/api/getFlightDates?originCity=dogeville&destinationCity=dogeland"))
-            .andReturn().getResponse();
+           .andReturn()
+           .getResponse();
 
     ArrayList<Date> expected = new ArrayList<>();
     expected.add(Date.valueOf("2022-01-23"));
@@ -202,7 +210,8 @@ public class AirlineRestControllerTest {
 
     MockHttpServletResponse response =
         mvc.perform(get("/api/getFlightDates?originCity=danville&destinationCity=hogwarts"))
-            .andReturn().getResponse();
+           .andReturn()
+           .getResponse();
     ArrayList<Date> results = jsonDateAttempt.parseObject(response.getContentAsString());
 
     assertEquals(0, results.size());
@@ -318,7 +327,7 @@ public class AirlineRestControllerTest {
     String destCity = "Unicorn";
 
 
-    User user = new User(userId, firstName, lastName);
+    User user = new User(userId, firstName, lastName, "user");
     Flight flight = new Flight(flightId, flightNumber, "United", deptDate, deptTime, numStops,
         originCity, destCity, price);
     Seat seat = new Seat(seatId, flightId, 2, "B", true, true);
@@ -326,16 +335,19 @@ public class AirlineRestControllerTest {
         new Reservation(0, user, firstName, lastName, flight, seat, null, firstClassPrice);
 
     given(airlineService.isSeatAvailable(seatId)).willReturn(true);
-    given(airlineService.makeReservation(flightId, userId, seatId, firstName, lastName))
-        .willReturn(reservation);
+    given(airlineService.makeReservation(flightId, userId, seatId, firstName, lastName)).willReturn(
+        reservation);
 
     // Perform simulated HTTP call
     MvcResult response = mvc
-        .perform(MockMvcRequestBuilders
-            .post("/api/makeReservation?flightId=" + flightId + "&userId=" + userId + "&seatId="
-                + seatId + "&passengerFirstName=" + firstName + "&passengerLastName=" + lastName)
-            .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-        .andExpect(status().isOk()).andReturn();
+                            .perform(MockMvcRequestBuilders.post(
+                                "/api/makeReservation?flightId=" + flightId + "&userId=" + userId
+                                    + "&seatId=" + seatId + "&passengerFirstName=" + firstName
+                                    + "&passengerLastName=" + lastName)
+                                                           .contentType(MediaType.APPLICATION_JSON)
+                                                           .accept(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isOk())
+                            .andReturn();
     CreateResponse actual =
         jsonCreateResponseAttempt.parseObject(response.getResponse().getContentAsString());
 
@@ -371,7 +383,7 @@ public class AirlineRestControllerTest {
     String originCity = "Doge";
     String destCity = "Unicorn";
 
-    User user = new User(userId, firstName, lastName);
+    User user = new User(userId, firstName, lastName, "user");
     Flight flight = new Flight(flightId, flightNumber, "United", deptDate, deptTime, numStops,
         originCity, destCity, price);
     Seat seat = new Seat(seatId, flightId, 20, "B", true, false);
@@ -379,16 +391,19 @@ public class AirlineRestControllerTest {
         new Reservation(0, user, firstName, lastName, flight, seat, null, price);
 
     given(airlineService.isSeatAvailable(seatId)).willReturn(true);
-    given(airlineService.makeReservation(flightId, userId, seatId, firstName, lastName))
-        .willReturn(reservation);
+    given(airlineService.makeReservation(flightId, userId, seatId, firstName, lastName)).willReturn(
+        reservation);
 
     // Perform simulated HTTP call
     MvcResult response = mvc
-        .perform(MockMvcRequestBuilders
-            .post("/api/makeReservation?flightId=" + flightId + "&userId=" + userId + "&seatId="
-                + seatId + "&passengerFirstName=" + firstName + "&passengerLastName=" + lastName)
-            .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-        .andExpect(status().isOk()).andReturn();
+                            .perform(MockMvcRequestBuilders.post(
+                                "/api/makeReservation?flightId=" + flightId + "&userId=" + userId
+                                    + "&seatId=" + seatId + "&passengerFirstName=" + firstName
+                                    + "&passengerLastName=" + lastName)
+                                                           .contentType(MediaType.APPLICATION_JSON)
+                                                           .accept(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isOk())
+                            .andReturn();
     CreateResponse actual =
         jsonCreateResponseAttempt.parseObject(response.getResponse().getContentAsString());
 
@@ -418,16 +433,19 @@ public class AirlineRestControllerTest {
     String lastName = "Data";
 
     given(airlineService.isSeatAvailable(seatId)).willReturn(true);
-    given(airlineService.makeReservation(flightId, userId, seatId, firstName, lastName))
-        .willReturn(null);
+    given(airlineService.makeReservation(flightId, userId, seatId, firstName, lastName)).willReturn(
+        null);
 
     // Perform simulated HTTP call
     MvcResult response = mvc
-        .perform(MockMvcRequestBuilders
-            .post("/api/makeReservation?flightId=" + flightId + "&userId=" + userId + "&seatId="
-                + seatId + "&passengerFirstName=" + firstName + "&passengerLastName=" + lastName)
-            .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-        .andExpect(status().isOk()).andReturn();
+                            .perform(MockMvcRequestBuilders.post(
+                                "/api/makeReservation?flightId=" + flightId + "&userId=" + userId
+                                    + "&seatId=" + seatId + "&passengerFirstName=" + firstName
+                                    + "&passengerLastName=" + lastName)
+                                                           .contentType(MediaType.APPLICATION_JSON)
+                                                           .accept(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isOk())
+                            .andReturn();
     CreateResponse actual =
         jsonCreateResponseAttempt.parseObject(response.getResponse().getContentAsString());
 
@@ -457,7 +475,7 @@ public class AirlineRestControllerTest {
     String destCity = "Unicorn";
 
 
-    User user = new User(userId, firstName, lastName);
+    User user = new User(userId, firstName, lastName, "user");
     Flight flight = new Flight(flightId, flightNumber, "United", deptDate, deptTime, numStops,
         originCity, destCity, price);
     Seat seat = new Seat(seatId, flightId, 20, "B", false, false);
@@ -465,16 +483,19 @@ public class AirlineRestControllerTest {
         new Reservation(0, user, firstName, lastName, flight, seat, null, price);
 
     given(airlineService.isSeatAvailable(seatId)).willReturn(false);
-    given(airlineService.makeReservation(flightId, userId, seatId, firstName, lastName))
-        .willReturn(reservation);
+    given(airlineService.makeReservation(flightId, userId, seatId, firstName, lastName)).willReturn(
+        reservation);
 
     // Perform simulated HTTP call
     MvcResult response = mvc
-        .perform(MockMvcRequestBuilders
-            .post("/api/makeReservation?flightId=" + flightId + "&userId=" + userId + "&seatId="
-                + seatId + "&passengerFirstName=" + firstName + "&passengerLastName=" + lastName)
-            .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-        .andExpect(status().isOk()).andReturn();
+                            .perform(MockMvcRequestBuilders.post(
+                                "/api/makeReservation?flightId=" + flightId + "&userId=" + userId
+                                    + "&seatId=" + seatId + "&passengerFirstName=" + firstName
+                                    + "&passengerLastName=" + lastName)
+                                                           .contentType(MediaType.APPLICATION_JSON)
+                                                           .accept(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isOk())
+                            .andReturn();
     CreateResponse actual =
         jsonCreateResponseAttempt.parseObject(response.getResponse().getContentAsString());
 
@@ -496,10 +517,12 @@ public class AirlineRestControllerTest {
     given(airlineService.cancelReservation(reservationId)).willReturn(true);
 
     // Perform simulated HTTP call
-    MvcResult result = mvc
-        .perform(MockMvcRequestBuilders.post("/api/cancelReservation?&reservationId=10&userId=12")
-            .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-        .andExpect(status().isOk()).andReturn();
+    MvcResult result = mvc.perform(
+        MockMvcRequestBuilders.post("/api/cancelReservation?&reservationId=10&userId=12")
+                              .contentType(MediaType.APPLICATION_JSON)
+                              .accept(MediaType.APPLICATION_JSON))
+                          .andExpect(status().isOk())
+                          .andReturn();
 
     // Get the response object
     Response actual = jsonResponseAttempt.parseObject(result.getResponse().getContentAsString());
@@ -521,10 +544,12 @@ public class AirlineRestControllerTest {
     given(airlineService.cancelReservation(reservationId)).willReturn(true);
 
     // Perform simulated HTTP call
-    MvcResult result = mvc
-        .perform(MockMvcRequestBuilders.post("/api/cancelReservation?&reservationId=10&userId=12")
-            .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-        .andExpect(status().isOk()).andReturn();
+    MvcResult result = mvc.perform(
+        MockMvcRequestBuilders.post("/api/cancelReservation?&reservationId=10&userId=12")
+                              .contentType(MediaType.APPLICATION_JSON)
+                              .accept(MediaType.APPLICATION_JSON))
+                          .andExpect(status().isOk())
+                          .andReturn();
 
     // Get the response object
     Response actual = jsonResponseAttempt.parseObject(result.getResponse().getContentAsString());
@@ -541,7 +566,7 @@ public class AirlineRestControllerTest {
   public void testGetAllReservationsSuccess() throws Exception {
     int userId = 12;
     String password = "password";
-    User user = new User(userId, "Test", "Person");
+    User user = new User(userId, "Test", "Person", "user");
 
     // Create an Array of Reservation objects
     int flightId = 14;
@@ -563,7 +588,8 @@ public class AirlineRestControllerTest {
     // Perform simulated HTTP call
     MockHttpServletResponse response =
         mvc.perform(get("/api/getAllReservations?userId=" + userId + "&password=" + password))
-            .andReturn().getResponse();
+           .andReturn()
+           .getResponse();
 
     // Get the response object
     Response actual = jsonResponseAttempt.parseObject(response.getContentAsString());
@@ -582,13 +608,14 @@ public class AirlineRestControllerTest {
     int userId = 12;
     String password = "password";
 
-    given(airlineService.getAllReservationsForUser(userId, password))
-        .willReturn(new ArrayList<Reservation>());
+    given(airlineService.getAllReservationsForUser(userId, password)).willReturn(
+        new ArrayList<Reservation>());
 
     // Perform simulated HTTP call
     MockHttpServletResponse response =
         mvc.perform(get("/api/getAllReservations?userId=" + userId + "&password=" + password))
-            .andReturn().getResponse();
+           .andReturn()
+           .getResponse();
 
     // Get the response object
     Response actual = jsonResponseAttempt.parseObject(response.getContentAsString());

@@ -2,7 +2,11 @@ package cst438.controller;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import cst438.domain.Flight;
 import cst438.domain.Reservation;
 import cst438.domain.Seat;
+import cst438.domain.User;
+import cst438.domain.UserRepository;
 import cst438.service.AirlineService;
 
 @Controller
@@ -18,6 +24,9 @@ public class AirlineController {
 
   @Autowired
   private AirlineService airlineService;
+
+  @Autowired
+  private UserRepository userRepository;
 
   @GetMapping("/")
   public String getTester(Model model) {
@@ -77,17 +86,24 @@ public class AirlineController {
   @PostMapping("/searchFlights/passengers")
   public String passengers(@RequestParam("flightId") String flightId,
       @RequestParam("numberOfPassengers") int numberOfPassengers,
-      @RequestParam("selectedSeats[]") ArrayList<String> selectedSeatIds, Model model) {
+      @RequestParam("selectedSeats[]") ArrayList<String> selectedSeatIds, Model model,
+      HttpServletRequest request) {
 
     System.out.println("Search Flights Passengers:\n" + " FlightID: " + flightId
         + " Number Of Passengers: " + numberOfPassengers + " selectedSeatIds " + selectedSeatIds);
 
-    ArrayList<Reservation> reservations = new ArrayList<>(numberOfPassengers);
+    // gets user from authentication
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    UserDetails userDetails = (UserDetails) auth.getPrincipal();
+    User user = userRepository.findByUserName(userDetails.getUsername());
+    // adds userId to session
+    request.getSession().setAttribute("userId", user.getUserId());
+    System.out.println("USER ID: [" + (int) request.getSession().getAttribute("userId") + "]");
 
     model.addAttribute("flightId", flightId);
     model.addAttribute("numberOfPassengers", numberOfPassengers);
     model.addAttribute("seats", selectedSeatIds);
-    model.addAttribute("userId", 1); // ****TODO NEED TO PULL THIS FROM SESSION VARIABLE***
+    model.addAttribute("userId", user.getUserId());
 
     System.out.println("Search Flights Passengers Sending Model:\n" + model);
 
@@ -113,6 +129,24 @@ public class AirlineController {
     System.out.println("Book Flight Sending:\n" + model);
 
     return "flight_confirmation";
+  }
+
+  @GetMapping("/reservations")
+  public String reservations(HttpServletRequest request, Model model) {
+
+    // gets user from authentication
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    UserDetails userDetails = (UserDetails) auth.getPrincipal();
+    User user = userRepository.findByUserName(userDetails.getUsername());
+
+    ArrayList<Reservation> reservations =
+        airlineService.getAllReservationsForUser(user.getUserId(), user.getPassword());
+
+    model.addAttribute("userId", user.getUserId());
+    model.addAttribute("reservations", reservations);
+    System.out.println("Reservations Sending:\n" + model);
+
+    return "reservations";
   }
 
 

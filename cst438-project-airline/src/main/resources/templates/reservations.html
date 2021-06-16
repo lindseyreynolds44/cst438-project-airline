@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+	<title>Reservations</title>
+	<!--/*/ <th:block th:include="fragments/fragments :: head"></th:block> /*/-->
+</head>
+<body>
+<!--/*/ <th:block th:include="fragments/topnav :: navbar"></th:block> /*/-->
+
+   <div id="content">
+         <table class="table table-dark table-striped">
+         <thead class="thead-dark">
+            <tr>
+               <th scope="col">#</th>
+               <th scope="col">Flight Number</th>
+               <th scope="col">Departure Date</th>
+               <th scope="col">Departure Time</th>
+               <th scope="col">From</th>
+               <th scope="col">To</th>
+               <th scope="col">Passenger Name</th>
+               <th scope="col">Seat</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr  th:each="r, iStat : ${reservations}">
+               <td scope="row">[[${iStat.count}]]</td>
+               <td>[[${r.flight.getFlightNumber()}]]</td>
+               <td>[[${#dates.format(r.flight.departureDate, 'E, MM-dd-yy')}]]</td>
+               <td>[[${#dates.format(r.flight.departureTime, 'h:mm aa z')}]]</td>
+               <td>[[${r.flight.originCity}]]</td>
+               <td>[[${r.flight.destinationCity}]]</td>
+               <td>[[${r.firstName +' '+ r.lastName}]]</td>
+               <td>[[${r.seat.seatRow + r.seat.seatLetter}]]</td>               
+            </tr>
+           </tbody>
+         </table>
+   </div>
+	
+<!-- Scripts -->  
+<!--/*/ <th:block th:include="fragments/fragments :: scripts"></th:block> /*/-->
+<script th:inline="javascript">
+	console.log([[${reservations}]]);
+</script>
+</body>
+</html>

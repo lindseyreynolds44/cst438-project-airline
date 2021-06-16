@@ -3,9 +3,45 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+	<!--/*/ <th:block th:include="fragments/fragments :: head"></th:block> /*/-->
 </head>
 <body>
+<!--/*/ <th:block th:include="fragments/topnav :: navbar"></th:block> /*/-->
 <h1> TESTING </h1>
 
+
+<!-- Scripts -->	
+<!--/*/ <th:block th:include="fragments/fragments :: scripts"></th:block> /*/-->
+<script>
+const username = "dandan";
+const password = "password"
+
+$.ajax({
+	type: "POST",
+	url: "/api/makeReservation",
+	beforeSend: function (xhr) {
+	    xhr.setRequestHeader ("Authorization", "Basic " + btoa(`${username}:${password}`));
+	},
+	data: {
+			"flightId": 10,
+			"userId": 9,
+			"seatId": 900,
+			"passengerFirstName": "Fake",
+			"passengerLastName": "Data"
+	    	},
+	success: function(data) {
+		console.log("success");
+		console.log(data);
+		
+		 },
+	error: function(error){
+		console.log("error");
+		console.log(error);
+	}
+
+}); // ajax
+
+
+</script>
 </body>
 </html>
