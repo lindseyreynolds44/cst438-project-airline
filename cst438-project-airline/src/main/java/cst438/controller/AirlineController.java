@@ -1,6 +1,5 @@
 package cst438.controller;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +27,9 @@ public class AirlineController {
   @Autowired
   private UserRepository userRepository;
 
+  /**
+   * Displays the landing page
+   */
   @GetMapping("/")
   public String getTester(Model model) {
     ArrayList<String> originCities = airlineService.getOriginCities();
@@ -61,6 +63,9 @@ public class AirlineController {
     return "display_flights";
   }
 
+  /**
+   * 
+   */
   @PostMapping("/searchFlights/seats")
   public String pickSeats(@RequestParam("flightId") int flightId,
       @RequestParam(value = "numberOfPassengers") int numberOfPassengers, Model model) {
@@ -148,30 +153,5 @@ public class AirlineController {
 
     return "reservations";
   }
-
-
-  @GetMapping("/testing")
-  public String showTest(Model model) {
-    ArrayList<String> originCities = airlineService.getOriginCities();
-    System.out.println("\nOrigin cities: " + originCities + "\n");
-
-    ArrayList<String> destCities = airlineService.getDestinationCities();
-    System.out.println("Destination cities: " + destCities + "\n");
-
-    String originCity = "seattle";
-    String destinationCity = "san diego";
-
-    ArrayList<Date> availDates = airlineService.getDatesForRoute(originCity, destinationCity);
-    System.out.println("Dates: " + availDates + "\n");
-
-    String date = "2021-07-12";
-    ArrayList<Flight> availFlights =
-        airlineService.getFlightsByRouteAndDate(originCity, destinationCity, date);
-    System.out.println("Times: " + availFlights + "\n");
-
-    return "tester";
-  }
-
-
 
 }

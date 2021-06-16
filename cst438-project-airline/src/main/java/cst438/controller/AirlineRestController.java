@@ -26,6 +26,9 @@ public class AirlineRestController {
   public ArrayList<Date> getFlightDate(@RequestParam("originCity") String origin,
       @RequestParam("destinationCity") String destination) {
 
+    System.out.println(
+        "Rest: Getting all available dates for flights from " + origin + " to " + destination);
+
     ArrayList<Date> dates = airlineService.getDatesForRoute(origin, destination);
 
     return dates;
@@ -37,6 +40,7 @@ public class AirlineRestController {
    */
   @GetMapping("/getRoutes")
   public ArrayList<String> getRoutes() {
+    System.out.println("Rest: Getting all available routes");
     ArrayList<String> routes = airlineService.getAllRoutes();
     return routes;
   }
@@ -46,13 +50,19 @@ public class AirlineRestController {
    */
   @GetMapping("/getAllFlights")
   public ArrayList<Flight> getAllFlights() {
+    System.out.println("Rest: Getting all flights");
     ArrayList<Flight> flights = airlineService.getAllFlights();
     return flights;
   }
 
+  /**
+   * Returns all flights for the route specified, using the origin city and destination city.
+   */
   @GetMapping("/getFlights")
   public ArrayList<Flight> getFlights(@RequestParam("originCity") String origin,
       @RequestParam("destinationCity") String destination) {
+    System.out.println("Rest: Getting all flights from " + origin + " to " + destination);
+
     // avoids calling the DB.
     if (origin == null || destination == null) {
       return new ArrayList<Flight>();
@@ -63,12 +73,15 @@ public class AirlineRestController {
 
   }
 
+  /**
+   * Returns all seats available on the specified flight, filtered by class.
+   */
   @GetMapping("/getSeats")
   public ArrayList<Seat> getSeats(@RequestParam("flightId") int flightId,
       @RequestParam("isFirstClass") boolean isFirstClass) {
 
     System.out.println(
-        "Rest: Get Seats " + "Flight ID: " + flightId + " Is First Class: " + isFirstClass);
+        "Rest: Getting Seats - Flight ID: " + flightId + " Is First Class: " + isFirstClass);
 
     ArrayList<Seat> seats = airlineService.getSeatsByFlightId(flightId, isFirstClass);
 
@@ -79,7 +92,7 @@ public class AirlineRestController {
   /**
    * Creates a reservation using the flight ID, User ID, seat ID and passenger information. If it
    * was successful, this method will return the newly created reservation, otherwise it will return
-   * with an "incorrect ID" exception or a "seat not available" exception.
+   * with an "incorrect ID" error or a "Seat ID not available" error.
    */
 
   @PostMapping(value = "/makeReservation")
@@ -88,7 +101,7 @@ public class AirlineRestController {
       @RequestParam("passengerFirstName") String passengerFirstName,
       @RequestParam("passengerLastName") String passengerLastName) {
 
-    System.out.println("\nAttempting to make a reservation for " + passengerFirstName + " "
+    System.out.println("\nRest: Attempting to make a reservation for " + passengerFirstName + " "
         + passengerLastName + "\nReservation Details... \nFlight ID: " + flightId + " | User ID: "
         + userId + " | Seat ID: " + seatId);
 
@@ -123,8 +136,8 @@ public class AirlineRestController {
   public Response cancelReservation(@RequestParam("reservationId") int reservationId,
       @RequestParam("userId") int userId) {
 
-    System.out.println("\nAttempting to cancel reservation with Reservation ID: " + reservationId
-        + " and User ID: " + userId);
+    System.out.println("\nRest: Attempting to cancel reservation with Reservation ID: "
+        + reservationId + " and User ID: " + userId);
 
     // Check that this reservation is valid
     if (!airlineService.isValidReservation(reservationId, userId)) {
@@ -149,7 +162,7 @@ public class AirlineRestController {
   @GetMapping("/getAllReservations")
   public Response getSeats(@RequestParam("userId") int userId) {
 
-    System.out.println("Getting all reservations for user with User ID: " + userId);
+    System.out.println("Rest: Getting all reservations for user with User ID: " + userId);
 
     ArrayList<Reservation> reservations = airlineService.getAllReservationsForUser(userId);
 
