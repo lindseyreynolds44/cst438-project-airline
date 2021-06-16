@@ -250,8 +250,8 @@ public class AirlineServiceTest {
 
 
     // Create stubs for the MOCK databases
-    given(reservationRepository.findByReservationIdAndUserId(reservationId, userId)).willReturn(
-        reservation);
+    given(reservationRepository.findByReservationIdAndUserId(reservationId, userId))
+        .willReturn(reservation);
 
     // Test the isValidReservation method
     boolean result = as.isValidReservation(reservationId, userId);
@@ -267,8 +267,8 @@ public class AirlineServiceTest {
     int reservationId = 15;
 
     // Create stubs for the MOCK databases
-    given(reservationRepository.findByReservationIdAndUserId(reservationId, userId)).willReturn(
-        null);
+    given(reservationRepository.findByReservationIdAndUserId(reservationId, userId))
+        .willReturn(null);
 
     // Test the isValidReservation method
     boolean result = as.isValidReservation(reservationId, userId);
@@ -625,7 +625,6 @@ public class AirlineServiceTest {
 
     // Data for creating stubs
     int userId = 15;
-    String password = "password";
     User user = new User(userId, "Test", "Person", "user");
 
     // Create an Array of Reservation objects
@@ -643,11 +642,11 @@ public class AirlineServiceTest {
     ArrayList<Reservation> reservations = new ArrayList<Reservation>(Arrays.asList(reservation));
 
     // Create stubs for the MOCK databases
-    given(userRepository.findUserByIdAndPassword(userId, password)).willReturn(user);
+    given(userRepository.findUserByIdAndPassword(userId)).willReturn(user);
     given(reservationRepository.findAllReservationsWithUserId(userId)).willReturn(reservations);
 
     // Test the getAllReservationsForUser method
-    ArrayList<Reservation> actual = as.getAllReservationsForUser(userId, password);
+    ArrayList<Reservation> actual = as.getAllReservationsForUser(userId);
 
     assertEquals(reservations, actual);
   }
@@ -657,13 +656,12 @@ public class AirlineServiceTest {
 
     // Data for creating stubs
     int userId = 15;
-    String password = "password";
 
     // Create stubs for the MOCK databases
-    given(userRepository.findUserByIdAndPassword(userId, password)).willReturn(null);
+    given(userRepository.findUserByIdAndPassword(userId)).willReturn(null);
 
     // Test the getAllReservationsForUser method
-    ArrayList<Reservation> actual = as.getAllReservationsForUser(userId, password);
+    ArrayList<Reservation> actual = as.getAllReservationsForUser(userId);
 
     ArrayList<Reservation> expected = new ArrayList<Reservation>();
 
@@ -675,16 +673,15 @@ public class AirlineServiceTest {
 
     // Data for creating stubs
     int userId = 15;
-    String password = "password";
     User user = new User(userId, "Test", "Person", "user");
 
     // Create stubs for the MOCK databases
-    given(userRepository.findUserByIdAndPassword(userId, password)).willReturn(user);
-    given(reservationRepository.findAllReservationsWithUserId(userId)).willReturn(
-        new ArrayList<Reservation>());
+    given(userRepository.findUserByIdAndPassword(userId)).willReturn(user);
+    given(reservationRepository.findAllReservationsWithUserId(userId))
+        .willReturn(new ArrayList<Reservation>());
 
     // Test the getAllReservationsForUser method
-    ArrayList<Reservation> actual = as.getAllReservationsForUser(userId, password);
+    ArrayList<Reservation> actual = as.getAllReservationsForUser(userId);
 
     ArrayList<Reservation> expected = new ArrayList<Reservation>();
 
