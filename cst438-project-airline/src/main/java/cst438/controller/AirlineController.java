@@ -140,7 +140,7 @@ public class AirlineController {
     User user = userRepository.findByUserName(userDetails.getUsername());
 
     ArrayList<Reservation> reservations =
-        airlineService.getAllReservationsForUser(user.getUserId(), user.getPassword());
+        airlineService.getAllReservationsForUser(user.getUserId());
 
     model.addAttribute("userId", user.getUserId());
     model.addAttribute("reservations", reservations);
