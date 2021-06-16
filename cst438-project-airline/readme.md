@@ -263,9 +263,6 @@ A successful response will return all the available seats for a flight.
 
 This endpoint will allow a thirdparty end user to book a flight reservation.
 
-#### Auth
-This endpoint requires authorization using Basic Auth. See the [example below](#sample-how-to-use-with-ajax) for how to use with AJAX.
-
 #### Parameters
 
     - flightId (required) int
@@ -287,8 +284,6 @@ This endpoint requires authorization using Basic Auth. See the [example below](#
 
 - A successful response will return a 200 code and a json response object with a status code of "Success" and the newly created reservation information.
 - If the seat is not available to book or if any of the ID numbers are invalid, a 200 code along with an error message will be displayed.
-
-
 
 ##### Response Example (Success)
 
@@ -337,81 +332,9 @@ This endpoint requires authorization using Basic Auth. See the [example below](#
     "data": null
 }
 ```
-#### Sample how to use with Ajax
-```
-const username = "deals";
-const password = "deals"
 
-$.ajax({
-	type: "POST",
-	url: "/api/makeReservation",
-	beforeSend: function (xhr) {
-	    xhr.setRequestHeader ("Authorization", "Basic " + btoa(`${username}:${password}`));
-	},
-	data: {
-			"flightId": flightId,
-			"userId": userId,
-			"seatId": seatId,
-			"passengerFirstName": passengerFirstName,
-			"passengerLastName": passengerLastName,
-	    	},
-	success: function(data) {
-		console.log("success");
-		console.log(data);
-		// implement your on success code here
-		
-		 },
-	error: function(error){
-		console.log("error");
-		console.log(error);
-		
-		// implement your on error code here
-	}
+<br/>
 
-}); // ajax
-```
-#### Sample how to use with Java
-This is just a sample
-```
-  @GetMapping("/request")
-  public String getData() {
-
-    final String url = "http://localhost:8080/api/makeReservation"; // make sure to include "http://"
-
-    // request parameters
-    MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
-    map.add("flightId", "10");
-    map.add("userId", "9");
-    map.add("seatId", "900");
-    map.add("passengerFirstName", "Fake");
-    map.add("passengerLastName", "Data");
-    
-    // encodes authentication
-    String plainCreds = "deals:deals";
-    byte[] plainCredsBytes = plainCreds.getBytes();
-    byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
-    String base64Creds = new String(base64CredsBytes);
-    
-    // adds auth to headers
-    HttpHeaders headers = new HttpHeaders();
-    headers.add("Authorization", "Basic " + base64Creds);
-    
-    // creates request
-    HttpEntity<MultiValueMap<String, String>> request =
-        new HttpEntity<MultiValueMap<String, String>>(map, headers);
-    
-    // sends and receives request/response
-    restTemplate = new RestTemplate();
-    ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class); 
-    // ***you may need to change this to return a specific object.*** //
-
-    System.out.println("Status " + response.getStatusCode());
-    System.out.println("RESPONSE " + response.getBody());
-
-    return response.getBody();
-  }
-
-```
 ### Cancel a Reservation
 `/api/cancelReservation`
 
