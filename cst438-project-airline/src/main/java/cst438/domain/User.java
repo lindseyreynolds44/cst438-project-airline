@@ -15,15 +15,25 @@ public class User {
   @Column(name = "user_name")
   private String userName;
   private String password;
+  private String role;
 
   public User() {}
 
-  public User(int userId, String userName, String password) {
+  public User(int userId, String userName, String password, String role) {
     super();
     this.userId = userId;
     this.userName = userName;
     this.password = password;
+    this.role = role;
   }
+
+  // public User(int userId, String userName, String password) {
+  // super();
+  // this.userId = userId;
+  // this.userName = userName;
+  // this.password = password;
+  // }
+
 
   public int getUserId() {
     return userId;
@@ -45,6 +55,16 @@ public class User {
     this.password = password;
   }
 
+  public String getRole() {
+    return role;
+  }
+
+  public void setRole(String role) {
+    this.role = role;
+  }
+
+
+
   @Override
   public boolean equals(Object obj) {
     if (this == obj)
@@ -59,6 +79,11 @@ public class User {
         return false;
     } else if (!password.equals(other.password))
       return false;
+    if (role == null) {
+      if (other.role != null)
+        return false;
+    } else if (!role.equals(other.role))
+      return false;
     if (userId != other.userId)
       return false;
     if (userName == null) {
@@ -71,7 +96,8 @@ public class User {
 
   @Override
   public String toString() {
-    return "User [userId=" + userId + ", userName=" + userName + ", password=" + password + "]";
+    return "User [userId=" + userId + ", userName=" + userName + ", password=" + password
+        + ", role=" + role + "]";
   }
 
 

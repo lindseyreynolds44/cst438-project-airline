@@ -21,6 +21,7 @@ import cst438.domain.User;
 import cst438.domain.UserRepository;
 
 @WebMvcTest(AirlineService.class)
+
 public class AirlineServiceTest {
 
   @MockBean
@@ -36,6 +37,7 @@ public class AirlineServiceTest {
   private UserRepository userRepository;
 
   private AirlineService as;
+
 
   @SuppressWarnings("deprecation")
   @BeforeEach
@@ -103,7 +105,7 @@ public class AirlineServiceTest {
     int numStops = 0;
     int price = 200;
 
-    User user = new User(userId, "Test", "Person");
+    User user = new User(userId, "Test", "Person", "user");
     Flight flight = new Flight(flightId, flightNumber, "unicorn", Date.valueOf("2021-06-01"),
         Time.valueOf("12:12:12"), numStops, "Lala Land", "Over the Rainbow", price);
     Seat seat = new Seat(seatId, flightId, 30, "A", true, false);
@@ -133,7 +135,7 @@ public class AirlineServiceTest {
     int numStops = 0;
     int price = 200;
     int firstClassPrice = price * 2;
-    User user = new User(userId, "Test", "Person");
+    User user = new User(userId, "Test", "Person", "user");
     Flight flight = new Flight(flightId, flightNumber, "unicorn", Date.valueOf("2021-06-01"),
         Time.valueOf("12:12:12"), numStops, "Lala Land", "Over the Rainbow", price);
     Seat seat = new Seat(seatId, flightId, 2, "A", true, true);
@@ -162,7 +164,7 @@ public class AirlineServiceTest {
     int flightId = 12;
     int userId = 10;
     int seatId = 198;
-    User user = new User(userId, "Test", "Person");
+    User user = new User(userId, "Test", "Person", "user");
     Seat seat = new Seat(seatId, flightId, 30, "A", true, false);
 
     // Create stubs for the MOCK databases
@@ -213,7 +215,7 @@ public class AirlineServiceTest {
     int seatId = 198;
     int numStops = 0;
     int price = 200;
-    User user = new User(userId, "Test", "Person");
+    User user = new User(userId, "Test", "Person", "user");
     Flight flight = new Flight(flightId, flightNumber, "unicorn", Date.valueOf("2021-06-01"),
         Time.valueOf("12:12:12"), numStops, "Lala Land", "Over the Rainbow", price);
 
@@ -240,7 +242,7 @@ public class AirlineServiceTest {
     int numStops = 0;
     int price = 200;
     int reservationId = 15;
-    User user = new User(userId, "Test", "Person");
+    User user = new User(userId, "Test", "Person", "user");
     Flight flight = new Flight(flightId, flightNumber, "unicorn", Date.valueOf("2021-06-01"),
         Time.valueOf("12:12:12"), numStops, "Lala Land", "Over the Rainbow", price);
     Seat seat = new Seat(seatId, flightId, 2, "A", true, true);
@@ -248,8 +250,8 @@ public class AirlineServiceTest {
 
 
     // Create stubs for the MOCK databases
-    given(reservationRepository.findByReservationIdAndUserId(reservationId, userId))
-        .willReturn(reservation);
+    given(reservationRepository.findByReservationIdAndUserId(reservationId, userId)).willReturn(
+        reservation);
 
     // Test the isValidReservation method
     boolean result = as.isValidReservation(reservationId, userId);
@@ -265,8 +267,8 @@ public class AirlineServiceTest {
     int reservationId = 15;
 
     // Create stubs for the MOCK databases
-    given(reservationRepository.findByReservationIdAndUserId(reservationId, userId))
-        .willReturn(null);
+    given(reservationRepository.findByReservationIdAndUserId(reservationId, userId)).willReturn(
+        null);
 
     // Test the isValidReservation method
     boolean result = as.isValidReservation(reservationId, userId);
@@ -284,7 +286,7 @@ public class AirlineServiceTest {
     int numStops = 0;
     int price = 200;
     int reservationId = 15;
-    User user = new User(userId, "Test", "Person");
+    User user = new User(userId, "Test", "Person", "user");
     Flight flight = new Flight(flightId, flightNumber, "unicorn", Date.valueOf("2021-06-01"),
         Time.valueOf("12:12:12"), numStops, "Lala Land", "Over the Rainbow", price);
     Seat seat = new Seat(seatId, flightId, 2, "A", true, true);
@@ -323,7 +325,7 @@ public class AirlineServiceTest {
     int numStops = 0;
     int price = 200;
 
-    User user = new User(userId, "Test", "Person");
+    User user = new User(userId, "Test", "Person", "user");
 
     Flight flight = new Flight(flightId, flightNumber, "unicorn", Date.valueOf("2021-06-01"),
         Time.valueOf("12:12:12"), numStops, "Lala Land", "Over the Rainbow", price);
@@ -368,7 +370,7 @@ public class AirlineServiceTest {
     int price = 200;
     int firstClassPrice = price * 2;
 
-    User user = new User(userId, "Test", "Person");
+    User user = new User(userId, "Test", "Person", "user");
 
     Flight flight = new Flight(flightId, flightNumber, "unicorn", Date.valueOf("2021-06-01"),
         Time.valueOf("12:12:12"), numStops, "Lala Land", "Over the Rainbow", price);
@@ -454,7 +456,7 @@ public class AirlineServiceTest {
     int price = 200;
     int firstClassPrice = price * 2;
 
-    User user = new User(userId, "Test", "Person");
+    User user = new User(userId, "Test", "Person", "user");
 
     Flight flight = null;
 
@@ -497,7 +499,7 @@ public class AirlineServiceTest {
     int price = 200;
     int firstClassPrice = price * 2;
 
-    User user = new User(userId, "Test", "Person");
+    User user = new User(userId, "Test", "Person", "user");
 
     Flight flight = new Flight(flightId, flightNumber, "unicorn", Date.valueOf("2021-06-01"),
         Time.valueOf("12:12:12"), numStops, "Lala Land", "Over the Rainbow", price);
@@ -541,7 +543,7 @@ public class AirlineServiceTest {
     int price = 200;
     int firstClassPrice = price * 2;
 
-    User user = new User(userId, "Test", "Person");
+    User user = new User(userId, "Test", "Person", "user");
 
     Flight flight = new Flight(flightId, flightNumber, "unicorn", Date.valueOf("2021-06-01"),
         Time.valueOf("12:12:12"), numStops, "Lala Land", "Over the Rainbow", price);
@@ -585,7 +587,7 @@ public class AirlineServiceTest {
     int price = 200;
     int firstClassPrice = price * 2;
 
-    User user = new User(userId, "Test", "Person");
+    User user = new User(userId, "Test", "Person", "user");
 
     Flight flight = new Flight(flightId, flightNumber, "unicorn", Date.valueOf("2021-06-01"),
         Time.valueOf("12:12:12"), numStops, "Lala Land", "Over the Rainbow", price);
@@ -624,7 +626,7 @@ public class AirlineServiceTest {
     // Data for creating stubs
     int userId = 15;
     String password = "password";
-    User user = new User(userId, "Test", "Person");
+    User user = new User(userId, "Test", "Person", "user");
 
     // Create an Array of Reservation objects
     int flightId = 12;
@@ -674,12 +676,12 @@ public class AirlineServiceTest {
     // Data for creating stubs
     int userId = 15;
     String password = "password";
-    User user = new User(userId, "Test", "Person");
+    User user = new User(userId, "Test", "Person", "user");
 
     // Create stubs for the MOCK databases
     given(userRepository.findUserByIdAndPassword(userId, password)).willReturn(user);
-    given(reservationRepository.findAllReservationsWithUserId(userId))
-        .willReturn(new ArrayList<Reservation>());
+    given(reservationRepository.findAllReservationsWithUserId(userId)).willReturn(
+        new ArrayList<Reservation>());
 
     // Test the getAllReservationsForUser method
     ArrayList<Reservation> actual = as.getAllReservationsForUser(userId, password);
