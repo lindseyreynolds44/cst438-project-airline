@@ -1,3 +1,8 @@
+/**
+ * 
+ * This service is used by Spring Security for authentication.
+ * 
+ */
 package cst438.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
