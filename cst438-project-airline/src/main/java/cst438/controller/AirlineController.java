@@ -28,7 +28,8 @@ public class AirlineController {
   private UserRepository userRepository;
 
   /**
-   * Displays the landing page
+   * Displays the landing page which allows the user to search for a flight and input the number of
+   * passengers.
    */
   @GetMapping("/")
   public String getTester(Model model) {
@@ -42,7 +43,8 @@ public class AirlineController {
   }
 
   /**
-   * Searches for and returns flights, given a route and a date
+   * Returns a page with a list of available flights for a given route and date, and allows a user
+   * to select one.
    */
   @PostMapping("/searchFlights")
   public String searchFlights(@RequestParam(value = "originCity") String origin,
@@ -64,7 +66,8 @@ public class AirlineController {
   }
 
   /**
-   * 
+   * Returns a page with the available seats for a given flight, and allows the user to select a
+   * seat(s).
    */
   @PostMapping("/searchFlights/seats")
   public String pickSeats(@RequestParam("flightId") int flightId,
@@ -88,6 +91,10 @@ public class AirlineController {
 
   }
 
+  /**
+   * Returns a page allowing a user to input the passengers for a given flight, seats, and a number
+   * of passengers.
+   */
   @PostMapping("/searchFlights/passengers")
   public String passengers(@RequestParam("flightId") String flightId,
       @RequestParam("numberOfPassengers") int numberOfPassengers,
@@ -115,7 +122,10 @@ public class AirlineController {
     return "passenger_booking";
   }
 
-
+  /*
+   * Returns a a page allowing the user to confirm and book their flight for all passengers and
+   * seats for a given flight.
+   */
   @PostMapping("/bookFlight")
   public String bookFlight(@RequestParam("user") int userId, @RequestParam("flightId") int flightId,
       @RequestParam("seats[]") ArrayList<Integer> seatIds,
@@ -136,6 +146,9 @@ public class AirlineController {
     return "flight_confirmation";
   }
 
+  /*
+   * Returns a page with a table of all the reservations made by a specific user.
+   */
   @GetMapping("/reservations")
   public String reservations(HttpServletRequest request, Model model) {
 
